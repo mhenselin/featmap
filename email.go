@@ -61,7 +61,7 @@ func (s *service) SendEmail(smtpServer string, smtpPort string, smtpUser string,
 		smtp.PlainAuth("", smtpUser, smtpPass, smtpServer),
 		from, []string{recipient}, []byte("From: "+from+"\r\nTo: "+recipient+"\r\nSubject: "+subject+"\r\nDate: "+date+"\r\n\r\n"+body))
 	if err != nil {
-		log.Printf("smtp error: %s", err)
+		log.Printf("smtp error: %s\n", err)
 		return err
 	}
 

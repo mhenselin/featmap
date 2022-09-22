@@ -6,17 +6,16 @@ import (
 	"strings"
 	"time"
 
-	"github.com/stripe/stripe-go"
-	"github.com/stripe/stripe-go/customer"
-
 	"github.com/amborle/featmap/lexorank"
-
 	"github.com/asaskevich/govalidator"
+
 	jwt "github.com/dgrijalva/jwt-go"
 	"github.com/go-chi/jwtauth"
 	"github.com/jmoiron/sqlx"
 	"github.com/pkg/errors"
 	uuid "github.com/satori/go.uuid"
+	stripe "github.com/stripe/stripe-go"
+	"github.com/stripe/stripe-go/customer"
 	"golang.org/x/crypto/bcrypt"
 )
 
@@ -2038,6 +2037,7 @@ func (s *service) ResendEmail() error {
 	err := s.SendEmail(s.config.SMTPServer, s.config.SMTPPort, s.config.SMTPUser, s.config.SMTPPass, s.config.EmailFrom, a.EmailConfirmationSentTo, "Featmap: verify your email address", body)
 	if err != nil {
 		log.Println("error sending mail")
+		return err
 	}
 	return nil
 }
@@ -2054,6 +2054,7 @@ func (s *service) SendResetEmail(email string) error {
 	err = s.SendEmail(s.config.SMTPServer, s.config.SMTPPort, s.config.SMTPUser, s.config.SMTPPass, s.config.EmailFrom, email, "Featmap: request to reset password", body)
 	if err != nil {
 		log.Println("error sending mail")
+		return err
 	}
 
 	return nil

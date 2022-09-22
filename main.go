@@ -1,11 +1,14 @@
 package main
 
 import (
-	"encoding/json"
 	"fmt"
+	"github.com/jmoiron/sqlx"
+	"github.com/pkg/errors"
+	"github.com/spf13/viper"
 	"log"
 	"net/http"
 	"os"
+	"path/filepath"
 	"strings"
 	"time"
 
@@ -22,29 +25,108 @@ import (
 	"github.com/golang-migrate/migrate/v4"
 	_ "github.com/golang-migrate/migrate/v4/database/postgres"
 	bindata "github.com/golang-migrate/migrate/v4/source/go_bindata"
-	"github.com/jmoiron/sqlx"
+	_ "modernc.org/sqlite"
+	//_ "github.com/mattn/go-sqlite3"
 )
 
 // Configuration ...
 type Configuration struct {
-	Environment         string `json:"environment"`
-	Mode                string `json:"mode"`
-	AppSiteURL          string `json:"appSiteURL"`
-	DbConnectionString  string `json:"dbConnectionString"`
-	JWTSecret           string `json:"jwtSecret"`
-	Port                string `json:"port"`
-	EmailFrom           string `json:"emailFrom"`
-	SMTPServer          string `json:"smtpServer"`
-	SMTPPort            string `json:"smtpPort"`
-	SMTPUser            string `json:"smtpUser"`
-	SMTPPass            string `json:"smtpPass"`
-	StripeKey           string `json:"stripeKey"`
-	StripeWebhookSecret string `json:"stripeWebhookSecret"`
-	StripeBasicPlan     string `json:"stripeBasicPlan"`
-	StripeProPlan       string `json:"stripeProPlan"`
+	Environment         string
+	Mode                string
+	AppSiteURL          string
+	DbHost              string
+	DbPort              string
+	DbType              string
+	DbUser              string
+	DbPass              string
+	DbName              string
+	DbConnectionString  string
+	JWTSecret           string
+	Port                string
+	EmailFrom           string
+	SMTPServer          string
+	SMTPPort            string
+	SMTPUser            string
+	SMTPPass            string
+	StripeKey           string
+	StripeWebhookSecret string
+	StripeBasicPlan     string
+	StripeProPlan       string
 }
 
+func getEnv(key, fallback string) string {
+	value := viper.GetString(key)
+	if value != "" {
+		return value
+	}
+
+	if value, ok := os.LookupEnv(key); ok {
+		return value
+	}
+
+	return fallback
+}
+
+func getConfig() (Configuration, error) {
+	viper.SetConfigFile(".env")
+	err := viper.ReadInConfig()
+	if err != nil {
+		log.Print("CONF: ")
+		log.Println(err)
+		log.Println("CONF: try loading config via environment ...")
+	}
+
+	cfg := Configuration{}
+	cfg.Environment = getEnv("ENV", "development")
+	cfg.Mode = getEnv("MODE", "")
+	cfg.AppSiteURL = getEnv("APP_SITE_URL", "https://localhost:5000")
+	cfg.DbType = getEnv("DB_TYPE", "postgres")
+	cfg.DbHost = getEnv("DB_HOST", "postgres")
+	cfg.DbPort = getEnv("DB_PORT", "5432")
+	cfg.DbName = getEnv("DB_NAME", "featmap")
+	cfg.DbUser = getEnv("DB_USER", "featmap")
+	cfg.DbPass = getEnv("DB_PASS", "featmap")
+	//config.DbConnectionString = getEnv("DB_CONN_STRING", "postgresql://postgres:postgres@localhost:5432/postgres?sslmode=disable")
+	cfg.DbConnectionString = getEnv("DB_CONN_STRING", "")
+
+	if cfg.DbConnectionString == "" {
+		switch cfg.DbType {
+		case "postgres":
+			cfg.DbConnectionString = "postgresql://" + cfg.DbUser + ":" + cfg.DbPass + "@" + cfg.DbHost + ":" + cfg.DbPort + "/" + cfg.DbName + "?sslmode=disable"
+			break
+		case "sqlite":
+			pwd, err := os.Getwd()
+			if err != nil {
+				fmt.Println(err)
+				os.Exit(1)
+			}
+			cfg.DbConnectionString = fmt.Sprintf("%s.sqlite", filepath.Join(pwd, cfg.DbName))
+			break
+		default:
+			return Configuration{}, errors.New("CONF: can not run without database")
+		}
+	}
+
+	cfg.JWTSecret = getEnv("JWT_SECRET", "ChangeMeForProduction")
+	cfg.Port = getEnv("PORT", "5000")
+	cfg.EmailFrom = getEnv("EMAIL_FROM", "noreply@example.com")
+	cfg.SMTPServer = getEnv("SMTP_HOST", "")
+	cfg.SMTPPort = getEnv("SMTP_PORT", "587")
+	cfg.SMTPUser = getEnv("SMTP_USER", "")
+	cfg.SMTPPass = getEnv("SMTP_PASS", "")
+
+	cfg.StripeKey = getEnv("STRIPE_KEY", "")
+	cfg.StripeWebhookSecret = getEnv("STRIPE_WH_SECRET", "")
+	cfg.StripeBasicPlan = getEnv("STRIPE_BASIC_PLAN", "")
+	cfg.StripeProPlan = getEnv("STRIPE_PRO_PLAN", "")
+
+	return cfg, nil
+}
+
+var config Configuration
+
 func main() {
+
 	r := chi.NewRouter()
 
 	// A good base middleware stack
@@ -54,9 +136,9 @@ func main() {
 	r.Use(middleware.Recoverer)
 	// r.Use(middleware.SetHeader("Content-Type", "application/json"))
 
-	config, err := readConfiguration()
+	config, err := getConfig()
 	if err != nil {
-		log.Fatalln("no conf.json found")
+		log.Fatalln(err)
 	}
 
 	// CORS
@@ -71,10 +153,11 @@ func main() {
 
 	r.Use(corsConfiguration.Handler)
 
-	db, err := sqlx.Connect("postgres", config.DbConnectionString)
+	db, err := sqlx.Connect(config.DbType, config.DbConnectionString)
 	if err != nil {
 		log.Fatalln("database error:" + err.Error())
 	}
+
 	defer func() {
 		if err := db.Close(); err != nil {
 			log.Fatalln(err)
@@ -97,7 +180,10 @@ func main() {
 		log.Fatalln(err)
 	}
 
-	m.Up()
+	err = m.Up()
+	if err != nil && err != migrate.ErrNoChange {
+		log.Fatalln(err)
+	}
 
 	// Create JWTAuth object
 	auth := jwtauth.New("HS256", []byte(config.JWTSecret), nil)
@@ -143,26 +229,6 @@ func main() {
 		log.Fatalln(err)
 	}
 
-}
-
-func readConfiguration() (Configuration, error) {
-	file, err := os.Open("conf.json")
-
-	defer func() {
-		if err := file.Close(); err != nil {
-			log.Println(err)
-		}
-	}()
-
-	decoder := json.NewDecoder(file)
-	configuration := Configuration{}
-	err = decoder.Decode(&configuration)
-
-	if configuration.SMTPPort == "" {
-		configuration.SMTPPort = "587"
-	}
-
-	return configuration, err
 }
 
 func fileServer(r chi.Router, path string, root http.FileSystem) {
