@@ -54,6 +54,8 @@ type Configuration struct {
 	StripeProPlan       string
 }
 
+var config Configuration
+
 func getEnv(key, fallback string) string {
 	value := viper.GetString(key)
 	if value != "" {
@@ -123,8 +125,6 @@ func getConfig() (Configuration, error) {
 	return cfg, nil
 }
 
-var config Configuration
-
 func main() {
 
 	r := chi.NewRouter()
@@ -136,7 +136,8 @@ func main() {
 	r.Use(middleware.Recoverer)
 	// r.Use(middleware.SetHeader("Content-Type", "application/json"))
 
-	config, err := getConfig()
+	var err error
+	config, err = getConfig()
 	if err != nil {
 		log.Fatalln(err)
 	}

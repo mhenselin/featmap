@@ -2032,11 +2032,15 @@ func (s *service) ResendEmail() error {
 		return errors.New("already confirmed")
 	}
 
-	body, _ := ChangeEmailBody(emailBody{s.config.AppSiteURL, a.EmailConfirmationSentTo, a.EmailConfirmationKey})
-
-	err := s.SendEmail(s.config.SMTPServer, s.config.SMTPPort, s.config.SMTPUser, s.config.SMTPPass, s.config.EmailFrom, a.EmailConfirmationSentTo, "Featmap: verify your email address", body)
+	body, err := ChangeEmailBody(emailBody{s.config.AppSiteURL, a.EmailConfirmationSentTo, a.EmailConfirmationKey})
 	if err != nil {
-		log.Println("error sending mail")
+		log.Println("RESEND: ", err)
+		return err
+	}
+
+	err = s.SendEmail(s.config.SMTPServer, s.config.SMTPPort, s.config.SMTPUser, s.config.SMTPPass, s.config.EmailFrom, a.EmailConfirmationSentTo, "Featmap: verify your email address", body)
+	if err != nil {
+		log.Println("RESEND: ", err)
 		return err
 	}
 	return nil
