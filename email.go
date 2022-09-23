@@ -57,15 +57,17 @@ func ChangeEmailBody(w emailBody) (string, error) {
 
 func (s *service) SendEmail(smtpServer string, smtpPort string, smtpUser string, smtpPass string, from string, recipient string, subject string, body string) error {
 	date := time.Now().Format(time.RFC1123)
+	auth := smtp.PlainAuth("", smtpUser, smtpPass, smtpServer)
 	err := smtp.SendMail(smtpServer+":"+smtpPort,
-		smtp.PlainAuth("", smtpUser, smtpPass, smtpServer),
-		from, []string{recipient}, []byte("From: "+from+"\r\nTo: "+recipient+"\r\nSubject: "+subject+"\r\nDate: "+date+"\r\n\r\n"+body))
+		auth,
+		from,
+		[]string{recipient},
+		[]byte("From: "+from+"\r\nTo: "+recipient+"\r\nSubject: "+subject+"\r\nDate: "+date+"\r\n\r\n"+body))
 	if err != nil {
 		log.Printf("smtp error: %s\n", err)
 		return err
 	}
-
-	return err
+	return nil
 }
 
 type resetPasswordBody struct {

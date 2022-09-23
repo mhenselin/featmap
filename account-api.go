@@ -99,7 +99,6 @@ func deleteAccount(w http.ResponseWriter, r *http.Request) {
 }
 
 func resend(w http.ResponseWriter, r *http.Request) {
-
 	s := GetEnv(r).Service
 	err := s.ResendEmail()
 	if err != nil {

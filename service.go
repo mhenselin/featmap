@@ -2025,11 +2025,10 @@ func (s *service) UpdateName(name string) error {
 }
 
 func (s *service) ResendEmail() error {
-
 	a := s.Acc
 
 	if !a.EmailConfirmationPending {
-		return errors.New("already confirmed")
+		return errors.New("email already confirmed")
 	}
 
 	body, err := ChangeEmailBody(emailBody{s.config.AppSiteURL, a.EmailConfirmationSentTo, a.EmailConfirmationKey})
@@ -2037,8 +2036,14 @@ func (s *service) ResendEmail() error {
 		log.Println("RESEND: ", err)
 		return err
 	}
-
-	err = s.SendEmail(s.config.SMTPServer, s.config.SMTPPort, s.config.SMTPUser, s.config.SMTPPass, s.config.EmailFrom, a.EmailConfirmationSentTo, "Featmap: verify your email address", body)
+	err = s.SendEmail(s.config.SMTPServer,
+		s.config.SMTPPort,
+		s.config.SMTPUser,
+		s.config.SMTPPass,
+		s.config.EmailFrom,
+		a.EmailConfirmationSentTo,
+		"Featmap: verify your email address",
+		body)
 	if err != nil {
 		log.Println("RESEND: ", err)
 		return err
