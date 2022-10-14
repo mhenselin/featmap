@@ -1,4 +1,3 @@
-version: "2.1"
 services:
         postgres:
                 image: postgres:11-alpine
@@ -14,17 +13,20 @@ services:
                         interval: 10s
                         timeout: 5s
                         retries: 5
+
         featmap:
-                image: amborle/featmap
-                restart: always
-                build: 
+                image: mhenselin/featmap
+                build:
                         context: .
                         dockerfile: Dockerfile
+                restart: always
                 ports:
                         - ${FEATMAP_HTTP_PORT}:${FEATMAP_HTTP_PORT}
                 depends_on: 
                     postgres:
                         condition: service_healthy
+                env_file:
+                        - ${PWD}/config/.env
                 volumes:
-                        - ${PWD}/conf.json:/opt/featmap/conf.json
+                        - ${PWD}/config/conf.json:/opt/featmap/conf.json
 

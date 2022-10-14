@@ -22,7 +22,9 @@ func (s *service) StripeWebhook(r *http.Request) error {
 	}
 
 	endpointSecret := s.config.StripeWebhookSecret
-	event, err := webhook.ConstructEvent(body, r.Header.Get("Stripe-Signature"),
+	event, err := webhook.ConstructEvent(
+		body,
+		r.Header.Get("Stripe-Signature"),
 		endpointSecret)
 
 	if err != nil {

@@ -8,5 +8,6 @@
   "smtpPort": "587",
   "smtpUser": "",
   "smtpPass": "",
-  "environment": "development"
+  "environment": "development",
+  "stripeWebhookSecret": ""
 }

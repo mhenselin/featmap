@@ -1,4 +1,4 @@
-FROM golang:1.15-alpine
+FROM golang:1.15-alpine as builder
 WORKDIR /src
 RUN apk add --update npm git
 RUN go get -u github.com/jteeuwen/go-bindata/...
@@ -17,4 +17,10 @@ RUN go-bindata  -pkg tmpl -o ./tmpl/bindata.go  ./tmpl/ && \
 RUN go build -o /opt/featmap/featmap && \
     chmod 775 /opt/featmap/featmap
 
-ENTRYPOINT cd /opt/featmap && ./featmap
+FROM golang:1.15-alpine
+ENV FEATMAP_HTTP_PORT=5000
+
+COPY --from=builder /opt/featmap/featmap /opt/featmap/featmap
+
+WORKDIR /opt/featmap
+ENTRYPOINT ["./featmap"]

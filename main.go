@@ -97,7 +97,10 @@ func main() {
 		log.Fatalln(err)
 	}
 
-	m.Up()
+	err = m.Up()
+	if err != nil {
+		log.Fatalln(err)
+	}
 
 	// Create JWTAuth object
 	auth := jwtauth.New("HS256", []byte(config.JWTSecret), nil)
@@ -138,6 +141,7 @@ func main() {
 	})
 
 	fmt.Println("Serving on port " + config.Port)
+	log.Println("Serving on port " + config.Port)
 	err = http.ListenAndServe(":"+config.Port, r)
 	if err != nil {
 		log.Fatalln(err)
