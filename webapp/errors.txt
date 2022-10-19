@@ -1,0 +1,618 @@
+
+> featmap-client@0.1.0 lint:ts
+> eslint ./src/**/*.{ts,tsx}
+
+
+/home/ezi/projects/featmap/webapp/src/components/Board.tsx
+  315:45  error  Don't use `{}` as a type. `{}` actually means "any non-nullish value".
+- If you want a type meaning "any object", you probably want `Record<string, unknown>` instead.
+- If you want a type meaning "any value", you probably want `unknown` instead.
+- If you want a type meaning "empty object", you probably want `Record<string, never>` instead  @typescript-eslint/ban-types
+  319:62  error  Don't use `{}` as a type. `{}` actually means "any non-nullish value".
+- If you want a type meaning "any object", you probably want `Record<string, unknown>` instead.
+- If you want a type meaning "any value", you probably want `unknown` instead.
+- If you want a type meaning "empty object", you probably want `Record<string, never>` instead  @typescript-eslint/ban-types
+
+/home/ezi/projects/featmap/webapp/src/components/Comment.tsx
+    3:3   error  FieldProps not found in 'formik'                                                            import/named
+    6:3   error  FormikHelpers not found in 'formik'                                                         import/named
+    7:3   error  FormikProps not found in 'formik'                                                           import/named
+   35:29  error  Unexpected empty arrow function                                                             @typescript-eslint/no-empty-function
+  167:15  error  Do not pass children as props. Instead, nest children between the opening and closing tags  react/no-children-prop
+
+/home/ezi/projects/featmap/webapp/src/components/ContextMenu.tsx
+  57:11  error  Visible, non-interactive elements with click handlers must have at least one keyboard listener                                                                                                     jsx-a11y/click-events-have-key-events
+  57:11  error  Avoid non-native interactive elements. If using native HTML is not possible, add an appropriate role and support for tabbing, mouse, keyboard, and touch inputs to an interactive content element  jsx-a11y/no-static-element-interactions
+
+/home/ezi/projects/featmap/webapp/src/components/CreateCardModal.tsx
+    2:31  error  FormikHelpers not found in 'formik'                                                                                                                                                                                                                                                                                                                   import/named
+   53:12  error  Don't use `{}` as a type. `{}` actually means "any non-nullish value".
+- If you want a type meaning "any object", you probably want `Record<string, unknown>` instead.
+- If you want a type meaning "any value", you probably want `unknown` instead.
+- If you want a type meaning "empty object", you probably want `Record<string, never>` instead  @typescript-eslint/ban-types
+   57:12  error  Don't use `{}` as a type. `{}` actually means "any non-nullish value".
+- If you want a type meaning "any object", you probably want `Record<string, unknown>` instead.
+- If you want a type meaning "any value", you probably want `unknown` instead.
+- If you want a type meaning "empty object", you probably want `Record<string, never>` instead  @typescript-eslint/ban-types
+  116:14  error  Don't use `{}` as a type. `{}` actually means "any non-nullish value".
+- If you want a type meaning "any object", you probably want `Record<string, unknown>` instead.
+- If you want a type meaning "any value", you probably want `unknown` instead.
+- If you want a type meaning "empty object", you probably want `Record<string, never>` instead  @typescript-eslint/ban-types
+  391:33  error  The autoFocus prop should not be used, as it can reduce usability and accessibility for users                                                                                                                                                                                                                                                         jsx-a11y/no-autofocus
+
+/home/ezi/projects/featmap/webapp/src/components/CreateProjectModal.tsx
+   12:3   error  FormikHelpers not found in 'formik'                                                            import/named
+   13:3   error  FormikProps not found in 'formik'                                                              import/named
+   16:3   error  FieldProps not found in 'formik'                                                               import/named
+  153:31  error  The autoFocus prop should not be used, as it can reduce usability and accessibility for users  jsx-a11y/no-autofocus
+
+/home/ezi/projects/featmap/webapp/src/components/CreateWorkspaceModal.tsx
+    7:3   error  FormikHelpers not found in 'formik'                                                            import/named
+    8:3   error  FormikProps not found in 'formik'                                                              import/named
+   11:3   error  FieldProps not found in 'formik'                                                               import/named
+  136:33  error  The autoFocus prop should not be used, as it can reduce usability and accessibility for users  jsx-a11y/no-autofocus
+
+/home/ezi/projects/featmap/webapp/src/components/EntityDetailsBody.tsx
+    5:3   error  FormikHelpers not found in 'formik'                           import/named
+    6:3   error  FormikProps not found in 'formik'                             import/named
+  620:15  error  Do not use "@ts-ignore" because it alters compilation errors  @typescript-eslint/ban-ts-comment
+  629:15  error  Do not use "@ts-ignore" because it alters compilation errors  @typescript-eslint/ban-ts-comment
+  638:15  error  Do not use "@ts-ignore" because it alters compilation errors  @typescript-eslint/ban-ts-comment
+
+/home/ezi/projects/featmap/webapp/src/components/EntityDetailsComments.tsx
+  12:3   error  FormikHelpers not found in 'formik'                                                                                                                                                                                                                                                                                                                   import/named
+  13:3   error  FormikProps not found in 'formik'                                                                                                                                                                                                                                                                                                                     import/named
+  16:3   error  FieldProps not found in 'formik'                                                                                                                                                                                                                                                                                                                      import/named
+  62:14  error  Don't use `{}` as a type. `{}` actually means "any non-nullish value".
+- If you want a type meaning "any object", you probably want `Record<string, unknown>` instead.
+- If you want a type meaning "any value", you probably want `unknown` instead.
+- If you want a type meaning "empty object", you probably want `Record<string, never>` instead  @typescript-eslint/ban-types
+  67:29  error  Unexpected empty arrow function                                                                                                                                                                                                                                                                                                                       @typescript-eslint/no-empty-function
+
+/home/ezi/projects/featmap/webapp/src/components/EntityDetailsDescription.tsx
+    3:3   error  FieldProps not found in 'formik'                                                               import/named
+    6:3   error  FormikHelpers not found in 'formik'                                                            import/named
+    7:3   error  FormikProps not found in 'formik'                                                              import/named
+   78:29  error  Unexpected empty arrow function                                                                @typescript-eslint/no-empty-function
+  289:29  error  The autoFocus prop should not be used, as it can reduce usability and accessibility for users  jsx-a11y/no-autofocus
+  329:31  error  Do not pass children as props. Instead, nest children between the opening and closing tags     react/no-children-prop
+
+/home/ezi/projects/featmap/webapp/src/components/EntityDetailsModal.tsx
+  13:23  error  Don't use `{}` as a type. `{}` actually means "any non-nullish value".
+- If you want a type meaning "any object", you probably want `Record<string, unknown>` instead.
+- If you want a type meaning "any value", you probably want `unknown` instead.
+- If you want a type meaning "empty object", you probably want `Record<string, never>` instead  @typescript-eslint/ban-types
+  15:26  error  Don't use `{}` as a type. `{}` actually means "any non-nullish value".
+- If you want a type meaning "any object", you probably want `Record<string, unknown>` instead.
+- If you want a type meaning "any value", you probably want `unknown` instead.
+- If you want a type meaning "empty object", you probably want `Record<string, never>` instead  @typescript-eslint/ban-types
+  28:14  error  Don't use `{}` as a type. `{}` actually means "any non-nullish value".
+- If you want a type meaning "any object", you probably want `Record<string, unknown>` instead.
+- If you want a type meaning "any value", you probably want `unknown` instead.
+- If you want a type meaning "empty object", you probably want `Record<string, never>` instead  @typescript-eslint/ban-types
+
+/home/ezi/projects/featmap/webapp/src/components/EntityDetailsTitle.tsx
+   31:3   error  FormikHelpers not found in 'formik'                                                            import/named
+   32:3   error  FormikProps not found in 'formik'                                                              import/named
+   35:3   error  FieldProps not found in 'formik'                                                               import/named
+  116:29  error  Unexpected empty arrow function                                                                @typescript-eslint/no-empty-function
+  333:29  error  The autoFocus prop should not be used, as it can reduce usability and accessibility for users  jsx-a11y/no-autofocus
+
+/home/ezi/projects/featmap/webapp/src/components/Messages.tsx
+  17:26  error  Don't use `{}` as a type. `{}` actually means "any non-nullish value".
+- If you want a type meaning "any object", you probably want `Record<string, unknown>` instead.
+- If you want a type meaning "any value", you probably want `unknown` instead.
+- If you want a type meaning "empty object", you probably want `Record<string, never>` instead  @typescript-eslint/ban-types
+  18:18  error  Don't use `{}` as a type. `{}` actually means "any non-nullish value".
+- If you want a type meaning "any object", you probably want `Record<string, unknown>` instead.
+- If you want a type meaning "any value", you probably want `unknown` instead.
+- If you want a type meaning "empty object", you probably want `Record<string, never>` instead  @typescript-eslint/ban-types
+  21:14  error  Don't use `{}` as a type. `{}` actually means "any non-nullish value".
+- If you want a type meaning "any object", you probably want `Record<string, unknown>` instead.
+- If you want a type meaning "any value", you probably want `unknown` instead.
+- If you want a type meaning "empty object", you probably want `Record<string, never>` instead  @typescript-eslint/ban-types
+
+/home/ezi/projects/featmap/webapp/src/components/Personas.tsx
+    7:3   error  FormikHelpers not found in 'formik'                                                                                                                                                                                                                                                                                                                   import/named
+    8:3   error  FormikProps not found in 'formik'                                                                                                                                                                                                                                                                                                                     import/named
+   46:12  error  Don't use `{}` as a type. `{}` actually means "any non-nullish value".
+- If you want a type meaning "any object", you probably want `Record<string, unknown>` instead.
+- If you want a type meaning "any value", you probably want `unknown` instead.
+- If you want a type meaning "empty object", you probably want `Record<string, never>` instead  @typescript-eslint/ban-types
+   50:12  error  Don't use `{}` as a type. `{}` actually means "any non-nullish value".
+- If you want a type meaning "any object", you probably want `Record<string, unknown>` instead.
+- If you want a type meaning "any value", you probably want `unknown` instead.
+- If you want a type meaning "empty object", you probably want `Record<string, never>` instead  @typescript-eslint/ban-types
+   96:14  error  Don't use `{}` as a type. `{}` actually means "any non-nullish value".
+- If you want a type meaning "any object", you probably want `Record<string, unknown>` instead.
+- If you want a type meaning "any value", you probably want `unknown` instead.
+- If you want a type meaning "empty object", you probably want `Record<string, never>` instead  @typescript-eslint/ban-types
+  131:11  error  Unexpected aliasing of 'this' to local variable                                                                                                                                                                                                                                                                                                       @typescript-eslint/no-this-alias
+  176:31  error  Visible, non-interactive elements with click handlers must have at least one keyboard listener                                                                                                                                                                                                                                                        jsx-a11y/click-events-have-key-events
+  176:31  error  Avoid non-native interactive elements. If using native HTML is not possible, add an appropriate role and support for tabbing, mouse, keyboard, and touch inputs to an interactive content element                                                                                                                                                     jsx-a11y/no-static-element-interactions
+  339:41  error  The autoFocus prop should not be used, as it can reduce usability and accessibility for users                                                                                                                                                                                                                                                         jsx-a11y/no-autofocus
+  433:41  error  Do not pass children as props. Instead, nest children between the opening and closing tags                                                                                                                                                                                                                                                            react/no-children-prop
+  649:39  error  The autoFocus prop should not be used, as it can reduce usability and accessibility for users                                                                                                                                                                                                                                                         jsx-a11y/no-autofocus
+
+/home/ezi/projects/featmap/webapp/src/pages/AcceptInvitePage.tsx
+    4:3   error  FormikHelpers not found in 'formik'                                                                                                                                                                                                                                                                                                                   import/named
+    5:3   error  FormikProps not found in 'formik'                                                                                                                                                                                                                                                                                                                     import/named
+   15:23  error  Don't use `{}` as a type. `{}` actually means "any non-nullish value".
+- If you want a type meaning "any object", you probably want `Record<string, unknown>` instead.
+- If you want a type meaning "any value", you probably want `unknown` instead.
+- If you want a type meaning "empty object", you probably want `Record<string, never>` instead  @typescript-eslint/ban-types
+   16:20  error  Don't use `{}` as a type. `{}` actually means "any non-nullish value".
+- If you want a type meaning "any object", you probably want `Record<string, unknown>` instead.
+- If you want a type meaning "any value", you probably want `unknown` instead.
+- If you want a type meaning "empty object", you probably want `Record<string, never>` instead  @typescript-eslint/ban-types
+   19:26  error  Don't use `{}` as a type. `{}` actually means "any non-nullish value".
+- If you want a type meaning "any object", you probably want `Record<string, unknown>` instead.
+- If you want a type meaning "any value", you probably want `unknown` instead.
+- If you want a type meaning "empty object", you probably want `Record<string, never>` instead  @typescript-eslint/ban-types
+   20:18  error  Don't use `{}` as a type. `{}` actually means "any non-nullish value".
+- If you want a type meaning "any object", you probably want `Record<string, unknown>` instead.
+- If you want a type meaning "any value", you probably want `unknown` instead.
+- If you want a type meaning "empty object", you probably want `Record<string, never>` instead  @typescript-eslint/ban-types
+   99:36  error  Don't use `{}` as a type. `{}` actually means "any non-nullish value".
+- If you want a type meaning "any object", you probably want `Record<string, unknown>` instead.
+- If you want a type meaning "any value", you probably want `unknown` instead.
+- If you want a type meaning "empty object", you probably want `Record<string, never>` instead  @typescript-eslint/ban-types
+   99:63  error  Don't use `{}` as a type. `{}` actually means "any non-nullish value".
+- If you want a type meaning "any object", you probably want `Record<string, unknown>` instead.
+- If you want a type meaning "any value", you probably want `unknown` instead.
+- If you want a type meaning "empty object", you probably want `Record<string, never>` instead  @typescript-eslint/ban-types
+  116:42  error  Don't use `{}` as a type. `{}` actually means "any non-nullish value".
+- If you want a type meaning "any object", you probably want `Record<string, unknown>` instead.
+- If you want a type meaning "any value", you probably want `unknown` instead.
+- If you want a type meaning "empty object", you probably want `Record<string, never>` instead  @typescript-eslint/ban-types
+
+/home/ezi/projects/featmap/webapp/src/pages/AccountPage.tsx
+    4:10  error  RouteComponentProps not found in 'react-router'                                                                                                                                                                                                                                                                                                       import/named
+   10:3   error  FormikHelpers not found in 'formik'                                                                                                                                                                                                                                                                                                                   import/named
+   11:3   error  FormikProps not found in 'formik'                                                                                                                                                                                                                                                                                                                     import/named
+   14:3   error  FieldProps not found in 'formik'                                                                                                                                                                                                                                                                                                                      import/named
+   38:20  error  Don't use `{}` as a type. `{}` actually means "any non-nullish value".
+- If you want a type meaning "any object", you probably want `Record<string, unknown>` instead.
+- If you want a type meaning "any value", you probably want `unknown` instead.
+- If you want a type meaning "empty object", you probably want `Record<string, never>` instead  @typescript-eslint/ban-types
+   38:45  error  Don't use `{}` as a type. `{}` actually means "any non-nullish value".
+- If you want a type meaning "any object", you probably want `Record<string, unknown>` instead.
+- If you want a type meaning "any value", you probably want `unknown` instead.
+- If you want a type meaning "empty object", you probably want `Record<string, never>` instead  @typescript-eslint/ban-types
+   42:17  error  Don't use `{}` as a type. `{}` actually means "any non-nullish value".
+- If you want a type meaning "any object", you probably want `Record<string, unknown>` instead.
+- If you want a type meaning "any value", you probably want `unknown` instead.
+- If you want a type meaning "empty object", you probably want `Record<string, never>` instead  @typescript-eslint/ban-types
+   83:36  error  Don't use `{}` as a type. `{}` actually means "any non-nullish value".
+- If you want a type meaning "any object", you probably want `Record<string, unknown>` instead.
+- If you want a type meaning "any value", you probably want `unknown` instead.
+- If you want a type meaning "empty object", you probably want `Record<string, never>` instead  @typescript-eslint/ban-types
+   83:63  error  Don't use `{}` as a type. `{}` actually means "any non-nullish value".
+- If you want a type meaning "any object", you probably want `Record<string, unknown>` instead.
+- If you want a type meaning "any value", you probably want `unknown` instead.
+- If you want a type meaning "empty object", you probably want `Record<string, never>` instead  @typescript-eslint/ban-types
+   96:42  error  Don't use `{}` as a type. `{}` actually means "any non-nullish value".
+- If you want a type meaning "any object", you probably want `Record<string, unknown>` instead.
+- If you want a type meaning "any value", you probably want `unknown` instead.
+- If you want a type meaning "empty object", you probably want `Record<string, never>` instead  @typescript-eslint/ban-types
+   99:53  error  Don't use `{}` as a type. `{}` actually means "any non-nullish value".
+- If you want a type meaning "any object", you probably want `Record<string, unknown>` instead.
+- If you want a type meaning "any value", you probably want `unknown` instead.
+- If you want a type meaning "empty object", you probably want `Record<string, never>` instead  @typescript-eslint/ban-types
+  315:34  error  Don't use `{}` as a type. `{}` actually means "any non-nullish value".
+- If you want a type meaning "any object", you probably want `Record<string, unknown>` instead.
+- If you want a type meaning "any value", you probably want `unknown` instead.
+- If you want a type meaning "empty object", you probably want `Record<string, never>` instead  @typescript-eslint/ban-types
+  315:61  error  Don't use `{}` as a type. `{}` actually means "any non-nullish value".
+- If you want a type meaning "any object", you probably want `Record<string, unknown>` instead.
+- If you want a type meaning "any value", you probably want `unknown` instead.
+- If you want a type meaning "empty object", you probably want `Record<string, never>` instead  @typescript-eslint/ban-types
+  328:40  error  Don't use `{}` as a type. `{}` actually means "any non-nullish value".
+- If you want a type meaning "any object", you probably want `Record<string, unknown>` instead.
+- If you want a type meaning "any value", you probably want `unknown` instead.
+- If you want a type meaning "empty object", you probably want `Record<string, never>` instead  @typescript-eslint/ban-types
+
+/home/ezi/projects/featmap/webapp/src/pages/CancelPage.tsx
+  5:23  error  Don't use `{}` as a type. `{}` actually means "any non-nullish value".
+- If you want a type meaning "any object", you probably want `Record<string, unknown>` instead.
+- If you want a type meaning "any value", you probably want `unknown` instead.
+- If you want a type meaning "empty object", you probably want `Record<string, never>` instead  @typescript-eslint/ban-types
+  6:20  error  Don't use `{}` as a type. `{}` actually means "any non-nullish value".
+- If you want a type meaning "any object", you probably want `Record<string, unknown>` instead.
+- If you want a type meaning "any value", you probably want `unknown` instead.
+- If you want a type meaning "empty object", you probably want `Record<string, never>` instead  @typescript-eslint/ban-types
+  6:45  error  Don't use `{}` as a type. `{}` actually means "any non-nullish value".
+- If you want a type meaning "any object", you probably want `Record<string, unknown>` instead.
+- If you want a type meaning "any value", you probably want `unknown` instead.
+- If you want a type meaning "empty object", you probably want `Record<string, never>` instead  @typescript-eslint/ban-types
+  7:26  error  Don't use `{}` as a type. `{}` actually means "any non-nullish value".
+- If you want a type meaning "any object", you probably want `Record<string, unknown>` instead.
+- If you want a type meaning "any value", you probably want `unknown` instead.
+- If you want a type meaning "empty object", you probably want `Record<string, never>` instead  @typescript-eslint/ban-types
+  8:18  error  Don't use `{}` as a type. `{}` actually means "any non-nullish value".
+- If you want a type meaning "any object", you probably want `Record<string, unknown>` instead.
+- If you want a type meaning "any value", you probably want `unknown` instead.
+- If you want a type meaning "empty object", you probably want `Record<string, never>` instead  @typescript-eslint/ban-types
+
+/home/ezi/projects/featmap/webapp/src/pages/ContactPage.tsx
+    2:10  error  RouteComponentProps not found in 'react-router'                                                                                                                                                                                                                                                                                                       import/named
+    6:3   error  FormikHelpers not found in 'formik'                                                                                                                                                                                                                                                                                                                   import/named
+    7:3   error  FormikProps not found in 'formik'                                                                                                                                                                                                                                                                                                                     import/named
+   10:3   error  FieldProps not found in 'formik'                                                                                                                                                                                                                                                                                                                      import/named
+   16:23  error  Don't use `{}` as a type. `{}` actually means "any non-nullish value".
+- If you want a type meaning "any object", you probably want `Record<string, unknown>` instead.
+- If you want a type meaning "any value", you probably want `unknown` instead.
+- If you want a type meaning "empty object", you probably want `Record<string, never>` instead  @typescript-eslint/ban-types
+   17:20  error  Don't use `{}` as a type. `{}` actually means "any non-nullish value".
+- If you want a type meaning "any object", you probably want `Record<string, unknown>` instead.
+- If you want a type meaning "any value", you probably want `unknown` instead.
+- If you want a type meaning "empty object", you probably want `Record<string, never>` instead  @typescript-eslint/ban-types
+   17:45  error  Don't use `{}` as a type. `{}` actually means "any non-nullish value".
+- If you want a type meaning "any object", you probably want `Record<string, unknown>` instead.
+- If you want a type meaning "any value", you probably want `unknown` instead.
+- If you want a type meaning "empty object", you probably want `Record<string, never>` instead  @typescript-eslint/ban-types
+   18:26  error  Don't use `{}` as a type. `{}` actually means "any non-nullish value".
+- If you want a type meaning "any object", you probably want `Record<string, unknown>` instead.
+- If you want a type meaning "any value", you probably want `unknown` instead.
+- If you want a type meaning "empty object", you probably want `Record<string, never>` instead  @typescript-eslint/ban-types
+   19:18  error  Don't use `{}` as a type. `{}` actually means "any non-nullish value".
+- If you want a type meaning "any object", you probably want `Record<string, unknown>` instead.
+- If you want a type meaning "any value", you probably want `unknown` instead.
+- If you want a type meaning "empty object", you probably want `Record<string, never>` instead  @typescript-eslint/ban-types
+  133:35  error  The autoFocus prop should not be used, as it can reduce usability and accessibility for users                                                                                                                                                                                                                                                         jsx-a11y/no-autofocus
+
+/home/ezi/projects/featmap/webapp/src/pages/EntityDetailsPage.tsx
+  52:26  error  Don't use `{}` as a type. `{}` actually means "any non-nullish value".
+- If you want a type meaning "any object", you probably want `Record<string, unknown>` instead.
+- If you want a type meaning "any value", you probably want `unknown` instead.
+- If you want a type meaning "empty object", you probably want `Record<string, never>` instead  @typescript-eslint/ban-types
+  54:20  error  Don't use `{}` as a type. `{}` actually means "any non-nullish value".
+- If you want a type meaning "any object", you probably want `Record<string, unknown>` instead.
+- If you want a type meaning "any value", you probably want `unknown` instead.
+- If you want a type meaning "empty object", you probably want `Record<string, never>` instead  @typescript-eslint/ban-types
+  64:18  error  Don't use `{}` as a type. `{}` actually means "any non-nullish value".
+- If you want a type meaning "any object", you probably want `Record<string, unknown>` instead.
+- If you want a type meaning "any value", you probably want `unknown` instead.
+- If you want a type meaning "empty object", you probably want `Record<string, never>` instead  @typescript-eslint/ban-types
+  68:14  error  Don't use `{}` as a type. `{}` actually means "any non-nullish value".
+- If you want a type meaning "any object", you probably want `Record<string, unknown>` instead.
+- If you want a type meaning "any value", you probably want `unknown` instead.
+- If you want a type meaning "empty object", you probably want `Record<string, never>` instead  @typescript-eslint/ban-types
+
+/home/ezi/projects/featmap/webapp/src/pages/ExternalEntityDetailsPage.tsx
+  46:26  error  Don't use `{}` as a type. `{}` actually means "any non-nullish value".
+- If you want a type meaning "any object", you probably want `Record<string, unknown>` instead.
+- If you want a type meaning "any value", you probably want `unknown` instead.
+- If you want a type meaning "empty object", you probably want `Record<string, never>` instead  @typescript-eslint/ban-types
+  48:20  error  Don't use `{}` as a type. `{}` actually means "any non-nullish value".
+- If you want a type meaning "any object", you probably want `Record<string, unknown>` instead.
+- If you want a type meaning "any value", you probably want `unknown` instead.
+- If you want a type meaning "empty object", you probably want `Record<string, never>` instead  @typescript-eslint/ban-types
+  63:14  error  Don't use `{}` as a type. `{}` actually means "any non-nullish value".
+- If you want a type meaning "any object", you probably want `Record<string, unknown>` instead.
+- If you want a type meaning "any value", you probably want `unknown` instead.
+- If you want a type meaning "empty object", you probably want `Record<string, never>` instead  @typescript-eslint/ban-types
+
+/home/ezi/projects/featmap/webapp/src/pages/ExternalLinkPage.tsx
+  10:10  error  RouteComponentProps not found in 'react-router'                                                                                                                                                                                                                                                                                                       import/named
+  83:20  error  Don't use `{}` as a type. `{}` actually means "any non-nullish value".
+- If you want a type meaning "any object", you probably want `Record<string, unknown>` instead.
+- If you want a type meaning "any value", you probably want `unknown` instead.
+- If you want a type meaning "empty object", you probably want `Record<string, never>` instead  @typescript-eslint/ban-types
+  96:18  error  Don't use `{}` as a type. `{}` actually means "any non-nullish value".
+- If you want a type meaning "any object", you probably want `Record<string, unknown>` instead.
+- If you want a type meaning "any value", you probably want `unknown` instead.
+- If you want a type meaning "empty object", you probably want `Record<string, never>` instead  @typescript-eslint/ban-types
+
+/home/ezi/projects/featmap/webapp/src/pages/IndexPage.tsx
+  26:20  error  Don't use `{}` as a type. `{}` actually means "any non-nullish value".
+- If you want a type meaning "any object", you probably want `Record<string, unknown>` instead.
+- If you want a type meaning "any value", you probably want `unknown` instead.
+- If you want a type meaning "empty object", you probably want `Record<string, never>` instead  @typescript-eslint/ban-types
+  26:45  error  Don't use `{}` as a type. `{}` actually means "any non-nullish value".
+- If you want a type meaning "any object", you probably want `Record<string, unknown>` instead.
+- If you want a type meaning "any value", you probably want `unknown` instead.
+- If you want a type meaning "empty object", you probably want `Record<string, never>` instead  @typescript-eslint/ban-types
+  30:18  error  Don't use `{}` as a type. `{}` actually means "any non-nullish value".
+- If you want a type meaning "any object", you probably want `Record<string, unknown>` instead.
+- If you want a type meaning "any value", you probably want `unknown` instead.
+- If you want a type meaning "empty object", you probably want `Record<string, never>` instead  @typescript-eslint/ban-types
+
+/home/ezi/projects/featmap/webapp/src/pages/LogInPage.tsx
+   3:3   error  FieldProps not found in 'formik'                                                                                                                                                                                                                                                                                                                      import/named
+   6:3   error  FormikHelpers not found in 'formik'                                                                                                                                                                                                                                                                                                                   import/named
+   7:3   error  FormikProps not found in 'formik'                                                                                                                                                                                                                                                                                                                     import/named
+  10:10  error  RouteComponentProps not found in 'react-router'                                                                                                                                                                                                                                                                                                       import/named
+  24:23  error  Don't use `{}` as a type. `{}` actually means "any non-nullish value".
+- If you want a type meaning "any object", you probably want `Record<string, unknown>` instead.
+- If you want a type meaning "any value", you probably want `unknown` instead.
+- If you want a type meaning "empty object", you probably want `Record<string, never>` instead  @typescript-eslint/ban-types
+  25:20  error  Don't use `{}` as a type. `{}` actually means "any non-nullish value".
+- If you want a type meaning "any object", you probably want `Record<string, unknown>` instead.
+- If you want a type meaning "any value", you probably want `unknown` instead.
+- If you want a type meaning "empty object", you probably want `Record<string, never>` instead  @typescript-eslint/ban-types
+  25:45  error  Don't use `{}` as a type. `{}` actually means "any non-nullish value".
+- If you want a type meaning "any object", you probably want `Record<string, unknown>` instead.
+- If you want a type meaning "any value", you probably want `unknown` instead.
+- If you want a type meaning "empty object", you probably want `Record<string, never>` instead  @typescript-eslint/ban-types
+  26:26  error  Don't use `{}` as a type. `{}` actually means "any non-nullish value".
+- If you want a type meaning "any object", you probably want `Record<string, unknown>` instead.
+- If you want a type meaning "any value", you probably want `unknown` instead.
+- If you want a type meaning "empty object", you probably want `Record<string, never>` instead  @typescript-eslint/ban-types
+  27:18  error  Don't use `{}` as a type. `{}` actually means "any non-nullish value".
+- If you want a type meaning "any object", you probably want `Record<string, unknown>` instead.
+- If you want a type meaning "any value", you probably want `unknown` instead.
+- If you want a type meaning "empty object", you probably want `Record<string, never>` instead  @typescript-eslint/ban-types
+
+/home/ezi/projects/featmap/webapp/src/pages/LogOutPage.tsx
+  12:23  error  Don't use `{}` as a type. `{}` actually means "any non-nullish value".
+- If you want a type meaning "any object", you probably want `Record<string, unknown>` instead.
+- If you want a type meaning "any value", you probably want `unknown` instead.
+- If you want a type meaning "empty object", you probably want `Record<string, never>` instead  @typescript-eslint/ban-types
+  13:20  error  Don't use `{}` as a type. `{}` actually means "any non-nullish value".
+- If you want a type meaning "any object", you probably want `Record<string, unknown>` instead.
+- If you want a type meaning "any value", you probably want `unknown` instead.
+- If you want a type meaning "empty object", you probably want `Record<string, never>` instead  @typescript-eslint/ban-types
+  13:45  error  Don't use `{}` as a type. `{}` actually means "any non-nullish value".
+- If you want a type meaning "any object", you probably want `Record<string, unknown>` instead.
+- If you want a type meaning "any value", you probably want `unknown` instead.
+- If you want a type meaning "empty object", you probably want `Record<string, never>` instead  @typescript-eslint/ban-types
+  17:18  error  Don't use `{}` as a type. `{}` actually means "any non-nullish value".
+- If you want a type meaning "any object", you probably want `Record<string, unknown>` instead.
+- If you want a type meaning "any value", you probably want `unknown` instead.
+- If you want a type meaning "empty object", you probably want `Record<string, never>` instead  @typescript-eslint/ban-types
+
+/home/ezi/projects/featmap/webapp/src/pages/ProjectPage.tsx
+  100:20  error  Don't use `{}` as a type. `{}` actually means "any non-nullish value".
+- If you want a type meaning "any object", you probably want `Record<string, unknown>` instead.
+- If you want a type meaning "any value", you probably want `unknown` instead.
+- If you want a type meaning "empty object", you probably want `Record<string, never>` instead  @typescript-eslint/ban-types
+  113:18  error  Don't use `{}` as a type. `{}` actually means "any non-nullish value".
+- If you want a type meaning "any object", you probably want `Record<string, unknown>` instead.
+- If you want a type meaning "any value", you probably want `unknown` instead.
+- If you want a type meaning "empty object", you probably want `Record<string, never>` instead  @typescript-eslint/ban-types
+
+/home/ezi/projects/featmap/webapp/src/pages/ProjectsPage.tsx
+   3:10  error  RouteComponentProps not found in 'react-router'                                                                                                                                                                                                                                                                                                       import/named
+  31:20  error  Don't use `{}` as a type. `{}` actually means "any non-nullish value".
+- If you want a type meaning "any object", you probably want `Record<string, unknown>` instead.
+- If you want a type meaning "any value", you probably want `unknown` instead.
+- If you want a type meaning "empty object", you probably want `Record<string, never>` instead  @typescript-eslint/ban-types
+  34:26  error  Don't use `{}` as a type. `{}` actually means "any non-nullish value".
+- If you want a type meaning "any object", you probably want `Record<string, unknown>` instead.
+- If you want a type meaning "any value", you probably want `unknown` instead.
+- If you want a type meaning "empty object", you probably want `Record<string, never>` instead  @typescript-eslint/ban-types
+  35:18  error  Don't use `{}` as a type. `{}` actually means "any non-nullish value".
+- If you want a type meaning "any object", you probably want `Record<string, unknown>` instead.
+- If you want a type meaning "any value", you probably want `unknown` instead.
+- If you want a type meaning "empty object", you probably want `Record<string, never>` instead  @typescript-eslint/ban-types
+
+/home/ezi/projects/featmap/webapp/src/pages/ResetPasswordPage.tsx
+   6:3   error  FormikHelpers not found in 'formik'                                                                                                                                                                                                                                                                                                                   import/named
+   7:3   error  FormikProps not found in 'formik'                                                                                                                                                                                                                                                                                                                     import/named
+  10:3   error  FieldProps not found in 'formik'                                                                                                                                                                                                                                                                                                                      import/named
+  21:23  error  Don't use `{}` as a type. `{}` actually means "any non-nullish value".
+- If you want a type meaning "any object", you probably want `Record<string, unknown>` instead.
+- If you want a type meaning "any value", you probably want `unknown` instead.
+- If you want a type meaning "empty object", you probably want `Record<string, never>` instead  @typescript-eslint/ban-types
+  22:20  error  Don't use `{}` as a type. `{}` actually means "any non-nullish value".
+- If you want a type meaning "any object", you probably want `Record<string, unknown>` instead.
+- If you want a type meaning "any value", you probably want `unknown` instead.
+- If you want a type meaning "empty object", you probably want `Record<string, never>` instead  @typescript-eslint/ban-types
+  22:45  error  Don't use `{}` as a type. `{}` actually means "any non-nullish value".
+- If you want a type meaning "any object", you probably want `Record<string, unknown>` instead.
+- If you want a type meaning "any value", you probably want `unknown` instead.
+- If you want a type meaning "empty object", you probably want `Record<string, never>` instead  @typescript-eslint/ban-types
+  23:26  error  Don't use `{}` as a type. `{}` actually means "any non-nullish value".
+- If you want a type meaning "any object", you probably want `Record<string, unknown>` instead.
+- If you want a type meaning "any value", you probably want `unknown` instead.
+- If you want a type meaning "empty object", you probably want `Record<string, never>` instead  @typescript-eslint/ban-types
+  24:18  error  Don't use `{}` as a type. `{}` actually means "any non-nullish value".
+- If you want a type meaning "any object", you probably want `Record<string, unknown>` instead.
+- If you want a type meaning "any value", you probably want `unknown` instead.
+- If you want a type meaning "empty object", you probably want `Record<string, never>` instead  @typescript-eslint/ban-types
+
+/home/ezi/projects/featmap/webapp/src/pages/ResetPasswordWithKeyPage.tsx
+   2:10  error  RouteComponentProps not found in 'react-router'                                                                                                                                                                                                                                                                                                       import/named
+   6:3   error  FormikHelpers not found in 'formik'                                                                                                                                                                                                                                                                                                                   import/named
+   7:3   error  FormikProps not found in 'formik'                                                                                                                                                                                                                                                                                                                     import/named
+  10:3   error  FieldProps not found in 'formik'                                                                                                                                                                                                                                                                                                                      import/named
+  23:23  error  Don't use `{}` as a type. `{}` actually means "any non-nullish value".
+- If you want a type meaning "any object", you probably want `Record<string, unknown>` instead.
+- If you want a type meaning "any value", you probably want `unknown` instead.
+- If you want a type meaning "empty object", you probably want `Record<string, never>` instead  @typescript-eslint/ban-types
+  24:20  error  Don't use `{}` as a type. `{}` actually means "any non-nullish value".
+- If you want a type meaning "any object", you probably want `Record<string, unknown>` instead.
+- If you want a type meaning "any value", you probably want `unknown` instead.
+- If you want a type meaning "empty object", you probably want `Record<string, never>` instead  @typescript-eslint/ban-types
+  27:26  error  Don't use `{}` as a type. `{}` actually means "any non-nullish value".
+- If you want a type meaning "any object", you probably want `Record<string, unknown>` instead.
+- If you want a type meaning "any value", you probably want `unknown` instead.
+- If you want a type meaning "empty object", you probably want `Record<string, never>` instead  @typescript-eslint/ban-types
+  28:18  error  Don't use `{}` as a type. `{}` actually means "any non-nullish value".
+- If you want a type meaning "any object", you probably want `Record<string, unknown>` instead.
+- If you want a type meaning "any value", you probably want `unknown` instead.
+- If you want a type meaning "empty object", you probably want `Record<string, never>` instead  @typescript-eslint/ban-types
+
+/home/ezi/projects/featmap/webapp/src/pages/SignUpPage.tsx
+   2:10  error  RouteComponentProps not found in 'react-router'                                                                                                                                                                                                                                                                                                       import/named
+   6:3   error  FormikHelpers not found in 'formik'                                                                                                                                                                                                                                                                                                                   import/named
+   7:3   error  FormikProps not found in 'formik'                                                                                                                                                                                                                                                                                                                     import/named
+  10:3   error  FieldProps not found in 'formik'                                                                                                                                                                                                                                                                                                                      import/named
+  34:23  error  Don't use `{}` as a type. `{}` actually means "any non-nullish value".
+- If you want a type meaning "any object", you probably want `Record<string, unknown>` instead.
+- If you want a type meaning "any value", you probably want `unknown` instead.
+- If you want a type meaning "empty object", you probably want `Record<string, never>` instead  @typescript-eslint/ban-types
+  35:20  error  Don't use `{}` as a type. `{}` actually means "any non-nullish value".
+- If you want a type meaning "any object", you probably want `Record<string, unknown>` instead.
+- If you want a type meaning "any value", you probably want `unknown` instead.
+- If you want a type meaning "empty object", you probably want `Record<string, never>` instead  @typescript-eslint/ban-types
+  35:45  error  Don't use `{}` as a type. `{}` actually means "any non-nullish value".
+- If you want a type meaning "any object", you probably want `Record<string, unknown>` instead.
+- If you want a type meaning "any value", you probably want `unknown` instead.
+- If you want a type meaning "empty object", you probably want `Record<string, never>` instead  @typescript-eslint/ban-types
+  36:26  error  Don't use `{}` as a type. `{}` actually means "any non-nullish value".
+- If you want a type meaning "any object", you probably want `Record<string, unknown>` instead.
+- If you want a type meaning "any value", you probably want `unknown` instead.
+- If you want a type meaning "empty object", you probably want `Record<string, never>` instead  @typescript-eslint/ban-types
+  37:18  error  Don't use `{}` as a type. `{}` actually means "any non-nullish value".
+- If you want a type meaning "any object", you probably want `Record<string, unknown>` instead.
+- If you want a type meaning "any value", you probably want `unknown` instead.
+- If you want a type meaning "empty object", you probably want `Record<string, never>` instead  @typescript-eslint/ban-types
+
+/home/ezi/projects/featmap/webapp/src/pages/SignupSuccessPage.tsx
+   5:23  error  Don't use `{}` as a type. `{}` actually means "any non-nullish value".
+- If you want a type meaning "any object", you probably want `Record<string, unknown>` instead.
+- If you want a type meaning "any value", you probably want `unknown` instead.
+- If you want a type meaning "empty object", you probably want `Record<string, never>` instead  @typescript-eslint/ban-types
+   6:20  error  Don't use `{}` as a type. `{}` actually means "any non-nullish value".
+- If you want a type meaning "any object", you probably want `Record<string, unknown>` instead.
+- If you want a type meaning "any value", you probably want `unknown` instead.
+- If you want a type meaning "empty object", you probably want `Record<string, never>` instead  @typescript-eslint/ban-types
+   6:45  error  Don't use `{}` as a type. `{}` actually means "any non-nullish value".
+- If you want a type meaning "any object", you probably want `Record<string, unknown>` instead.
+- If you want a type meaning "any value", you probably want `unknown` instead.
+- If you want a type meaning "empty object", you probably want `Record<string, never>` instead  @typescript-eslint/ban-types
+   7:26  error  Don't use `{}` as a type. `{}` actually means "any non-nullish value".
+- If you want a type meaning "any object", you probably want `Record<string, unknown>` instead.
+- If you want a type meaning "any value", you probably want `unknown` instead.
+- If you want a type meaning "empty object", you probably want `Record<string, never>` instead  @typescript-eslint/ban-types
+   8:18  error  Don't use `{}` as a type. `{}` actually means "any non-nullish value".
+- If you want a type meaning "any object", you probably want `Record<string, unknown>` instead.
+- If you want a type meaning "any value", you probably want `unknown` instead.
+- If you want a type meaning "empty object", you probably want `Record<string, never>` instead  @typescript-eslint/ban-types
+  11:14  error  Don't use `{}` as a type. `{}` actually means "any non-nullish value".
+- If you want a type meaning "any object", you probably want `Record<string, unknown>` instead.
+- If you want a type meaning "any value", you probably want `unknown` instead.
+- If you want a type meaning "empty object", you probably want `Record<string, never>` instead  @typescript-eslint/ban-types
+
+/home/ezi/projects/featmap/webapp/src/pages/SubscriptionPage.tsx
+   2:10  error  RouteComponentProps not found in 'react-router'                                                                                                                                                                                                                                                                                                       import/named
+  22:3   error  FormikHelpers not found in 'formik'                                                                                                                                                                                                                                                                                                                   import/named
+  23:3   error  FormikProps not found in 'formik'                                                                                                                                                                                                                                                                                                                     import/named
+  42:20  error  Don't use `{}` as a type. `{}` actually means "any non-nullish value".
+- If you want a type meaning "any object", you probably want `Record<string, unknown>` instead.
+- If you want a type meaning "any value", you probably want `unknown` instead.
+- If you want a type meaning "empty object", you probably want `Record<string, never>` instead  @typescript-eslint/ban-types
+  49:18  error  Don't use `{}` as a type. `{}` actually means "any non-nullish value".
+- If you want a type meaning "any object", you probably want `Record<string, unknown>` instead.
+- If you want a type meaning "any value", you probably want `unknown` instead.
+- If you want a type meaning "empty object", you probably want `Record<string, never>` instead  @typescript-eslint/ban-types
+
+/home/ezi/projects/featmap/webapp/src/pages/SuccessPage.tsx
+   5:23  error  Don't use `{}` as a type. `{}` actually means "any non-nullish value".
+- If you want a type meaning "any object", you probably want `Record<string, unknown>` instead.
+- If you want a type meaning "any value", you probably want `unknown` instead.
+- If you want a type meaning "empty object", you probably want `Record<string, never>` instead  @typescript-eslint/ban-types
+   6:20  error  Don't use `{}` as a type. `{}` actually means "any non-nullish value".
+- If you want a type meaning "any object", you probably want `Record<string, unknown>` instead.
+- If you want a type meaning "any value", you probably want `unknown` instead.
+- If you want a type meaning "empty object", you probably want `Record<string, never>` instead  @typescript-eslint/ban-types
+   6:45  error  Don't use `{}` as a type. `{}` actually means "any non-nullish value".
+- If you want a type meaning "any object", you probably want `Record<string, unknown>` instead.
+- If you want a type meaning "any value", you probably want `unknown` instead.
+- If you want a type meaning "empty object", you probably want `Record<string, never>` instead  @typescript-eslint/ban-types
+   7:26  error  Don't use `{}` as a type. `{}` actually means "any non-nullish value".
+- If you want a type meaning "any object", you probably want `Record<string, unknown>` instead.
+- If you want a type meaning "any value", you probably want `unknown` instead.
+- If you want a type meaning "empty object", you probably want `Record<string, never>` instead  @typescript-eslint/ban-types
+   8:18  error  Don't use `{}` as a type. `{}` actually means "any non-nullish value".
+- If you want a type meaning "any object", you probably want `Record<string, unknown>` instead.
+- If you want a type meaning "any value", you probably want `unknown` instead.
+- If you want a type meaning "empty object", you probably want `Record<string, never>` instead  @typescript-eslint/ban-types
+  11:14  error  Don't use `{}` as a type. `{}` actually means "any non-nullish value".
+- If you want a type meaning "any object", you probably want `Record<string, unknown>` instead.
+- If you want a type meaning "any value", you probably want `unknown` instead.
+- If you want a type meaning "empty object", you probably want `Record<string, never>` instead  @typescript-eslint/ban-types
+
+/home/ezi/projects/featmap/webapp/src/pages/VerifyEmailPage.tsx
+   6:23  error  Don't use `{}` as a type. `{}` actually means "any non-nullish value".
+- If you want a type meaning "any object", you probably want `Record<string, unknown>` instead.
+- If you want a type meaning "any value", you probably want `unknown` instead.
+- If you want a type meaning "empty object", you probably want `Record<string, never>` instead  @typescript-eslint/ban-types
+   7:20  error  Don't use `{}` as a type. `{}` actually means "any non-nullish value".
+- If you want a type meaning "any object", you probably want `Record<string, unknown>` instead.
+- If you want a type meaning "any value", you probably want `unknown` instead.
+- If you want a type meaning "empty object", you probably want `Record<string, never>` instead  @typescript-eslint/ban-types
+  10:26  error  Don't use `{}` as a type. `{}` actually means "any non-nullish value".
+- If you want a type meaning "any object", you probably want `Record<string, unknown>` instead.
+- If you want a type meaning "any value", you probably want `unknown` instead.
+- If you want a type meaning "empty object", you probably want `Record<string, never>` instead  @typescript-eslint/ban-types
+  11:18  error  Don't use `{}` as a type. `{}` actually means "any non-nullish value".
+- If you want a type meaning "any object", you probably want `Record<string, unknown>` instead.
+- If you want a type meaning "any value", you probably want `unknown` instead.
+- If you want a type meaning "empty object", you probably want `Record<string, never>` instead  @typescript-eslint/ban-types
+
+/home/ezi/projects/featmap/webapp/src/pages/WorkspacePage.tsx
+  37:20  error  Don't use `{}` as a type. `{}` actually means "any non-nullish value".
+- If you want a type meaning "any object", you probably want `Record<string, unknown>` instead.
+- If you want a type meaning "any value", you probably want `unknown` instead.
+- If you want a type meaning "empty object", you probably want `Record<string, never>` instead  @typescript-eslint/ban-types
+  44:18  error  Don't use `{}` as a type. `{}` actually means "any non-nullish value".
+- If you want a type meaning "any object", you probably want `Record<string, unknown>` instead.
+- If you want a type meaning "any value", you probably want `unknown` instead.
+- If you want a type meaning "empty object", you probably want `Record<string, never>` instead  @typescript-eslint/ban-types
+
+/home/ezi/projects/featmap/webapp/src/pages/WorkspaceSettingsPage.tsx
+    5:3   error  FormikHelpers not found in 'formik'                                                                                                                                                                                                                                                                                                                   import/named
+    6:3   error  FormikProps not found in 'formik'                                                                                                                                                                                                                                                                                                                     import/named
+   10:10  error  RouteComponentProps not found in 'react-router'                                                                                                                                                                                                                                                                                                       import/named
+   54:20  error  Don't use `{}` as a type. `{}` actually means "any non-nullish value".
+- If you want a type meaning "any object", you probably want `Record<string, unknown>` instead.
+- If you want a type meaning "any value", you probably want `unknown` instead.
+- If you want a type meaning "empty object", you probably want `Record<string, never>` instead  @typescript-eslint/ban-types
+   61:18  error  Don't use `{}` as a type. `{}` actually means "any non-nullish value".
+- If you want a type meaning "any object", you probably want `Record<string, unknown>` instead.
+- If you want a type meaning "any value", you probably want `unknown` instead.
+- If you want a type meaning "empty object", you probably want `Record<string, never>` instead  @typescript-eslint/ban-types
+  665:47  error  Don't use `{}` as a type. `{}` actually means "any non-nullish value".
+- If you want a type meaning "any object", you probably want `Record<string, unknown>` instead.
+- If you want a type meaning "any value", you probably want `unknown` instead.
+- If you want a type meaning "empty object", you probably want `Record<string, never>` instead  @typescript-eslint/ban-types
+  666:62  error  Don't use `{}` as a type. `{}` actually means "any non-nullish value".
+- If you want a type meaning "any object", you probably want `Record<string, unknown>` instead.
+- If you want a type meaning "any value", you probably want `unknown` instead.
+- If you want a type meaning "empty object", you probably want `Record<string, never>` instead  @typescript-eslint/ban-types
+  690:62  error  Don't use `{}` as a type. `{}` actually means "any non-nullish value".
+- If you want a type meaning "any object", you probably want `Record<string, unknown>` instead.
+- If you want a type meaning "any value", you probably want `unknown` instead.
+- If you want a type meaning "empty object", you probably want `Record<string, never>` instead  @typescript-eslint/ban-types
+  753:38  error  Don't use `{}` as a type. `{}` actually means "any non-nullish value".
+- If you want a type meaning "any object", you probably want `Record<string, unknown>` instead.
+- If you want a type meaning "any value", you probably want `unknown` instead.
+- If you want a type meaning "empty object", you probably want `Record<string, never>` instead  @typescript-eslint/ban-types
+  753:65  error  Don't use `{}` as a type. `{}` actually means "any non-nullish value".
+- If you want a type meaning "any object", you probably want `Record<string, unknown>` instead.
+- If you want a type meaning "any value", you probably want `unknown` instead.
+- If you want a type meaning "empty object", you probably want `Record<string, never>` instead  @typescript-eslint/ban-types
+  766:44  error  Don't use `{}` as a type. `{}` actually means "any non-nullish value".
+- If you want a type meaning "any object", you probably want `Record<string, unknown>` instead.
+- If you want a type meaning "any value", you probably want `unknown` instead.
+- If you want a type meaning "empty object", you probably want `Record<string, never>` instead  @typescript-eslint/ban-types
+
+/home/ezi/projects/featmap/webapp/src/pages/WorkspacesPage.tsx
+  20:20  error  Don't use `{}` as a type. `{}` actually means "any non-nullish value".
+- If you want a type meaning "any object", you probably want `Record<string, unknown>` instead.
+- If you want a type meaning "any value", you probably want `unknown` instead.
+- If you want a type meaning "empty object", you probably want `Record<string, never>` instead  @typescript-eslint/ban-types
+  20:45  error  Don't use `{}` as a type. `{}` actually means "any non-nullish value".
+- If you want a type meaning "any object", you probably want `Record<string, unknown>` instead.
+- If you want a type meaning "any value", you probably want `unknown` instead.
+- If you want a type meaning "empty object", you probably want `Record<string, never>` instead  @typescript-eslint/ban-types
+  21:26  error  Don't use `{}` as a type. `{}` actually means "any non-nullish value".
+- If you want a type meaning "any object", you probably want `Record<string, unknown>` instead.
+- If you want a type meaning "any value", you probably want `unknown` instead.
+- If you want a type meaning "empty object", you probably want `Record<string, never>` instead  @typescript-eslint/ban-types
+  22:17  error  Don't use `{}` as a type. `{}` actually means "any non-nullish value".
+- If you want a type meaning "any object", you probably want `Record<string, unknown>` instead.
+- If you want a type meaning "any value", you probably want `unknown` instead.
+- If you want a type meaning "empty object", you probably want `Record<string, never>` instead  @typescript-eslint/ban-types
+
+/home/ezi/projects/featmap/webapp/src/store/application/actions.ts
+  21:12  error  Don't use `{}` as a type. `{}` actually means "any non-nullish value".
+- If you want a type meaning "any object", you probably want `Record<string, unknown>` instead.
+- If you want a type meaning "any value", you probably want `unknown` instead.
+- If you want a type meaning "empty object", you probably want `Record<string, never>` instead  @typescript-eslint/ban-types
+
+✖ 194 problems (194 errors, 0 warnings)
+

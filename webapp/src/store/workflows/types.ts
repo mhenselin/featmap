@@ -1,8 +1,8 @@
-import { ICard } from '../../core/card'
-import {CardStatus} from "../../core/misc";
+import { ICard } from "../../core/card";
+import { CardStatus } from "../../core/misc";
 
-export interface IWorkflow extends ICard {
-    kind: "workflow"
-    projectId: string
-    status: CardStatus
-}
+export type IWorkflow = {
+  kind: "workflow";
+  projectId: string;
+  status: CardStatus;
+} & ICard;

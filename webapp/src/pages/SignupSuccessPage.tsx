@@ -1,31 +1,36 @@
-import React, { Component } from 'react';
-import { RouteComponentProps } from 'react-router'
-import { Button } from '../components/elements'
+import React, { Component } from "react";
+import type { RouteComponentProps } from "react-router";
+import { Button } from "../components/elements";
 
-interface PropsFromState { }
-interface RouterProps extends RouteComponentProps<{
-}> { }
-interface PropsFromDispatch { }
-interface SelfProps { }
-type Props = RouterProps & PropsFromState & PropsFromDispatch & SelfProps
+type PropsFromState = {};
+type RouterProps = {} & RouteComponentProps<{}>;
+type PropsFromDispatch = {};
+type SelfProps = {};
+type Props = RouterProps & PropsFromState & PropsFromDispatch & SelfProps;
 
-interface State {
-}
+type State = {};
 
 class SignupSuccessPage extends Component<Props, State> {
-    render() {
-        const { history } = this.props
-        return (
-            <div className="flex p-2  w-full  justify-center items-center flex-col " >
-                <div className="flex  p-3  max-w-xl w-full   items-center  flex-col ">
-                    <div className="flex  p-2 flex-col items-baseline">
-                        <div className="p-1 text-2xl font-bold ">Welcome to Featmap!</div>
-                        <div className="p-1 text-center "> <Button title="Get started" primary handleOnClick={() => history.push("/")} /></div>
-                    </div>
-                </div>
-            </div >
-        );
-    }
+  render() {
+    const { history } = this.props;
+    return (
+      <div className="flex w-full  flex-col  items-center justify-center p-2 ">
+        <div className="flex  w-full  max-w-xl flex-col   items-center  p-3 ">
+          <div className="flex  flex-col items-baseline p-2">
+            <div className="p-1 text-2xl font-bold ">Welcome to Featmap!</div>
+            <div className="p-1 text-center ">
+              {" "}
+              <Button
+                title="Get started"
+                primary
+                handleOnClick={() => history.push("/")}
+              />
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
 }
 
-export default SignupSuccessPage
+export default SignupSuccessPage;

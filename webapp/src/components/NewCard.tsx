@@ -1,15 +1,11 @@
-import React, { Component } from 'react';
+import { FunctionComponent, PropsWithChildren } from "react";
 
-class NewCard extends Component {
-  render() {
-    return (
-      <div className="p-1 w-36 h-24  border border-dashed border-gray-300 rounded-sm items-center justify-center ">
-        <div className="flex h-full">
-          {this.props.children}
-        </div>
-      </div >
-    );
-  }
-}
+const NewCard: FunctionComponent<PropsWithChildren> = (props) => {
+  return (
+    <div className="h-24 w-36 items-center  justify-center rounded-sm border border-dashed border-gray-300 p-1 ">
+      <div className="flex h-full">{props.children}</div>
+    </div>
+  );
+};
 
 export default NewCard;

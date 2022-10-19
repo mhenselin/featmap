@@ -1,12 +1,8 @@
-import React, { Component } from 'react';
+import React, { Component } from "react";
 
 class Footer extends Component {
   render() {
-    return (
-      <div className="flex p-2 text-xs justify-center">
-
-      </div>
-    );
+    return <div className="flex justify-center p-2 text-xs"></div>;
   }
 }
 
