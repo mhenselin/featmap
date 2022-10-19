@@ -1,6 +1,3 @@
-import { ICard } from "../../core/card";
-import { CardStatus } from "../../core/misc";
-
 export type IFeatureComment = {
   kind: "featureComment";
   id: string;

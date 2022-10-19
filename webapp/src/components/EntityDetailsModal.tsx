@@ -1,18 +1,17 @@
-import React, { Component } from "react";
-import { connect } from "react-redux";
-import { AppState } from "../store";
+import { Component } from "react";
 import onClickOutside from "react-onclickoutside";
-import EntityDetailsBody from "./EntityDetailsBody";
+import { connect } from "react-redux";
 import { EntityTypes } from "../core/card";
 import { IFeatureComment } from "../store/featurecomments/types";
+import EntityDetailsBody from "./EntityDetailsBody";
 
-const mapStateToProps = (state: AppState) => ({});
+const mapStateToProps = () => ({});
 
 const mapDispatchToProps = {};
 
-type PropsFromState = {};
+type PropsFromState = Record<string, never>;
 
-type PropsFromDispatch = {};
+type PropsFromDispatch = Record<string, unknown>;
 
 type SelfProps = {
   entity: EntityTypes;
@@ -25,7 +24,7 @@ type SelfProps = {
 
 type Props = PropsFromState & PropsFromDispatch & SelfProps;
 
-type State = {};
+type State = Record<string, never>;
 
 class EntityDetailsModal extends Component<Props, State> {
   keydownHandler = (event: KeyboardEvent) => {
@@ -87,4 +86,7 @@ class EntityDetailsModal extends Component<Props, State> {
   }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(EntityDetailsModal);
+export default connect<State, unknown, SelfProps>(
+  mapStateToProps,
+  mapDispatchToProps
+)(EntityDetailsModal);

@@ -17,9 +17,9 @@ const mapStateToProps = (state: AppState) => ({
 type PropsFromState = {
   state: AppState;
 };
-type RouterProps = {} & RouteComponentProps<{}>;
-type PropsFromDispatch = {};
-type OwnProps = {};
+type RouterProps = RouteComponentProps;
+type PropsFromDispatch = Record<string, never>;
+type OwnProps = Record<string, never>;
 type Props = RouterProps & PropsFromState & PropsFromDispatch & OwnProps;
 
 type State = {

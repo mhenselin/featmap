@@ -1,16 +1,16 @@
-import React, { Component } from "react";
+import { Component } from "react";
+import { connect } from "react-redux";
+import type { RouteComponentProps } from "react-router";
+import { Redirect, Route, Switch } from "react-router-dom";
+import { API_FETCH_APP, API_FETCH_APP_RESP } from "../api";
+import Footer from "../components/Footer";
+import { AppState } from "../store";
+import { receiveAppAction } from "../store/application/actions";
+import { IApplication } from "../store/application/types";
 import AccountPage from "./AccountPage";
+import NotFound from "./NotFound";
 import WorkspacePage from "./WorkspacePage";
 import WorkspacesPage from "./WorkspacesPage";
-import NotFound from "./NotFound";
-import Footer from "../components/Footer";
-import type { RouteComponentProps } from "react-router";
-import { Route, Switch, Redirect } from "react-router-dom";
-import { AppState } from "../store";
-import { connect } from "react-redux";
-import { IApplication } from "../store/application/types";
-import { receiveAppAction } from "../store/application/actions";
-import { API_FETCH_APP, API_FETCH_APP_RESP } from "../api";
 
 const mapDispatchToProps = {
   applicationReceived: receiveAppAction,
@@ -23,11 +23,11 @@ const mapStateToProps = (state: AppState) => ({
 type PropsFromState = {
   application: IApplication;
 };
-type RouterProps = {} & RouteComponentProps<{}>;
+type RouterProps = RouteComponentProps;
 type PropsFromDispatch = {
   applicationReceived: typeof receiveAppAction;
 };
-type SelfProps = {};
+type SelfProps = Record<string, never>;
 type Props = RouterProps & PropsFromState & PropsFromDispatch & SelfProps;
 
 type State = {

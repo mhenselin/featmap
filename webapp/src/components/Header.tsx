@@ -1,6 +1,6 @@
-import React, { Component } from "react";
-import { IAccount } from "../store/application/types";
+import { Component } from "react";
 import { Link } from "react-router-dom";
+import { IAccount } from "../store/application/types";
 import ContextMenu from "./ContextMenu";
 
 type Props = {
@@ -28,7 +28,7 @@ class Header extends Component<Props> {
             <div className="flex items-center  rounded p-1 ">
               <ContextMenu icon="account_circle">
                 <div className="absolute top-0 right-0 mt-8 min-w-full rounded bg-white text-sm shadow-md">
-                  <ul className="list-reset">
+                  <ul className="">
                     {this.props.workspaceName ? (
                       <li className="block whitespace-nowrap px-4 py-2 text-gray-600">
                         Current workspace:{" "}
@@ -38,7 +38,7 @@ class Header extends Component<Props> {
                           </Link>{" "}
                         </b>{" "}
                         <Link
-                          className="flex-no-shrink rounded bg-gray-300 p-1 text-xs  font-bold"
+                          className="shrink-0 rounded bg-gray-300 p-1 text-xs  font-bold"
                           to="/account/workspaces"
                         >
                           Change{" "}

@@ -1,16 +1,14 @@
-import React, { Component } from "react";
-import { RouteComponentProps } from "react-router";
-import * as Yup from "yup";
-import {
-  Formik,
+import type {
+  FieldProps,
   FormikHelpers as FormikActions,
   FormikProps,
-  Form,
-  Field,
-  FieldProps,
 } from "formik";
-import { API_NEW_PASSWORD_REQ, API_SET_PASSWORD } from "../api";
+import { Field, Form, Formik } from "formik";
+import { Component } from "react";
+import type { RouteComponentProps } from "react-router";
 import { Link } from "react-router-dom";
+import * as Yup from "yup";
+import { API_NEW_PASSWORD_REQ, API_SET_PASSWORD } from "../api";
 import { Button } from "../components/elements";
 
 const Schema = Yup.object().shape({
@@ -20,12 +18,12 @@ const Schema = Yup.object().shape({
     .required("Password required."),
 });
 
-type PropsFromState = {};
-type RouterProps = {} & RouteComponentProps<{
+type PropsFromState = Record<string, never>;
+type RouterProps = RouteComponentProps<{
   key: string;
 }>;
-type PropsFromDispatch = {};
-type SelfProps = {};
+type PropsFromDispatch = Record<string, never>;
+type SelfProps = Record<string, never>;
 type Props = RouterProps & PropsFromState & PropsFromDispatch & SelfProps;
 
 type State = {
@@ -100,7 +98,7 @@ class ResetPasswordPage extends Component<Props, State> {
                     <div>{formikBag.status.msg}</div>
                   )}
                   <Field name="password">
-                    {({ field, form }: FieldProps<API_NEW_PASSWORD_REQ>) => (
+                    {({ form }: FieldProps<API_NEW_PASSWORD_REQ>) => (
                       <div className="flex flex-row items-baseline">
                         <div className="flex w-full flex-col">
                           <div>

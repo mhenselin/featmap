@@ -1,24 +1,18 @@
-import React, { Component, Dispatch } from "react";
+import type { FieldProps, FormikHelpers, FormikProps } from "formik";
+import { Field, Form, Formik } from "formik";
+import { Component, Dispatch } from "react";
 import { connect } from "react-redux";
-import { AppState, AllActions } from "../store";
+import { v4 as uuid } from "uuid";
+import * as Yup from "yup";
+import { API_CREATE_PROJECT } from "../api";
+import { AllActions, AppState } from "../store";
 import {
   application,
   getWorkspaceByName,
 } from "../store/application/selectors";
+import { IApplication } from "../store/application/types";
 import { createProjectAction } from "../store/projects/actions";
 import { IProject } from "../store/projects/types";
-import {
-  Formik,
-  FormikHelpers as FormikActions,
-  FormikProps,
-  Form,
-  Field,
-  FieldProps,
-} from "formik";
-import { API_CREATE_PROJECT } from "../api";
-import { v4 as uuid } from "uuid";
-import * as Yup from "yup";
-import { IApplication } from "../store/application/types";
 import { Button } from "./elements";
 
 const mapStateToProps = (state: AppState) => ({
@@ -100,7 +94,7 @@ class CreateProjectModal extends Component<Props, State> {
             validationSchema={Schema}
             onSubmit={(
               values: formValues,
-              actions: FormikActions<formValues>
+              actions: FormikHelpers<formValues>
             ) => {
               const projectId = uuid();
 
@@ -150,7 +144,6 @@ class CreateProjectModal extends Component<Props, State> {
                         <div className="flex flex-col">
                           <div>
                             <input
-                              autoFocus
                               type="text"
                               value={form.values.title}
                               onChange={form.handleChange}

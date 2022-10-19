@@ -1,25 +1,25 @@
-import React, { Component } from "react";
+import { Component } from "react";
+import { connect } from "react-redux";
 import type { RouteComponentProps } from "react-router";
+import { Link, Redirect, Route, Switch } from "react-router-dom";
+import { API_GET_PROJECTS } from "../api";
+import Header from "../components/Header";
+import { daysBetween, subIsInactive, subIsTrial } from "../core/misc";
 import { AppState } from "../store";
 import {
-  getWorkspaceByName,
   application,
   getSubscription,
+  getWorkspaceByName,
 } from "../store/application/selectors";
-import { connect } from "react-redux";
-import NotFound from "./NotFound";
-import ProjectPage from "./ProjectPage";
-import Header from "../components/Header";
 import { IApplication } from "../store/application/types";
 import { loadProjectsAction } from "../store/projects/actions";
 import { projects } from "../store/projects/selectors";
 import { IProject } from "../store/projects/types";
-import { Route, Switch, Redirect, Link } from "react-router-dom";
+import NotFound from "./NotFound";
+import ProjectPage from "./ProjectPage";
 import ProjectsPage from "./ProjectsPage";
-import { API_GET_PROJECTS } from "../api";
-import WorkspaceSettingsPage from "./WorkspaceSettingsPage";
-import { daysBetween, subIsInactive, subIsTrial } from "../core/misc";
 import SubscriptionPage from "./SubscriptionPage";
+import WorkspaceSettingsPage from "./WorkspaceSettingsPage";
 
 const mapStateToProps = (state: AppState) => ({
   application: application(state),
@@ -34,14 +34,14 @@ type PropsFromState = {
   application: IApplication;
   projects: IProject[];
 };
-type RouterProps = {} & RouteComponentProps<{
+type RouterProps = RouteComponentProps<{
   workspaceName: string;
 }>;
 type PropsFromDispatch = {
   //loadProjectsRequest: typeof loadProjectsRequest
   loadProjects: typeof loadProjectsAction;
 };
-type SelfProps = {};
+type SelfProps = Record<string, never>;
 type Props = RouterProps & PropsFromState & PropsFromDispatch & SelfProps;
 
 type State = {

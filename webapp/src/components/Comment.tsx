@@ -1,11 +1,5 @@
-import {
-  Field,
-  FieldProps,
-  Form,
-  Formik,
-  FormikHelpers as FormikActions,
-  FormikProps,
-} from "formik";
+import type { FieldProps, FormikProps } from "formik";
+import { Field, Form, Formik } from "formik";
 import { Component } from "react";
 import ReactMarkdown from "react-markdown";
 import * as Yup from "yup";
@@ -32,14 +26,13 @@ type State = {
 class Comment extends Component<Props, State> {
   constructor(props: Props) {
     super(props);
-    this.submitForm = () => {};
     this.state = {
       editing: false,
       post: props.comment.post,
     };
   }
 
-  submitForm: () => void;
+  submitForm!: FormikProps<{ comment: string }>["submitForm"];
 
   render() {
     const owner =
@@ -69,7 +62,7 @@ class Comment extends Component<Props, State> {
             <div>
               <ContextMenu icon="more_horiz">
                 <div className="absolute top-0 right-0  z-20 mt-8 min-w-full rounded bg-white text-xs shadow-md">
-                  <ul className="list-reset">
+                  <ul className="">
                     <li>
                       <Button
                         noborder
@@ -108,10 +101,7 @@ class Comment extends Component<Props, State> {
                 .min(1, "Minimum 1 character.")
                 .max(10000, "Maximum 10000 characters."),
             })}
-            onSubmit={(
-              values: { comment: string },
-              actions: FormikActions<{ comment: string }>
-            ) => {
+            onSubmit={(values: { comment: string }) => {
               this.props.editComment(this.props.comment, values.comment);
             }}
           >
@@ -163,10 +153,9 @@ class Comment extends Component<Props, State> {
           </Formik>
         ) : (
           <div className="markdown-body">
-            <ReactMarkdown
-              children={this.props.comment.post}
-              linkTarget="_blank"
-            />
+            <ReactMarkdown linkTarget="_blank">
+              {this.props.comment.post}
+            </ReactMarkdown>
           </div>
         )}
       </div>

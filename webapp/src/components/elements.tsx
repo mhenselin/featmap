@@ -1,7 +1,7 @@
 import { FunctionComponent, PropsWithChildren } from "react";
 
 export const OldButton: FunctionComponent<{ title: string }> = (props) => (
-  <div className="flex-no-shrink whitespace-nowrap rounded  bg-gray-200  p-2  text-xs font-bold uppercase ">
+  <div className="shrink-0 whitespace-nowrap rounded  bg-gray-200  p-2  text-xs font-bold uppercase ">
     {props.title}
   </div>
 );
@@ -25,7 +25,7 @@ export const Button: FunctionComponent<{
   >
     <div
       className={
-        " flex-no-shrink flex items-center    whitespace-nowrap font-medium " +
+        " flex shrink-0 items-center    whitespace-nowrap font-medium " +
         (props.small ? " p-1 " : " p-2 ") +
         (!props.noborder && " border ") +
         (!props.primary && " text-black  ") +

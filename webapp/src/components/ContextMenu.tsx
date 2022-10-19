@@ -54,7 +54,7 @@ class ContextMenu extends Component<Props, State> {
               ) : null}
             </button>
           </div>
-          <div
+          <button
             onClick={() =>
               this.setState((state) => {
                 return { expand: !state.expand };
@@ -62,7 +62,7 @@ class ContextMenu extends Component<Props, State> {
             }
           >
             {this.state.expand ? <div>{this.props.children}</div> : ""}
-          </div>
+          </button>
         </div>
       </div>
     );

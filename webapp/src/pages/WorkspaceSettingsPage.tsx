@@ -1,13 +1,8 @@
-import {
-  Field,
-  Form,
-  Formik,
-  FormikHelpers as FormikActions,
-  FormikProps,
-} from "formik";
+import type { FormikProps } from "formik";
+import { Field, Form, Formik } from "formik";
 import { Component, Dispatch, FunctionComponent, useState } from "react";
 import { connect } from "react-redux";
-import { RouteComponentProps } from "react-router";
+import type { RouteComponentProps } from "react-router";
 import * as Yup from "yup";
 import {
   API_CHANGE_GENERAL_INFORMATION,
@@ -51,14 +46,14 @@ const mapDispatchToProps = (dispatch: Dispatch<AllActions>) => ({
 type PropsFromState = {
   application: IApplication;
 };
-type RouterProps = {} & RouteComponentProps<{
+type RouterProps = RouteComponentProps<{
   workspaceName: string;
 }>;
 type PropsFromDispatch = {
   newMessage: ReturnType<typeof newMessage>;
   receiveApp: typeof receiveAppAction;
 };
-type SelfProps = {};
+type SelfProps = Record<string, never>;
 type Props = RouterProps & PropsFromState & PropsFromDispatch & SelfProps;
 
 type State = {
@@ -245,7 +240,7 @@ class WorkspaceSettingsPage extends Component<Props, State> {
                   )}
                 </div>
 
-                <div className="justify-right mt-3 ml-3 flex  text-xs">
+                <div className="mt-3 ml-3 flex  text-xs">
                   <Formik
                     initialValues={{ level: props.member.level }}
                     validationSchema={Yup.object().shape({
@@ -350,7 +345,7 @@ class WorkspaceSettingsPage extends Component<Props, State> {
                           case "canceled":
                             return "Inactive (canceled by user or  due to unpaid invoice)";
                           default:
-                            break;
+                            return null;
                         }
                       })()}
                     </div>
@@ -415,10 +410,7 @@ class WorkspaceSettingsPage extends Component<Props, State> {
                     .email("Invalid email address")
                     .required("Required."),
                 })}
-                onSubmit={(
-                  values: orgInfoForm,
-                  actions: FormikActions<orgInfoForm>
-                ) => {
+                onSubmit={(values: orgInfoForm) => {
                   API_CHANGE_GENERAL_INFORMATION(
                     ws.id,
                     values.euVat,
@@ -530,10 +522,7 @@ class WorkspaceSettingsPage extends Component<Props, State> {
                             .required("Required."),
                           level: Yup.string().required("Required."),
                         })}
-                        onSubmit={(
-                          values: inviteForm,
-                          actions: FormikActions<inviteForm>
-                        ) => {
+                        onSubmit={(values: inviteForm) => {
                           API_CREATE_INVITE(
                             ws.id,
                             values.email,
@@ -661,10 +650,7 @@ class WorkspaceSettingsPage extends Component<Props, State> {
                                 <div className="ml-1">
                                   <Formik
                                     initialValues={{}}
-                                    onSubmit={(
-                                      values: {},
-                                      actions: FormikActions<{}>
-                                    ) => {
+                                    onSubmit={() => {
                                       API_RESEND_INVITE(ws.id, x.id).then(
                                         (response) => {
                                           if (response.ok) {
@@ -676,18 +662,20 @@ class WorkspaceSettingsPage extends Component<Props, State> {
                                           } else {
                                             response
                                               .json()
-                                              .then((data: any) => {
-                                                this.props.newMessage(
-                                                  "fail",
-                                                  data.message
-                                                );
-                                              });
+                                              .then(
+                                                (data: { message: string }) => {
+                                                  this.props.newMessage(
+                                                    "fail",
+                                                    data.message
+                                                  );
+                                                }
+                                              );
                                           }
                                         }
                                       );
                                     }}
                                   >
-                                    {(formikBag: FormikProps<{}>) => (
+                                    {() => (
                                       <Form>
                                         <span className="text-xs">
                                           <Button
@@ -750,20 +738,20 @@ class WorkspaceSettingsPage extends Component<Props, State> {
 
                 <Formik
                   initialValues={{}}
-                  onSubmit={(values: {}, actions: FormikActions<{}>) => {
+                  onSubmit={() => {
                     API_DELETE_WORKSPACE(ws.id).then((response) => {
                       if (response.ok) {
                         this.props.newMessage("success", "workspace deleted");
                         window.location.href = "/";
                       } else {
-                        response.json().then((data: any) => {
+                        response.json().then((data: { message: string }) => {
                           this.props.newMessage("fail", data.message);
                         });
                       }
                     });
                   }}
                 >
-                  {(formikBag: FormikProps<{}>) => (
+                  {() => (
                     <Form>
                       <p className="text-xs">
                         <Button

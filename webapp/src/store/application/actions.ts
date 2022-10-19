@@ -18,7 +18,7 @@ export type receiveApp = {
 };
 export type resetApp = {
   type: AppActions.RESET_APPLICATION;
-  payload: {};
+  payload: Record<string, never>;
 };
 export type createMessage = {
   type: AppActions.CREATE_MESSAGE;

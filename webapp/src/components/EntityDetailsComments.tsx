@@ -1,34 +1,28 @@
-import React, { Component } from "react";
+import { Component } from "react";
 import { connect } from "react-redux";
 import { AppState } from "../store";
 
-import {
-  createFeatureCommentAction,
-  updateFeatureCommentAction,
-  deleteFeatureCommentAction,
-} from "../store/featurecomments/actions";
-import {
-  Formik,
-  FormikHelpers as FormikActions,
-  FormikProps,
-  Form,
-  Field,
-  FieldProps,
-} from "formik";
+import type { FieldProps, FormikProps } from "formik";
+import { Field, Form, Formik } from "formik";
 import {
   API_CREATE_FEATURE_COMMENT,
   API_DELETE_FEATURE_COMMENT,
   API_UPDATE_FEATURE_COMMENT_POST,
 } from "../api";
+import {
+  createFeatureCommentAction,
+  deleteFeatureCommentAction,
+  updateFeatureCommentAction,
+} from "../store/featurecomments/actions";
 
 import { v4 as uuid } from "uuid";
 import * as Yup from "yup";
+import { EntityTypes } from "../core/card";
 import { application, getMembership } from "../store/application/selectors";
 import { IApplication } from "../store/application/types";
-import { EntityTypes } from "../core/card";
-import { Button } from "./elements";
 import { IFeatureComment } from "../store/featurecomments/types";
 import Comment from "./Comment";
+import { Button } from "./elements";
 
 const mapStateToProps = (state: AppState) => ({
   application: application(state),
@@ -59,15 +53,14 @@ type SelfProps = {
 };
 type Props = PropsFromState & PropsFromDispatch & SelfProps;
 
-type State = {};
+type State = Record<string, never>;
 
 class EntityDetailsComments extends Component<Props, State> {
   constructor(props: Props) {
     super(props);
-    this.submitForm = () => {};
   }
 
-  submitForm: () => void;
+  submitForm!: FormikProps<{ comment: string }>["submitForm"];
 
   deleteComment = (id: string) => {
     this.props.deleteFeatureComment(id); // optimistic
@@ -129,10 +122,7 @@ class EntityDetailsComments extends Component<Props, State> {
                   .required("Please write a comment.")
                   .max(10000, "Maximum 10000 characters."),
               })}
-              onSubmit={(
-                values: { comment: string },
-                actions: FormikActions<{ comment: string }>
-              ) => {
+              onSubmit={(values: { comment: string }) => {
                 const id = uuid();
                 const t = new Date().toISOString();
                 const by =
@@ -240,7 +230,7 @@ class EntityDetailsComments extends Component<Props, State> {
                                                         <div>
                                                             <ContextMenu icon="more_horiz">
                                                                 <div className="rounded bg-white shadow-md  absolute mt-8 top-0 right-0 min-w-full text-xs" >
-                                                                    <ul className="list-reset">
+                                                                    <ul className="">
                                                                         <li><Button noborder title="Edit" icon="edit" handleOnClick={() => this.deleteComment(comment.id)} /></li>
                                                                         <li><Button noborder title="Delete" icon="delete" warning handleOnClick={() => this.deleteComment(comment.id)} /></li>
                                                                     </ul>

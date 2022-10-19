@@ -1,14 +1,14 @@
-import React, { Component } from "react";
+import { Component } from "react";
 import type { RouteComponentProps } from "react-router";
 import { Link } from "react-router-dom";
 import { API_VERIFY_EMAIL } from "../api";
 
-type PropsFromState = {};
-type RouterProps = {} & RouteComponentProps<{
+type PropsFromState = Record<string, never>;
+type RouterProps = RouteComponentProps<{
   key: string;
 }>;
-type PropsFromDispatch = {};
-type SelfProps = {};
+type PropsFromDispatch = Record<string, never>;
+type SelfProps = Record<string, never>;
 type Props = RouterProps & PropsFromState & PropsFromDispatch & SelfProps;
 
 type State = {

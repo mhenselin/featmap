@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import { Component } from "react";
 import { Link } from "react-router-dom";
 import {
   Color,
@@ -37,7 +37,7 @@ class Card extends Component<Props, State> {
         <div
           style={{ fontSize: "12px" }}
           className={
-            "flex-no-shrink flex w-36 flex-row overflow-hidden   rounded-sm  border bg-white   " +
+            "flex w-36 shrink-0 flex-row overflow-hidden   rounded-sm  border bg-white   " +
             (this.props.small ? " " : " h-24 ") +
             (color
               ? " border-l-4 " + colorToBorderColorClass(color) + " "
@@ -106,7 +106,7 @@ class Card extends Component<Props, State> {
           </Link>
         </div>
         {this.props.bottomLink && (
-          <div className=" flex-no-shrink -mt-1 -mb-2  flex h-6 w-36  justify-center">
+          <div className=" -mt-1 -mb-2 flex  h-6 w-36 shrink-0  justify-center">
             <div className="showme flex text-xl font-bold   ">
               <button
                 className=" text-gray-500 hover:text-gray-800"

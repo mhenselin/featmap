@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import { Component } from "react";
 import type { RouteComponentProps } from "react-router";
 import { API_LOG_OUT } from "../api";
 import { resetAppAction } from "../store/application/actions";
@@ -9,12 +9,12 @@ const mapDispatchToProps = {
   resetApp: resetAppAction,
 };
 
-type PropsFromState = {};
-type RouterProps = {} & RouteComponentProps<{}>;
+type PropsFromState = Record<string, never>;
+type RouterProps = RouteComponentProps;
 type PropsFromDispatch = {
   resetApp: typeof resetAppAction;
 };
-type SelfProps = {};
+type SelfProps = Record<string, never>;
 type Props = RouterProps & PropsFromState & PropsFromDispatch & SelfProps;
 class LogoutPage extends Component<Props> {
   componentDidMount() {

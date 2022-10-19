@@ -1,5 +1,5 @@
-import type { FieldProps, FormikProps } from "formik";
-import { Field, Form, Formik, FormikHelpers } from "formik";
+import type { FieldProps, FormikProps, FormikHelpers } from "formik";
+import { Field, Form, Formik } from "formik";
 import { Component } from "react";
 import OnClickOut from "react-onclickoutside";
 import { connect } from "react-redux";
@@ -50,11 +50,11 @@ export enum Types {
 
 export type newMilestone = {
   type: Types.MILESTONE;
-  payload: {};
+  payload: Record<string, never>;
 };
 export type newWorkflow = {
   type: Types.WORKFLOW;
-  payload: {};
+  payload: Record<string, never>;
 };
 export type newSubWorkflow = {
   type: Types.SUBWORKFLOW;
@@ -113,7 +113,7 @@ type SelfProps = {
 };
 type Props = PropsFromState & PropsFromDispatch & SelfProps;
 
-type State = {};
+type State = Record<string, never>;
 
 const Schema = Yup.object().shape({
   title: Yup.string()
@@ -388,7 +388,6 @@ class CreateCardModal extends Component<Props, State> {
                           <div className="flex flex-col">
                             <div>
                               <input
-                                autoFocus
                                 type="text"
                                 value={form.values.title}
                                 onChange={form.handleChange}

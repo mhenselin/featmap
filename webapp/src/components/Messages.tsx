@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import { Component } from "react";
 import { connect } from "react-redux";
 import { AppState } from "../store";
 import { application } from "../store/application/selectors";
@@ -14,11 +14,11 @@ type PropsFromState = {
   application: IApplication;
 };
 
-type PropsFromDispatch = {};
-type SelfProps = {};
+type PropsFromDispatch = Record<string, never>;
+type SelfProps = Record<string, never>;
 type Props = PropsFromState & PropsFromDispatch & SelfProps;
 
-type State = {};
+type State = Record<string, never>;
 
 class Messages extends Component<Props, State> {
   render() {
@@ -35,7 +35,7 @@ class Messages extends Component<Props, State> {
                 )}
                 {x.type === "fail" && (
                   <div className="mr-1">
-                    <i className="material-icons text-red">error</i>{" "}
+                    <i className="material-icons text-red-500">error</i>{" "}
                   </div>
                 )}
                 <div className="flex  grow">{x.message} </div>

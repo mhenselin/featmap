@@ -1,9 +1,5 @@
-import {
-  Form,
-  Formik,
-  FormikHelpers as FormikActions,
-  FormikProps,
-} from "formik";
+import type { FormikHelpers as FormikActions, FormikProps } from "formik";
+import { Form, Formik } from "formik";
 import { Component } from "react";
 import type { RouteComponentProps } from "react-router";
 import { Link } from "react-router-dom";
@@ -12,12 +8,12 @@ import { Button } from "../components/elements";
 import { memberLevelToTitle } from "../core/misc";
 import { IInvite } from "../store/application/types";
 
-type PropsFromState = {};
-type RouterProps = {} & RouteComponentProps<{
+type PropsFromState = Record<string, never>;
+type RouterProps = RouteComponentProps<{
   code: string;
 }>;
-type PropsFromDispatch = {};
-type SelfProps = {};
+type PropsFromDispatch = Record<string, never>;
+type SelfProps = Record<string, never>;
 type Props = RouterProps & PropsFromState & PropsFromDispatch & SelfProps;
 
 type State = {
@@ -96,7 +92,10 @@ class AcceptInvitePage extends Component<Props, State> {
             <div>
               <Formik
                 initialValues={{}}
-                onSubmit={(values: {}, actions: FormikActions<{}>) => {
+                onSubmit={(
+                  _,
+                  actions: FormikActions<Record<string, never>>
+                ) => {
                   actions.setStatus("");
                   API_ACCEPT_INVITE(this.props.match.params.code).then(
                     (response) => {
@@ -113,9 +112,9 @@ class AcceptInvitePage extends Component<Props, State> {
                   actions.setSubmitting(false);
                 }}
               >
-                {(formikBag: FormikProps<{}>) => (
+                {(formikBag: FormikProps<Record<string, never>>) => (
                   <Form>
-                    <div className="text-red p-2  font-bold">
+                    <div className="p-2 font-bold  text-red-500">
                       {formikBag.status}
                     </div>
                     <div className="flex  w-full justify-center text-lg ">

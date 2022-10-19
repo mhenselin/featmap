@@ -1,31 +1,26 @@
-import React, { Component, Dispatch } from "react";
-import { RouteComponentProps } from "react-router";
-import { AppState, AllActions } from "../store";
-import {
-  application,
-  getWorkspaceByName,
-  getMembership,
-  getSubscription,
-} from "../store/application/selectors";
+import type { FormikHelpers as FormikActions, FormikProps } from "formik";
+import { Field, Form, Formik } from "formik";
+import { Component, Dispatch } from "react";
 import { connect } from "react-redux";
-import { IApplication, IMembership } from "../store/application/types";
-import { newMessage, receiveAppAction } from "../store/application/actions";
+import type { RouteComponentProps } from "react-router";
+import * as Yup from "yup";
+import { API_CHANGE_SUBSCRIPTION, API_GET_MEMBERS } from "../api";
+import { Button, CardLayout } from "../components/elements";
 import {
-  Roles,
-  mustCreateNewSub,
   isEditor,
+  mustCreateNewSub,
+  Roles,
   SubscriptionLevels,
 } from "../core/misc";
-import { CardLayout, Button } from "../components/elements";
+import { AllActions, AppState } from "../store";
+import { newMessage, receiveAppAction } from "../store/application/actions";
 import {
-  Formik,
-  FormikHelpers as FormikActions,
-  FormikProps,
-  Form,
-  Field,
-} from "formik";
-import * as Yup from "yup";
-import { API_GET_MEMBERS, API_CHANGE_SUBSCRIPTION } from "../api";
+  application,
+  getMembership,
+  getSubscription,
+  getWorkspaceByName,
+} from "../store/application/selectors";
+import { IApplication, IMembership } from "../store/application/types";
 
 const mapStateToProps = (state: AppState) => ({
   application: application(state),
@@ -39,14 +34,14 @@ const mapDispatchToProps = (dispatch: Dispatch<AllActions>) => ({
 type PropsFromState = {
   application: IApplication;
 };
-type RouterProps = {} & RouteComponentProps<{
+type RouterProps = RouteComponentProps<{
   workspaceName: string;
 }>;
 type PropsFromDispatch = {
   newMessage: ReturnType<typeof newMessage>;
   receiveApp: typeof receiveAppAction;
 };
-type SelfProps = {};
+type SelfProps = Record<string, never>;
 type Props = RouterProps & PropsFromState & PropsFromDispatch & SelfProps;
 
 type State = {
@@ -262,7 +257,7 @@ class SubscriptionPage extends Component<Props, State> {
                                           For teams who wants to focus on
                                           building better products.{" "}
                                         </div>
-                                        <ul className="list-reset ">
+                                        <ul className=" ">
                                           <li className="mb-2 flex items-center">
                                             <div className="mr-1">
                                               <i className="material-icons font-bold text-green-500">
@@ -361,7 +356,7 @@ class SubscriptionPage extends Component<Props, State> {
 
                                                                             <div >
                                                                                 <div className="p-3 bg-gray-200 my-2">For larger teams or multiple teams. </div>
-                                                                                <ul className="list-reset ">
+                                                                                <ul className=" ">
                                                                                     <li className="mb-2 flex items-center">
                                                                                         <div>Includes everything in <b>Teams</b> with full functionality and </div>
                                                                                     </li>
@@ -398,7 +393,7 @@ class SubscriptionPage extends Component<Props, State> {
 
                                                                             <div >
                                                                                 <div className="p-3 bg-gray-200 my-2"> For large organizations with more than 50 members.  </div>
-                                                                                <ul className="list-reset ">
+                                                                                <ul className=" ">
                                                                                     <li className="mb-2 flex items-center">
                                                                                         <div className="mr-1"><i className="material-icons font-bold text-green-500">done</i> </div>
                                                                                         <div>Custom pricing</div>

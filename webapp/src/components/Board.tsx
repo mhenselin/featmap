@@ -312,11 +312,11 @@ class Board extends Component<Props, State> {
     this.setState({ showClosedMilestones: false });
   };
 
-  getListStyle = (isDraggingOver: boolean): {} => ({
+  getListStyle = (isDraggingOver: boolean) => ({
     background: isDraggingOver ? "#DAE1E7" : "",
   });
 
-  getItemStyle = (isDragging: boolean, draggableStyle: any): {} => ({
+  getItemStyle = (isDragging: boolean, draggableStyle: any) => ({
     background: isDragging ? "#51D88A" : "",
 
     // styles we need to apply on draggables
@@ -658,7 +658,7 @@ class Board extends Component<Props, State> {
                                   ) => (
                                     <div
                                       key={w.id}
-                                      className="bug flex p-1   "
+                                      className="flex p-1   "
                                       ref={providedDraggable.innerRef}
                                       {...providedDraggable.draggableProps}
                                       {...providedDraggable.dragHandleProps}
@@ -717,7 +717,7 @@ class Board extends Component<Props, State> {
                                               icon="add"
                                             >
                                               <div className="absolute top-0 left-0  mt-8 w-full max-w-xs rounded  bg-white  text-xs shadow-md">
-                                                <ul className="list-reset p-3">
+                                                <ul className=" p-3">
                                                   {sortPersonas(
                                                     removeSpecificPersonas(
                                                       this.props.personas,
@@ -789,7 +789,7 @@ class Board extends Component<Props, State> {
                                             link={this.props.url + "/w/" + w.id}
                                           />
                                         </div>
-                                        <div className="fm-paren flex flex-row ">
+                                        <div className=" flex flex-row ">
                                           <Droppable
                                             key={"w" + w.id}
                                             droppableId={"sw*" + w.id}
@@ -863,7 +863,7 @@ class Board extends Component<Props, State> {
                                                         ) => (
                                                           <div>
                                                             <div
-                                                              className="bug flex p-1 "
+                                                              className="flex p-1 "
                                                               ref={
                                                                 providedDraggable.innerRef
                                                               }
@@ -910,9 +910,9 @@ class Board extends Component<Props, State> {
 
                                                   {this.props.viewOnly &&
                                                   !this.props.demo ? (
-                                                    <div className="flex-no-shrink mt-1 flex h-24  w-2 justify-center"></div>
+                                                    <div className="mt-1 flex h-24 w-2  shrink-0 justify-center"></div>
                                                   ) : (
-                                                    <div className="flex-no-shrink mt-1 flex h-24  w-2 justify-center">
+                                                    <div className="mt-1 flex h-24 w-2  shrink-0 justify-center">
                                                       <div className="showme flex text-xl font-bold">
                                                         <button
                                                           className=" text-gray-500 hover:text-gray-800"
@@ -977,6 +977,93 @@ class Board extends Component<Props, State> {
                     providedDroppable: DroppableProvided,
                     snapshotDroppable: DroppableStateSnapshot
                   ) => {
+                    const A = () => {
+                      const nbrOfClosedMilestones =
+                        filterClosedMilestones(milestones).length;
+                      const nbrOfClosedWorkflows =
+                        filterClosedWorkflows(workflows).length;
+                      const nbrOfClosedSubWorkflows =
+                        filterClosedSubWorkflows(subWorkflows).length;
+
+                      if (
+                        nbrOfClosedMilestones > 0 ||
+                        nbrOfClosedWorkflows > 0 ||
+                        nbrOfClosedSubWorkflows > 0
+                      ) {
+                        return "Closed cards not shown: ";
+                      }
+                      return null;
+                    };
+
+                    const B = () => {
+                      const nbrOfClosedMilestones =
+                        filterClosedMilestones(milestones).length;
+
+                      if (nbrOfClosedMilestones === 1) {
+                        return (
+                          <span>
+                            {" "}
+                            <b> {nbrOfClosedMilestones}</b> release{" "}
+                          </span>
+                        );
+                      }
+                      if (nbrOfClosedMilestones > 1) {
+                        return (
+                          <span>
+                            {" "}
+                            <b> {nbrOfClosedMilestones}</b> releases{" "}
+                          </span>
+                        );
+                      }
+                      return null;
+                    };
+
+                    const C = () => {
+                      const nbrOfClosedWorkflows =
+                        filterClosedWorkflows(workflows).length;
+
+                      if (nbrOfClosedWorkflows === 1) {
+                        return (
+                          <span>
+                            {" "}
+                            <b> {nbrOfClosedWorkflows}</b> goal
+                          </span>
+                        );
+                      }
+                      if (nbrOfClosedWorkflows > 1) {
+                        return (
+                          <span>
+                            {" "}
+                            <b> {nbrOfClosedWorkflows}</b> goals{" "}
+                          </span>
+                        );
+                      }
+                      return null;
+                    };
+
+                    const D = () => {
+                      const nbrOfClosedSubWorkflows =
+                        filterClosedSubWorkflows(subWorkflows).length;
+
+                      if (nbrOfClosedSubWorkflows === 1) {
+                        return (
+                          <span>
+                            {" "}
+                            <b> {nbrOfClosedSubWorkflows}</b> activity
+                          </span>
+                        );
+                      }
+                      if (nbrOfClosedSubWorkflows > 1) {
+                        return (
+                          <span>
+                            {" "}
+                            <b> {nbrOfClosedSubWorkflows}</b> activities{" "}
+                          </span>
+                        );
+                      }
+                      return null;
+                    };
+
                     return (
                       <div className="flex">
                         <div
@@ -1005,234 +1092,241 @@ class Board extends Component<Props, State> {
                                 {(
                                   providedDraggable: DraggableProvided,
                                   snapshotDraggable: DraggableStateSnapshot
-                                ) => (
-                                  <div
-                                    key={m.id}
-                                    className={"bug flex p-1   "}
-                                    ref={providedDraggable.innerRef}
-                                    {...providedDraggable.draggableProps}
-                                    {...providedDraggable.dragHandleProps}
-                                    style={this.getItemStyle(
-                                      snapshotDraggable.isDragging,
-                                      providedDraggable.draggableProps.style
-                                    )}
-                                  >
+                                ) => {
+                                  const InternalCard = () => {
+                                    const f = filterFeaturesOnMilestone(
+                                      features,
+                                      m.id
+                                    );
+                                    const fEstimate = f
+                                      .map((x) => x.estimate)
+                                      .reduce((p, c) => p + c, 0);
+
+                                    return (
+                                      <Card
+                                        estimate={fEstimate}
+                                        annotations={m.annotations}
+                                        nbrOfItems={f.length}
+                                        color={m.color}
+                                        status={m.status}
+                                        title={m.title}
+                                        link={this.props.url + "/m/" + m.id}
+                                      />
+                                    );
+                                  };
+                                  return (
                                     <div
-                                      className={
-                                        "flex   border-b  border-dashed pb-1  "
-                                      }
+                                      key={m.id}
+                                      className={"flex p-1   "}
+                                      ref={providedDraggable.innerRef}
+                                      {...providedDraggable.draggableProps}
+                                      {...providedDraggable.dragHandleProps}
+                                      style={this.getItemStyle(
+                                        snapshotDraggable.isDragging,
+                                        providedDraggable.draggableProps.style
+                                      )}
                                     >
-                                      <div className={"flex  w-full  "}>
-                                        <div className="p-1">
-                                          {(() => {
-                                            const f = filterFeaturesOnMilestone(
-                                              features,
-                                              m.id
-                                            );
-                                            const fEstimate = f
-                                              .map((x) => x.estimate)
-                                              .reduce((p, c) => p + c, 0);
+                                      <div
+                                        className={
+                                          "flex   border-b  border-dashed pb-1  "
+                                        }
+                                      >
+                                        <div className={"flex  w-full  "}>
+                                          <div className="p-1">
+                                            <InternalCard />
+                                          </div>
 
-                                            return (
-                                              <Card
-                                                estimate={fEstimate}
-                                                annotations={m.annotations}
-                                                nbrOfItems={f.length}
-                                                color={m.color}
-                                                status={m.status}
-                                                title={m.title}
-                                                link={
-                                                  this.props.url + "/m/" + m.id
+                                          {ww.map((w, index) => {
+                                            let ss = getSubWorkflowByWorkflow(
+                                              subWorkflows,
+                                              w.id
+                                            );
+                                            if (!this.props.showClosed) {
+                                              ss =
+                                                filterOutClosedSubWorkflows(ss);
+                                            }
+
+                                            return [
+                                              <div
+                                                className={
+                                                  index === 0
+                                                    ? "flex flex-row px-1"
+                                                    : "flex flex-row pl-3 pr-1"
                                                 }
-                                              />
-                                            );
-                                          })()}
-                                        </div>
+                                                key={w.id}
+                                              >
+                                                {ss.length === 0 ? (
+                                                  <div className="p-1">
+                                                    <EmptyCard />
+                                                  </div>
+                                                ) : null}
 
-                                        {ww.map((w, index) => {
-                                          let ss = getSubWorkflowByWorkflow(
-                                            subWorkflows,
-                                            w.id
-                                          );
-                                          if (!this.props.showClosed) {
-                                            ss =
-                                              filterOutClosedSubWorkflows(ss);
-                                          }
-
-                                          return [
-                                            <div
-                                              className={
-                                                index === 0
-                                                  ? "flex flex-row px-1"
-                                                  : "flex flex-row pl-3 pr-1"
-                                              }
-                                              key={w.id}
-                                            >
-                                              {ss.length === 0 ? (
-                                                <div className="p-1">
-                                                  <EmptyCard />
-                                                </div>
-                                              ) : null}
-
-                                              {ss.map((sw) => {
-                                                const ff =
-                                                  filterFeaturesOnMilestoneAndSubWorkflow(
-                                                    features,
-                                                    m.id,
-                                                    sw.id
-                                                  );
-                                                return [
-                                                  <Droppable
-                                                    key={sw.id}
-                                                    droppableId={
-                                                      "df*" + m.id + "*" + sw.id
-                                                    }
-                                                    type="FEATURE"
-                                                  >
-                                                    {(
-                                                      providedDroppable: DroppableProvided,
-                                                      snapshotDroppable: DroppableStateSnapshot
-                                                    ) => (
-                                                      <div
-                                                        className="fm-paren showhim flex flex-col "
-                                                        ref={
-                                                          providedDroppable.innerRef
-                                                        }
-                                                        {...providedDroppable.droppableProps}
-                                                        style={this.getListStyle(
-                                                          snapshotDroppable.isDraggingOver
-                                                        )}
-                                                      >
-                                                        {ff.map((f, index) => {
-                                                          return [
-                                                            <Draggable
-                                                              isDragDisabled={
-                                                                viewOnly
-                                                              }
-                                                              key={f.id}
-                                                              draggableId={
-                                                                "f*" + f.id
-                                                              }
-                                                              index={index}
-                                                            >
-                                                              {(
-                                                                providedDraggable: DraggableProvided,
-                                                                snapshotDraggable: DraggableStateSnapshot
-                                                              ) => (
-                                                                <div>
-                                                                  <div
-                                                                    className="p-1"
-                                                                    ref={
-                                                                      providedDraggable.innerRef
-                                                                    }
-                                                                    {...providedDraggable.draggableProps}
-                                                                    {...providedDraggable.dragHandleProps}
-                                                                    style={this.getItemStyle(
-                                                                      snapshotDraggable.isDragging,
-                                                                      providedDraggable
-                                                                        .draggableProps
-                                                                        .style
-                                                                    )}
-                                                                  >
-                                                                    <Card
-                                                                      estimate={
-                                                                        f.estimate
-                                                                      }
-                                                                      annotations={
-                                                                        f.annotations
-                                                                      }
-                                                                      nbrOfComments={
-                                                                        filterFeatureCommentsOnFeature(
-                                                                          this
-                                                                            .props
-                                                                            .comments,
-                                                                          f.id
-                                                                        ).length
-                                                                      }
-                                                                      color={
-                                                                        f.color
-                                                                      }
-                                                                      status={
-                                                                        f.status
-                                                                      }
-                                                                      title={
-                                                                        f.title
-                                                                      }
-                                                                      link={
-                                                                        this
-                                                                          .props
-                                                                          .url +
-                                                                        "/f/" +
-                                                                        f.id
-                                                                      }
-                                                                      bottomLink={
-                                                                        index ===
-                                                                          ff.length -
-                                                                            1 &&
-                                                                        !viewOnly
-                                                                          ? () =>
-                                                                              this.setState(
-                                                                                {
-                                                                                  showCreateFeatureModal:
-                                                                                    true,
-                                                                                  createFeatureModalMilestoneId:
-                                                                                    m.id,
-                                                                                  createFeatureModalSubWorkflowId:
-                                                                                    sw.id,
-                                                                                }
-                                                                              )
-                                                                          : undefined
-                                                                      }
-                                                                    />
-                                                                  </div>
-                                                                </div>
-                                                              )}
-                                                            </Draggable>,
-                                                          ];
-                                                        })}
-                                                        {
-                                                          providedDroppable.placeholder
-                                                        }
-
-                                                        {ff.length === 0 ? (
-                                                          <div className="flex  p-1 text-xs">
-                                                            {!viewOnly ? (
-                                                              <NewDimCard>
-                                                                <button
-                                                                  className=" text-2xl text-gray-400 hover:text-gray-800"
-                                                                  onClick={() =>
-                                                                    this.setState(
-                                                                      {
-                                                                        showCreateFeatureModal:
-                                                                          true,
-                                                                        createFeatureModalMilestoneId:
-                                                                          m.id,
-                                                                        createFeatureModalSubWorkflowId:
-                                                                          sw.id,
-                                                                      }
-                                                                    )
+                                                {ss.map((sw) => {
+                                                  const ff =
+                                                    filterFeaturesOnMilestoneAndSubWorkflow(
+                                                      features,
+                                                      m.id,
+                                                      sw.id
+                                                    );
+                                                  return [
+                                                    <Droppable
+                                                      key={sw.id}
+                                                      droppableId={
+                                                        "df*" +
+                                                        m.id +
+                                                        "*" +
+                                                        sw.id
+                                                      }
+                                                      type="FEATURE"
+                                                    >
+                                                      {(
+                                                        providedDroppable: DroppableProvided,
+                                                        snapshotDroppable: DroppableStateSnapshot
+                                                      ) => (
+                                                        <div
+                                                          className=" showhim flex flex-col "
+                                                          ref={
+                                                            providedDroppable.innerRef
+                                                          }
+                                                          {...providedDroppable.droppableProps}
+                                                          style={this.getListStyle(
+                                                            snapshotDroppable.isDraggingOver
+                                                          )}
+                                                        >
+                                                          {ff.map(
+                                                            (f, index) => {
+                                                              return [
+                                                                <Draggable
+                                                                  isDragDisabled={
+                                                                    viewOnly
                                                                   }
+                                                                  key={f.id}
+                                                                  draggableId={
+                                                                    "f*" + f.id
+                                                                  }
+                                                                  index={index}
                                                                 >
-                                                                  +
-                                                                </button>
-                                                              </NewDimCard>
-                                                            ) : (
-                                                              <EmptyCard />
-                                                            )}
-                                                          </div>
-                                                        ) : null}
-                                                      </div>
-                                                    )}
-                                                  </Droppable>,
-                                                ];
-                                              })}
-                                            </div>,
-                                          ];
-                                        })}
+                                                                  {(
+                                                                    providedDraggable: DraggableProvided,
+                                                                    snapshotDraggable: DraggableStateSnapshot
+                                                                  ) => (
+                                                                    <div>
+                                                                      <div
+                                                                        className="p-1"
+                                                                        ref={
+                                                                          providedDraggable.innerRef
+                                                                        }
+                                                                        {...providedDraggable.draggableProps}
+                                                                        {...providedDraggable.dragHandleProps}
+                                                                        style={this.getItemStyle(
+                                                                          snapshotDraggable.isDragging,
+                                                                          providedDraggable
+                                                                            .draggableProps
+                                                                            .style
+                                                                        )}
+                                                                      >
+                                                                        <Card
+                                                                          estimate={
+                                                                            f.estimate
+                                                                          }
+                                                                          annotations={
+                                                                            f.annotations
+                                                                          }
+                                                                          nbrOfComments={
+                                                                            filterFeatureCommentsOnFeature(
+                                                                              this
+                                                                                .props
+                                                                                .comments,
+                                                                              f.id
+                                                                            )
+                                                                              .length
+                                                                          }
+                                                                          color={
+                                                                            f.color
+                                                                          }
+                                                                          status={
+                                                                            f.status
+                                                                          }
+                                                                          title={
+                                                                            f.title
+                                                                          }
+                                                                          link={
+                                                                            this
+                                                                              .props
+                                                                              .url +
+                                                                            "/f/" +
+                                                                            f.id
+                                                                          }
+                                                                          bottomLink={
+                                                                            index ===
+                                                                              ff.length -
+                                                                                1 &&
+                                                                            !viewOnly
+                                                                              ? () =>
+                                                                                  this.setState(
+                                                                                    {
+                                                                                      showCreateFeatureModal:
+                                                                                        true,
+                                                                                      createFeatureModalMilestoneId:
+                                                                                        m.id,
+                                                                                      createFeatureModalSubWorkflowId:
+                                                                                        sw.id,
+                                                                                    }
+                                                                                  )
+                                                                              : undefined
+                                                                          }
+                                                                        />
+                                                                      </div>
+                                                                    </div>
+                                                                  )}
+                                                                </Draggable>,
+                                                              ];
+                                                            }
+                                                          )}
+                                                          {
+                                                            providedDroppable.placeholder
+                                                          }
+
+                                                          {ff.length === 0 ? (
+                                                            <div className="flex  p-1 text-xs">
+                                                              {!viewOnly ? (
+                                                                <NewDimCard>
+                                                                  <button
+                                                                    className=" text-2xl text-gray-400 hover:text-gray-800"
+                                                                    onClick={() =>
+                                                                      this.setState(
+                                                                        {
+                                                                          showCreateFeatureModal:
+                                                                            true,
+                                                                          createFeatureModalMilestoneId:
+                                                                            m.id,
+                                                                          createFeatureModalSubWorkflowId:
+                                                                            sw.id,
+                                                                        }
+                                                                      )
+                                                                    }
+                                                                  >
+                                                                    +
+                                                                  </button>
+                                                                </NewDimCard>
+                                                              ) : (
+                                                                <EmptyCard />
+                                                              )}
+                                                            </div>
+                                                          ) : null}
+                                                        </div>
+                                                      )}
+                                                    </Droppable>,
+                                                  ];
+                                                })}
+                                              </div>,
+                                            ];
+                                          })}
+                                        </div>
                                       </div>
                                     </div>
-                                  </div>
-                                )}
+                                  );
+                                }}
                               </Draggable>,
                             ];
                           })}
@@ -1257,107 +1351,10 @@ class Board extends Component<Props, State> {
 
                             {!this.props.showClosed && (
                               <div className="mt-2 italic">
-                                {(() => {
-                                  const nbrOfClosedMilestones =
-                                    filterClosedMilestones(milestones).length;
-                                  const nbrOfClosedWorkflows =
-                                    filterClosedWorkflows(workflows).length;
-                                  const nbrOfClosedSubWorkflows =
-                                    filterClosedSubWorkflows(
-                                      subWorkflows
-                                    ).length;
-
-                                  if (
-                                    nbrOfClosedMilestones > 0 ||
-                                    nbrOfClosedWorkflows > 0 ||
-                                    nbrOfClosedSubWorkflows > 0
-                                  ) {
-                                    return "Closed cards not shown: ";
-                                  }
-                                  return null;
-                                })()}
-
-                                {(() => {
-                                  const nbrOfClosedMilestones =
-                                    filterClosedMilestones(milestones).length;
-
-                                  if (nbrOfClosedMilestones === 1) {
-                                    return (
-                                      <span>
-                                        {" "}
-                                        <b>
-                                          {" "}
-                                          {nbrOfClosedMilestones}
-                                        </b> release{" "}
-                                      </span>
-                                    );
-                                  }
-                                  if (nbrOfClosedMilestones > 1) {
-                                    return (
-                                      <span>
-                                        {" "}
-                                        <b>
-                                          {" "}
-                                          {nbrOfClosedMilestones}
-                                        </b> releases{" "}
-                                      </span>
-                                    );
-                                  }
-                                  return null;
-                                })()}
-
-                                {(() => {
-                                  const nbrOfClosedWorkflows =
-                                    filterClosedWorkflows(workflows).length;
-
-                                  if (nbrOfClosedWorkflows === 1) {
-                                    return (
-                                      <span>
-                                        {" "}
-                                        <b> {nbrOfClosedWorkflows}</b> goal
-                                      </span>
-                                    );
-                                  }
-                                  if (nbrOfClosedWorkflows > 1) {
-                                    return (
-                                      <span>
-                                        {" "}
-                                        <b>
-                                          {" "}
-                                          {nbrOfClosedWorkflows}
-                                        </b> goals{" "}
-                                      </span>
-                                    );
-                                  }
-                                  return null;
-                                })()}
-
-                                {(() => {
-                                  const nbrOfClosedSubWorkflows =
-                                    filterClosedSubWorkflows(
-                                      subWorkflows
-                                    ).length;
-
-                                  if (nbrOfClosedSubWorkflows === 1) {
-                                    return (
-                                      <span>
-                                        {" "}
-                                        <b> {nbrOfClosedSubWorkflows}</b>{" "}
-                                        activity
-                                      </span>
-                                    );
-                                  }
-                                  if (nbrOfClosedSubWorkflows > 1) {
-                                    return (
-                                      <span>
-                                        {" "}
-                                        <b> {nbrOfClosedSubWorkflows}</b>{" "}
-                                        activities{" "}
-                                      </span>
-                                    );
-                                  }
-                                  return null;
-                                })()}
+                                {A()}
+                                {B()}
+                                {C()}
+                                {D()}
                               </div>
                             )}
                           </div>

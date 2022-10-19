@@ -1,18 +1,16 @@
-import React, { Component, Dispatch } from "react";
-import { connect } from "react-redux";
-import { AppState, AllActions } from "../store";
-import { application } from "../store/application/selectors";
-import {
-  Formik,
+import type {
+  FieldProps,
   FormikHelpers as FormikActions,
   FormikProps,
-  Form,
-  Field,
-  FieldProps,
 } from "formik";
-import { API_CREATE_WORKSPACE } from "../api";
+import { Field, Form, Formik } from "formik";
+import { Component, Dispatch } from "react";
+import { connect } from "react-redux";
 import * as Yup from "yup";
-import { IApplication, IWorkspace } from "../store/application/types";
+import { API_CREATE_WORKSPACE } from "../api";
+import { AllActions, AppState } from "../store";
+import { application } from "../store/application/selectors";
+import { IApplication } from "../store/application/types";
 import { Button } from "./elements";
 
 import { getApp, newMessage } from "../store/application/actions";
@@ -87,8 +85,7 @@ class CreateWorkspaceModal extends Component<Props, State> {
             ) => {
               API_CREATE_WORKSPACE(values.name).then((response) => {
                 if (response.ok) {
-                  response.json().then((data: IWorkspace) => {
-                    // noinspection JSIgnoredPromiseFromCall
+                  response.json().then(() => {
                     this.props.getApp();
                     this.props.close();
                   });
@@ -133,7 +130,6 @@ class CreateWorkspaceModal extends Component<Props, State> {
                           <div className="flex flex-row items-center">
                             <div className="w-full">
                               <input
-                                autoFocus
                                 type="text"
                                 value={form.values.name}
                                 onChange={form.handleChange}

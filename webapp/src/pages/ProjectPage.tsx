@@ -1,68 +1,68 @@
-import React, { Component } from "react";
-import Board from "../components/Board";
-import EntityDetailsPage from "./EntityDetailsPage";
-import {
-  application,
-  getWorkspaceByName,
-  getMembership,
-  getSubscription,
-} from "../store/application/selectors";
-import { projects, getProjectById } from "../store/projects/selectors";
-import type { RouteComponentProps } from "react-router";
-import { Route, Switch, Link } from "react-router-dom";
-import { IProject } from "../store/projects/types";
-import { loadMilestonesAction } from "../store/milestones/actions";
-import { loadWorkflowsAction } from "../store/workflows/actions";
-import {
-  milestones,
-  filterMilestonesOnProject,
-} from "../store/milestones/selectors";
-import { AppState } from "../store";
+import queryString from "query-string";
+import { Component, createRef } from "react";
 import { connect } from "react-redux";
+import type { RouteComponentProps } from "react-router";
+import { Link, Route, Switch } from "react-router-dom";
 import { API_GET_PROJECT, API_GET_PROJECT_RESP } from "../api";
-import { IApplication } from "../store/application/types";
-import { IMilestone } from "../store/milestones/types";
-import {
-  features,
-  filterFeaturesOnMilestoneAndSubWorkflow,
-} from "../store/features/selectors";
-import {
-  filterWorkflowsOnProject,
-  workflows,
-} from "../store/workflows/selectors";
-import {
-  subWorkflows,
-  getSubWorkflowByWorkflow,
-} from "../store/subworkflows/selectors";
-import { ISubWorkflow } from "../store/subworkflows/types";
-import { IWorkflow } from "../store/workflows/types";
-import { loadSubWorkflowsAction } from "../store/subworkflows/actions";
-import { loadFeaturesAction } from "../store/features/actions";
-import { loadPersonasAction } from "../store/personas/actions";
-import { loadWorkflowPersonasAction } from "../store/workflowpersonas/actions";
-import { loadFeatureCommentsAction } from "../store/featurecomments/actions";
-import { IFeature } from "../store/features/types";
+import Board from "../components/Board";
+import ContextMenu from "../components/ContextMenu";
+import { Button } from "../components/elements";
 import {
   isEditor,
+  subIsBasicOrAbove,
   subIsInactive,
   subIsTrial,
-  subIsBasicOrAbove,
 } from "../core/misc";
-import { Button } from "../components/elements";
-import queryString from "query-string";
+import { AppState } from "../store";
+import {
+  application,
+  getMembership,
+  getSubscription,
+  getWorkspaceByName,
+} from "../store/application/selectors";
+import { IApplication } from "../store/application/types";
+import { loadFeatureCommentsAction } from "../store/featurecomments/actions";
 import {
   featureComments,
   filterFeatureCommentsOnProject,
 } from "../store/featurecomments/selectors";
 import { IFeatureComment } from "../store/featurecomments/types";
-import ContextMenu from "../components/ContextMenu";
+import { loadFeaturesAction } from "../store/features/actions";
 import {
-  workflowPersonas,
-  filterWorkflowPersonasOnProject,
-} from "../store/workflowpersonas/selectors";
-import { personas, filterPersonasOnProject } from "../store/personas/selectors";
+  features,
+  filterFeaturesOnMilestoneAndSubWorkflow,
+} from "../store/features/selectors";
+import { IFeature } from "../store/features/types";
+import { loadMilestonesAction } from "../store/milestones/actions";
+import {
+  filterMilestonesOnProject,
+  milestones,
+} from "../store/milestones/selectors";
+import { IMilestone } from "../store/milestones/types";
+import { loadPersonasAction } from "../store/personas/actions";
+import { filterPersonasOnProject, personas } from "../store/personas/selectors";
 import { IPersona } from "../store/personas/types";
+import { getProjectById, projects } from "../store/projects/selectors";
+import { IProject } from "../store/projects/types";
+import { loadSubWorkflowsAction } from "../store/subworkflows/actions";
+import {
+  getSubWorkflowByWorkflow,
+  subWorkflows,
+} from "../store/subworkflows/selectors";
+import { ISubWorkflow } from "../store/subworkflows/types";
+import { loadWorkflowPersonasAction } from "../store/workflowpersonas/actions";
+import {
+  filterWorkflowPersonasOnProject,
+  workflowPersonas,
+} from "../store/workflowpersonas/selectors";
 import { IWorkflowPersona } from "../store/workflowpersonas/types";
+import { loadWorkflowsAction } from "../store/workflows/actions";
+import {
+  filterWorkflowsOnProject,
+  workflows,
+} from "../store/workflows/selectors";
+import { IWorkflow } from "../store/workflows/types";
+import EntityDetailsPage from "./EntityDetailsPage";
 
 const mapStateToProps = (state: AppState) => ({
   application: application(state),
@@ -97,7 +97,7 @@ type PropsFromState = {
   personas: IPersona[];
   workflowPersonas: IWorkflowPersona[];
 };
-type RouterProps = {} & RouteComponentProps<{
+type RouterProps = RouteComponentProps<{
   workspaceName: string;
   projectId: string;
 }>;
@@ -110,7 +110,7 @@ type PropsFromDispatch = {
   loadPersonas: typeof loadPersonasAction;
   loadWorkflowPersonas: typeof loadWorkflowPersonasAction;
 };
-type SelfProps = {};
+type SelfProps = Record<string, never>;
 type Props = RouterProps & PropsFromState & PropsFromDispatch & SelfProps;
 
 type State = {
@@ -235,7 +235,7 @@ class ProjectPage extends Component<Props, State> {
     this.setState({ copySuccess: true });
   };
 
-  urlRef = React.createRef<HTMLInputElement>();
+  urlRef = createRef<HTMLInputElement>();
 
   render() {
     const { projectId, workspaceName } = this.props.match.params;
@@ -262,7 +262,7 @@ class ProjectPage extends Component<Props, State> {
               </div>
               <ContextMenu icon="more_horiz">
                 <div className="absolute top-0 right-0  mt-8 min-w-full rounded bg-white text-xs shadow-md">
-                  <ul className="list-reset">
+                  <ul className="">
                     <li>
                       <Button
                         noborder

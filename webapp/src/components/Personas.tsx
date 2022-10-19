@@ -1,38 +1,32 @@
-import React, { Component } from "react";
+import type { FormikHelpers, FormikProps } from "formik";
+import { ErrorMessage, Field, Form, Formik } from "formik";
+import { Component } from "react";
+import ReactMarkdown from "react-markdown";
+import OnClickOut from "react-onclickoutside";
 import { connect } from "react-redux";
+import { v4 as uuid } from "uuid";
+import * as Yup from "yup";
+import {
+  API_CREATE_PERSONA,
+  API_DELTE_PERSONA,
+  API_UPDATE_PERSONA,
+} from "../api";
+import { avatar, AvatarName, avatarNames } from "../avatars";
+import { personaBarState } from "../core/misc";
 import { AppState } from "../store";
 import { application } from "../store/application/selectors";
-import {
-  Formik,
-  FormikHelpers,
-  FormikProps,
-  Form,
-  Field,
-  ErrorMessage,
-} from "formik";
-import {
-  API_UPDATE_PERSONA,
-  API_DELTE_PERSONA,
-  API_CREATE_PERSONA,
-} from "../api";
-import * as Yup from "yup";
 import { IApplication } from "../store/application/types";
-import OnClickOut from "react-onclickoutside";
-import { DarkButton, Button } from "./elements";
-import { personaBarState } from "../core/misc";
-import { IPersona } from "../store/personas/types";
-import { avatar, AvatarName } from "../avatars";
-import ReactMarkdown from "react-markdown";
-import { getPersona } from "../store/personas/selectors";
 import {
-  updatePersonaAction,
-  deletePersonaAction,
   createPersonaAction,
+  deletePersonaAction,
+  updatePersonaAction,
 } from "../store/personas/actions";
+import { getPersona } from "../store/personas/selectors";
+import { IPersona } from "../store/personas/types";
 import { createWorkflowPersonaAction } from "../store/workflowpersonas/actions";
-import ContextMenu from "./ContextMenu";
-import { v4 as uuid } from "uuid";
 import { IWorkflowPersona } from "../store/workflowpersonas/types";
+import ContextMenu from "./ContextMenu";
+import { Button, DarkButton } from "./elements";
 
 export enum Types {
   MILESTONE = "MILESTONE",
@@ -43,11 +37,11 @@ export enum Types {
 
 export type newMilestone = {
   type: Types.MILESTONE;
-  payload: {};
+  payload: Record<string, never>;
 };
 export type newWorkflow = {
   type: Types.WORKFLOW;
-  payload: {};
+  payload: Record<string, never>;
 };
 export type newSubWorkflow = {
   type: Types.SUBWORKFLOW;
@@ -93,12 +87,11 @@ type SelfProps = {
 };
 type Props = PropsFromState & PropsFromDispatch & SelfProps;
 
-type State = {};
+type State = Record<string, never>;
 
 class Personas extends Component<Props, State> {
   constructor(props: Props) {
     super(props);
-    this.state = {};
   }
 
   keydownHandler = (event: KeyboardEvent) => {
@@ -128,6 +121,7 @@ class Personas extends Component<Props, State> {
   render() {
     const parentProps = this.props;
 
+    // eslint-disable-next-line @typescript-eslint/no-this-alias
     const parent = this;
 
     const Dialog = class Dialog extends Component<{ close: () => void }> {
@@ -137,7 +131,7 @@ class Personas extends Component<Props, State> {
 
       render() {
         return (
-          <div className="w-100 flex h-screen  w-full flex-col bg-gray-900 p-3 text-white  shadow-xl  ">
+          <div className="flex h-screen w-full flex-col bg-gray-900 p-3 text-white shadow-xl  ">
             <div className="mb-2 flex w-full">
               <div className="grow text-xl ">Personas</div>
               <div>
@@ -173,7 +167,7 @@ class Personas extends Component<Props, State> {
                         {parentProps.personas.map((p, key) => {
                           return (
                             <div key={key}>
-                              <div
+                              <button
                                 className="mb-2 flex bg-gray-800 p-2"
                                 style={{ cursor: "pointer" }}
                                 onClick={() =>
@@ -190,7 +184,7 @@ class Personas extends Component<Props, State> {
                                   <div className=" font-medium "> {p.name}</div>
                                   <div className="italic "> {p.role}</div>
                                 </div>
-                              </div>
+                              </button>
                             </div>
                           );
                         })}
@@ -286,17 +280,7 @@ class Personas extends Component<Props, State> {
                                 <div className="flex flex-col    items-baseline sm:flex-row">
                                   <div className=" flex flex-col ">
                                     <div className="flex flex-wrap">
-                                      {[
-                                        "avatar00",
-                                        "avatar01",
-                                        "avatar02",
-                                        "avatar03",
-                                        "avatar04",
-                                        "avatar05",
-                                        "avatar06",
-                                        "avatar07",
-                                        "avatar08",
-                                      ].map((a, key) => (
+                                      {avatarNames.map((a, key) => (
                                         <div
                                           key={key}
                                           className={
@@ -336,7 +320,6 @@ class Personas extends Component<Props, State> {
                                     </div>
                                     <div>
                                       <Field
-                                        autoFocus
                                         name="name"
                                         className="w-full rounded  border border-gray-500 bg-gray-900 p-1 	"
                                         placeholder="E.g. John Smith"
@@ -429,10 +412,9 @@ class Personas extends Component<Props, State> {
 
                                   <div className="mt-2">
                                     <div className="markdown-body  text-white">
-                                      <ReactMarkdown
-                                        children={p.description}
-                                        linkTarget="_blank"
-                                      />
+                                      <ReactMarkdown linkTarget="_blank">
+                                        {p.description}
+                                      </ReactMarkdown>
                                     </div>
                                   </div>
                                 </div>
@@ -442,7 +424,7 @@ class Personas extends Component<Props, State> {
                                   parent.props.demo) && (
                                   <ContextMenu icon="more_horiz">
                                     <div className="absolute top-0 right-0  mt-8 min-w-full rounded bg-white text-xs shadow-md">
-                                      <ul className="list-reset">
+                                      <ul className="">
                                         <li>
                                           <Button
                                             noborder
@@ -596,17 +578,7 @@ class Personas extends Component<Props, State> {
                               <div className="flex flex-col    items-baseline sm:flex-row">
                                 <div className=" flex flex-col ">
                                   <div className="flex flex-wrap">
-                                    {[
-                                      "avatar00",
-                                      "avatar01",
-                                      "avatar02",
-                                      "avatar03",
-                                      "avatar04",
-                                      "avatar05",
-                                      "avatar06",
-                                      "avatar07",
-                                      "avatar08",
-                                    ].map((a, key) => (
+                                    {avatarNames.map((a, key) => (
                                       <div
                                         key={key}
                                         className={
@@ -646,7 +618,6 @@ class Personas extends Component<Props, State> {
                                   </div>
                                   <div>
                                     <Field
-                                      autoFocus
                                       name="name"
                                       className="w-full rounded  border border-gray-500 bg-gray-900 p-1 	"
                                       placeholder="E.g. John Smith"
@@ -716,7 +687,7 @@ class Personas extends Component<Props, State> {
                     );
 
                   default:
-                    break;
+                    return null;
                 }
               })()}
             </div>

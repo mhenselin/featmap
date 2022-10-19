@@ -291,7 +291,7 @@ class EntityDetailsAnnotations extends Component<Props, State> {
         !(this.props.card.kind === "project") ? (
           <ContextMenu icon="add" text="Annotation" smallIcon>
             <div className="absolute top-0 left-0  mt-8 min-w-full rounded bg-white text-xs shadow-md">
-              <ul className="list-reset">
+              <ul className="">
                 {leftOverAnnotations.annotations.map((an, i) => {
                   return (
                     <li key={i}>

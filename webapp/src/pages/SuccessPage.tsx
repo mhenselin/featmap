@@ -1,14 +1,14 @@
-import React, { Component } from "react";
+import { Component } from "react";
 import type { RouteComponentProps } from "react-router";
 import { Link } from "react-router-dom";
 
-type PropsFromState = {};
-type RouterProps = {} & RouteComponentProps<{}>;
-type PropsFromDispatch = {};
-type SelfProps = {};
+type PropsFromState = Record<string, never>;
+type RouterProps = RouteComponentProps;
+type PropsFromDispatch = Record<string, never>;
+type SelfProps = Record<string, never>;
 type Props = RouterProps & PropsFromState & PropsFromDispatch & SelfProps;
 
-type State = {};
+type State = Record<string, never>;
 
 class SuccessPage extends Component<Props, State> {
   render() {

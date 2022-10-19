@@ -1,50 +1,50 @@
-import React, { Component } from "react";
-import { loadMilestonesAction } from "../store/milestones/actions";
-import { loadWorkflowsAction } from "../store/workflows/actions";
-import { loadSubWorkflowsAction } from "../store/subworkflows/actions";
-import { loadFeaturesAction } from "../store/features/actions";
-import { loadPersonasAction } from "../store/personas/actions";
-import { loadWorkflowPersonasAction } from "../store/workflowpersonas/actions";
-import { loadFeatureCommentsAction } from "../store/featurecomments/actions";
-import { loadProjectsAction } from "../store/projects/actions";
-import { RouteComponentProps } from "react-router";
-import { Route, Switch, Link } from "react-router-dom";
-import { AppState } from "../store";
+import queryString from "query-string";
+import { Component } from "react";
 import { connect } from "react-redux";
-import { IApplication } from "../store/application/types";
+import type { RouteComponentProps } from "react-router";
+import { Link, Route, Switch } from "react-router-dom";
 import { API_GET_EXTERNAL_LINK, API_GET_PROJECT_RESP } from "../api";
-import { IProject } from "../store/projects/types";
-import { IMilestone } from "../store/milestones/types";
-import { IWorkflow } from "../store/workflows/types";
-import { ISubWorkflow } from "../store/subworkflows/types";
-import { IFeature } from "../store/features/types";
-import { features } from "../store/features/selectors";
+import Board from "../components/Board";
+import { Button } from "../components/elements";
+import { AppState } from "../store";
+import { IApplication } from "../store/application/types";
+import { loadFeatureCommentsAction } from "../store/featurecomments/actions";
 import {
   featureComments,
   filterFeatureCommentsOnProject,
 } from "../store/featurecomments/selectors";
-import Board from "../components/Board";
-import {
-  filterWorkflowsOnProject,
-  workflows,
-} from "../store/workflows/selectors";
+import { IFeatureComment } from "../store/featurecomments/types";
+import { loadFeaturesAction } from "../store/features/actions";
+import { features } from "../store/features/selectors";
+import { IFeature } from "../store/features/types";
+import { loadMilestonesAction } from "../store/milestones/actions";
 import {
   filterMilestonesOnProject,
   milestones,
 } from "../store/milestones/selectors";
-import { projects, getProjectById } from "../store/projects/selectors";
-import { subWorkflows } from "../store/subworkflows/selectors";
-import { Button } from "../components/elements";
-import ExternalEntityDetailsPage from "./ExternalEntityDetailsPage";
-import queryString from "query-string";
-import { IFeatureComment } from "../store/featurecomments/types";
+import { IMilestone } from "../store/milestones/types";
+import { loadPersonasAction } from "../store/personas/actions";
 import { filterPersonasOnProject, personas } from "../store/personas/selectors";
+import { IPersona } from "../store/personas/types";
+import { loadProjectsAction } from "../store/projects/actions";
+import { getProjectById, projects } from "../store/projects/selectors";
+import { IProject } from "../store/projects/types";
+import { loadSubWorkflowsAction } from "../store/subworkflows/actions";
+import { subWorkflows } from "../store/subworkflows/selectors";
+import { ISubWorkflow } from "../store/subworkflows/types";
+import { loadWorkflowPersonasAction } from "../store/workflowpersonas/actions";
 import {
   filterWorkflowPersonasOnProject,
   workflowPersonas,
 } from "../store/workflowpersonas/selectors";
-import { IPersona } from "../store/personas/types";
 import { IWorkflowPersona } from "../store/workflowpersonas/types";
+import { loadWorkflowsAction } from "../store/workflows/actions";
+import {
+  filterWorkflowsOnProject,
+  workflows,
+} from "../store/workflows/selectors";
+import { IWorkflow } from "../store/workflows/types";
+import ExternalEntityDetailsPage from "./ExternalEntityDetailsPage";
 
 const mapDispatchToProps = {
   loadProjects: loadProjectsAction,
@@ -80,7 +80,7 @@ type PropsFromState = {
   personas: IPersona[];
   workflowPersonas: IWorkflowPersona[];
 };
-type RouterProps = {} & RouteComponentProps<{
+type RouterProps = RouteComponentProps<{
   key: string;
 }>;
 type PropsFromDispatch = {
@@ -93,7 +93,7 @@ type PropsFromDispatch = {
   loadPersonas: typeof loadPersonasAction;
   loadWorkflowPersonas: typeof loadWorkflowPersonasAction;
 };
-type SelfProps = {};
+type SelfProps = Record<string, never>;
 type Props = RouterProps & PropsFromState & PropsFromDispatch & SelfProps;
 
 type State = {

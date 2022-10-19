@@ -1,11 +1,6 @@
-import {
-  Field,
-  Form,
-  Formik,
-  FormikHelpers as FormikActions,
-  FormikProps,
-} from "formik";
-import React, { Component } from "react";
+import type { FormikProps } from "formik";
+import { Field, Form, Formik } from "formik";
+import { Component, createRef } from "react";
 import { connect } from "react-redux";
 import * as Yup from "yup";
 import {
@@ -160,7 +155,7 @@ class EntityDetailsBody extends Component<Props, State> {
     };
   }
 
-  urlRef = React.createRef<HTMLInputElement>();
+  urlRef = createRef<HTMLInputElement>();
 
   copyToClipboard = (url: string) => {
     const listener = (e: ClipboardEvent) => {
@@ -604,6 +599,159 @@ class EntityDetailsBody extends Component<Props, State> {
       default:
     }
 
+    const A = () => {
+      switch (this.props.entity.kind) {
+        case "workflow":
+        case "subworkflow":
+        case "milestone":
+        case "feature": {
+          const color = this.props.entity.color;
+          return (
+            <div className="mt-3 flex flex-col text-xs ">
+              <div className=" mb-1 font-bold">Color</div>
+              <div className="flex grow items-center">
+                <div className="flex flex-row">
+                  {Colors.map((x) => {
+                    return [
+                      <div key={x} className="mr-1 flex  flex-col">
+                        <button
+                          onClick={() => this.handleChangeColor(x)}
+                          title={x}
+                          className={
+                            "flex h-4 w-4 border " +
+                            colorToBackgroundColorClass(x) +
+                            " " +
+                            colorToBorderColorClass(x)
+                          }
+                        />
+                        <div className="flex justify-center">
+                          {color === x ? <div>●</div> : null}
+                        </div>
+                      </div>,
+                    ];
+                  })}{" "}
+                </div>
+              </div>
+            </div>
+          );
+        }
+        default:
+          return null;
+      }
+    };
+
+    const B = () => {
+      switch (this.props.entity.kind) {
+        case "feature": {
+          const fea: IFeature = this.props.entity;
+          return (
+            <div className="mt-1 flex flex-col text-xs  ">
+              <div className=" mb-1 font-bold">Size</div>
+              <div className="flex grow items-center">
+                <Formik
+                  initialValues={{
+                    estimate: this.props.entity.estimate,
+                  }}
+                  validationSchema={Yup.object().shape({
+                    estimate: Yup.number()
+                      .integer("Must be an integer.")
+                      .max(999, "Max 999.")
+                      .min(0, "Must be positive."),
+                  })}
+                  onSubmit={(values: { estimate: number }) => {
+                    const est = values.estimate ? values.estimate : 0;
+
+                    this.props.updateFeature({
+                      ...fea,
+                      estimate: est,
+                      lastModified: new Date().toISOString(),
+                      lastModifiedByName:
+                        this.props.application.account === undefined
+                          ? "demo"
+                          : this.props.application.account.name,
+                    });
+
+                    if (!this.props.demo) {
+                      API_CHANGE_FEATURE_ESTIMATE(
+                        this.props.entity.workspaceId,
+                        this.props.entity.id,
+                        est
+                      ).then((response) => {
+                        if (response.ok) {
+                          response.json().then((data: IFeature) => {
+                            this.props.updateFeature(data);
+                          });
+                        } else {
+                          alert("Something went wrong.");
+                        }
+                      });
+                    }
+                  }}
+                >
+                  {(formikBag: FormikProps<{ estimate: number }>) => (
+                    <Form>
+                      <Field
+                        name="estimate"
+                        component="input"
+                        type="number"
+                        min="0"
+                        max="999"
+                        className="mr-2 w-16 rounded border p-2"
+                        onBlur={() => formikBag.submitForm()}
+                      />
+
+                      {formikBag.touched.estimate &&
+                        formikBag.errors.estimate && (
+                          <div className="text-xs font-bold text-red-500">
+                            {formikBag.errors.estimate}
+                          </div>
+                        )}
+                    </Form>
+                  )}
+                </Formik>
+              </div>
+            </div>
+          );
+        }
+        default:
+          return null;
+      }
+    };
+
+    const C = () => {
+      switch (this.props.entity.kind) {
+        case "milestone":
+        case "subworkflow":
+        case "workflow":
+        case "feature":
+          if (this.props.entity.status === "OPEN") {
+            return (
+              <Button
+                secondary
+                icon="check_circle_outline"
+                iconColor="text-red-500"
+                title="Mark card as Closed"
+                handleOnClick={this.handleClose}
+              />
+            );
+          }
+          if (this.props.entity.status === "CLOSED") {
+            return (
+              <Button
+                secondary
+                title="Reopen card"
+                handleOnClick={this.handleOpen}
+              />
+            );
+          }
+
+          return null;
+
+        default:
+          return null;
+      }
+    };
+
     return (
       <div className="flex flex-col">
         <div
@@ -617,6 +765,7 @@ class EntityDetailsBody extends Component<Props, State> {
         <div className={"flex h-full w-full flex-row overflow-auto bg-white "}>
           <div className="flex w-full flex-col p-2  ">
             <EntityDetailsAnnotations
+              // eslint-disable-next-line @typescript-eslint/ban-ts-comment
               // @ts-ignore
               viewOnly={this.props.viewOnly}
               open={open}
@@ -626,6 +775,7 @@ class EntityDetailsBody extends Component<Props, State> {
               close={() => alert("close")}
             />
             <CardDetailsTitle
+              // eslint-disable-next-line @typescript-eslint/ban-ts-comment
               // @ts-ignore
               demo={this.props.demo}
               viewOnly={this.props.viewOnly}
@@ -635,6 +785,7 @@ class EntityDetailsBody extends Component<Props, State> {
               close={this.props.close}
             />
             <CardDetailsDescription
+              // eslint-disable-next-line @typescript-eslint/ban-ts-comment
               // @ts-ignore
               demo={this.props.demo}
               viewOnly={this.props.viewOnly}
@@ -660,7 +811,7 @@ class EntityDetailsBody extends Component<Props, State> {
               {!this.props.viewOnly ? (
                 <ContextMenu icon="more_horiz">
                   <div className="absolute top-0 right-0  mt-8 min-w-full rounded bg-white text-xs shadow-md">
-                    <ul className="list-reset">
+                    <ul className="">
                       <li>
                         <Button
                           noborder
@@ -733,137 +884,9 @@ class EntityDetailsBody extends Component<Props, State> {
               </div>
             </div>
 
-            {!this.props.viewOnly && open ? (
-              <div>
-                {(() => {
-                  switch (this.props.entity.kind) {
-                    case "workflow":
-                    case "subworkflow":
-                    case "milestone":
-                    case "feature": {
-                      const color = this.props.entity.color;
-                      return (
-                        <div className="mt-3 flex flex-col text-xs ">
-                          <div className=" mb-1 font-bold">Color</div>
-                          <div className="flex grow items-center">
-                            <div className="flex flex-row">
-                              {Colors.map((x) => {
-                                return [
-                                  <div key={x} className="mr-1 flex  flex-col">
-                                    <button
-                                      onClick={() => this.handleChangeColor(x)}
-                                      title={x}
-                                      className={
-                                        "flex h-4 w-4 border " +
-                                        colorToBackgroundColorClass(x) +
-                                        " " +
-                                        colorToBorderColorClass(x)
-                                      }
-                                    />
-                                    <div className="flex justify-center">
-                                      {color === x ? <div>●</div> : null}
-                                    </div>
-                                  </div>,
-                                ];
-                              })}{" "}
-                            </div>
-                          </div>
-                        </div>
-                      );
-                    }
-                    default:
-                  }
-                })()}
-              </div>
-            ) : null}
+            {!this.props.viewOnly && open ? <div>{A()}</div> : null}
 
-            {!this.props.viewOnly && open ? (
-              <div>
-                {(() => {
-                  switch (this.props.entity.kind) {
-                    case "feature": {
-                      const fea: IFeature = this.props.entity;
-                      return (
-                        <div className="mt-1 flex flex-col text-xs  ">
-                          <div className=" mb-1 font-bold">Size</div>
-                          <div className="flex grow items-center">
-                            <Formik
-                              initialValues={{
-                                estimate: this.props.entity.estimate,
-                              }}
-                              validationSchema={Yup.object().shape({
-                                estimate: Yup.number()
-                                  .integer("Must be an integer.")
-                                  .max(999, "Max 999.")
-                                  .min(0, "Must be positive."),
-                              })}
-                              onSubmit={(
-                                values: { estimate: number },
-                                actions: FormikActions<{ estimate: number }>
-                              ) => {
-                                const est = values.estimate
-                                  ? values.estimate
-                                  : 0;
-
-                                this.props.updateFeature({
-                                  ...fea,
-                                  estimate: est,
-                                  lastModified: new Date().toISOString(),
-                                  lastModifiedByName:
-                                    this.props.application.account === undefined
-                                      ? "demo"
-                                      : this.props.application.account.name,
-                                });
-
-                                if (!this.props.demo) {
-                                  API_CHANGE_FEATURE_ESTIMATE(
-                                    this.props.entity.workspaceId,
-                                    this.props.entity.id,
-                                    est
-                                  ).then((response) => {
-                                    if (response.ok) {
-                                      response.json().then((data: IFeature) => {
-                                        this.props.updateFeature(data);
-                                      });
-                                    } else {
-                                      alert("Something went wrong.");
-                                    }
-                                  });
-                                }
-                              }}
-                            >
-                              {(
-                                formikBag: FormikProps<{ estimate: number }>
-                              ) => (
-                                <Form>
-                                  <Field
-                                    name="estimate"
-                                    component="input"
-                                    type="number"
-                                    min="0"
-                                    max="999"
-                                    className="mr-2 w-16 rounded border p-2"
-                                    onBlur={() => formikBag.submitForm()}
-                                  />
-
-                                  {formikBag.touched.estimate &&
-                                    formikBag.errors.estimate && (
-                                      <div className="text-xs font-bold text-red-500">
-                                        {formikBag.errors.estimate}
-                                      </div>
-                                    )}
-                                </Form>
-                              )}
-                            </Formik>
-                          </div>
-                        </div>
-                      );
-                    }
-                    default:
-                  }
-                })()}
-              </div>
-            ) : null}
+            {!this.props.viewOnly && open ? <div>{B()}</div> : null}
 
             <div className="mt-3 flex flex-col text-xs ">
               <div className=" mb-1 font-bold">Created</div>
@@ -886,41 +909,7 @@ class EntityDetailsBody extends Component<Props, State> {
 
             <div className="mt-3 flex flex-col text-xs ">
               <div className="flex grow items-center  ">
-                {!this.props.viewOnly ? (
-                  <div>
-                    {(() => {
-                      switch (this.props.entity.kind) {
-                        case "milestone":
-                        case "subworkflow":
-                        case "workflow":
-                        case "feature":
-                          if (this.props.entity.status === "OPEN") {
-                            return (
-                              <Button
-                                secondary
-                                icon="check_circle_outline"
-                                iconColor="text-red-500"
-                                title="Mark card as Closed"
-                                handleOnClick={this.handleClose}
-                              />
-                            );
-                          }
-                          if (this.props.entity.status === "CLOSED") {
-                            return (
-                              <Button
-                                secondary
-                                title="Reopen card"
-                                handleOnClick={this.handleOpen}
-                              />
-                            );
-                          }
-
-                          break;
-                        default:
-                      }
-                    })()}
-                  </div>
-                ) : null}
+                {!this.props.viewOnly ? <div>{C()}</div> : null}
               </div>
             </div>
           </div>

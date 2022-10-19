@@ -1,13 +1,12 @@
-import {
-  Field,
+import type {
   FieldProps,
-  Form,
-  Formik,
   FormikHelpers as FormikActions,
   FormikProps,
 } from "formik";
+import { Field, Form, Formik } from "formik";
 import { Component } from "react";
 import ReactMarkdown from "react-markdown";
+import type { HandleClickOutside } from "react-onclickoutside";
 import onClickOutside from "react-onclickoutside";
 import { connect } from "react-redux";
 import * as Yup from "yup";
@@ -72,11 +71,12 @@ type State = {
   edit: boolean;
 };
 
-class EntityDetailsDescription extends Component<Props, State> {
+class EntityDetailsDescription
+  extends Component<Props, State>
+  implements HandleClickOutside<void>
+{
   constructor(props: Props) {
     super(props);
-    this.submitForm = () => {};
-
     this.state = { edit: false };
   }
 
@@ -87,7 +87,7 @@ class EntityDetailsDescription extends Component<Props, State> {
     }
   };
 
-  submitForm: () => void;
+  submitForm!: FormikProps<{ description: string }>["submitForm"];
 
   render() {
     let closed = false;
@@ -286,7 +286,6 @@ class EntityDetailsDescription extends Component<Props, State> {
                       <div className="mt-1 flex flex-col ">
                         <div>
                           <textarea
-                            autoFocus
                             rows={20}
                             value={form.values.description}
                             onChange={form.handleChange}
@@ -295,7 +294,7 @@ class EntityDetailsDescription extends Component<Props, State> {
                             className="w-full rounded  border p-2  	"
                           />
                         </div>
-                        <span className="right p-1 text-xs">
+                        <span className="p-1 text-xs">
                           The description supports formatting through{" "}
                           <a
                             rel="noopener noreferrer"
@@ -325,10 +324,9 @@ class EntityDetailsDescription extends Component<Props, State> {
                       ) : (
                         <div>
                           <div className="markdown-body overflow-auto text-left">
-                            <ReactMarkdown
-                              children={this.props.entity.description}
-                              linkTarget="_blank"
-                            />
+                            <ReactMarkdown linkTarget="_blank">
+                              {this.props.entity.description}
+                            </ReactMarkdown>
                           </div>
                         </div>
                       )}

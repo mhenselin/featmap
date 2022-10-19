@@ -1,21 +1,21 @@
+import { Component } from "react";
+import { connect } from "react-redux";
+import type { RouteComponentProps } from "react-router";
+import { Link } from "react-router-dom";
+import CreateProjectModal from "../components/CreateProjectModal";
 import { Button, CardLayout } from "../components/elements";
-import React, { Component } from "react";
-import { RouteComponentProps } from "react-router";
+import { TimeAgo } from "../components/TimeAgo";
+import { isEditor, subIsInactive } from "../core/misc";
 import { AppState } from "../store";
 import {
   application,
-  getWorkspaceByName,
   getMembership,
   getSubscription,
+  getWorkspaceByName,
 } from "../store/application/selectors";
-import { connect } from "react-redux";
 import { IApplication } from "../store/application/types";
 import { projects } from "../store/projects/selectors";
 import { IProject } from "../store/projects/types";
-import { Link } from "react-router-dom";
-import CreateProjectModal from "../components/CreateProjectModal";
-import { isEditor, subIsInactive } from "../core/misc";
-import { TimeAgo } from "../components/TimeAgo";
 
 const mapStateToProps = (state: AppState) => ({
   application: application(state),
@@ -28,11 +28,11 @@ type PropsFromState = {
   application: IApplication;
   projects: IProject[];
 };
-type RouterProps = {} & RouteComponentProps<{
+type RouterProps = RouteComponentProps<{
   workspaceName: string;
 }>;
-type PropsFromDispatch = {};
-type SelfProps = {};
+type PropsFromDispatch = Record<string, never>;
+type SelfProps = Record<string, never>;
 type Props = RouterProps & PropsFromState & PropsFromDispatch & SelfProps;
 
 type State = {
@@ -50,13 +50,13 @@ class WorkspacePage extends Component<Props, State> {
   }
 
   openProjectModal = () => {
-    this.setState((state) => ({
+    this.setState(() => ({
       showAddProjectModal: true,
     }));
   };
 
   closeProjectModal = () => {
-    this.setState((state) => ({
+    this.setState(() => ({
       showAddProjectModal: false,
     }));
   };

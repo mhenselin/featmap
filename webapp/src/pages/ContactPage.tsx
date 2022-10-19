@@ -1,22 +1,20 @@
-import React, { Component } from "react";
-import { RouteComponentProps } from "react-router";
-import * as Yup from "yup";
-import {
-  Formik,
+import type {
+  FieldProps,
   FormikHelpers as FormikActions,
   FormikProps,
-  Form,
-  Field,
-  FieldProps,
 } from "formik";
+import { Field, Form, Formik } from "formik";
+import { Component } from "react";
+import type { RouteComponentProps } from "react-router";
+import { Link } from "react-router-dom";
+import * as Yup from "yup";
 import { API_CONTACT, API_CONTACT_INTERFACE } from "../api";
 import { Button } from "../components/elements";
-import { Link } from "react-router-dom";
 
-type PropsFromState = {};
-type RouterProps = {} & RouteComponentProps<{}>;
-type PropsFromDispatch = {};
-type SelfProps = {};
+type PropsFromState = Record<string, never>;
+type RouterProps = RouteComponentProps;
+type PropsFromDispatch = Record<string, never>;
+type SelfProps = Record<string, never>;
 type Props = RouterProps & PropsFromState & PropsFromDispatch & SelfProps;
 
 type State = {
@@ -130,7 +128,6 @@ class ContactPage extends Component<Props, State> {
                             <div className=" flex w-full flex-col">
                               <div>
                                 <textarea
-                                  autoFocus
                                   rows={20}
                                   value={form.values.body}
                                   onChange={form.handleChange}

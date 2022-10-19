@@ -1,27 +1,25 @@
-import React, { Component } from "react";
-import type { RouteComponentProps } from "react-router";
-import * as Yup from "yup";
-import {
-  Formik,
+import type {
+  FieldProps,
   FormikHelpers as FormikActions,
   FormikProps,
-  Form,
-  Field,
-  FieldProps,
 } from "formik";
-import { API_PASSWORD_RESET } from "../api";
-import { Link } from "react-router-dom";
+import { Field, Form, Formik } from "formik";
 import queryString from "query-string";
+import { Component } from "react";
+import type { RouteComponentProps } from "react-router";
+import { Link } from "react-router-dom";
+import * as Yup from "yup";
+import { API_PASSWORD_RESET } from "../api";
 import { Button } from "../components/elements";
 
 const Schema = Yup.object().shape({
   email: Yup.string().email("Email invalid.").required("Email required."),
 });
 
-type PropsFromState = {};
-type RouterProps = {} & RouteComponentProps<{}>;
-type PropsFromDispatch = {};
-type SelfProps = {};
+type PropsFromState = Record<string, never>;
+type RouterProps = RouteComponentProps;
+type PropsFromDispatch = Record<string, never>;
+type SelfProps = Record<string, never>;
 type Props = RouterProps & PropsFromState & PropsFromDispatch & SelfProps;
 
 type State = {
@@ -80,7 +78,7 @@ class ResetPasswordPage extends Component<Props, State> {
                 values: { email: string },
                 actions: FormikActions<{ email: string }>
               ) => {
-                API_PASSWORD_RESET(values.email).then((response) => {
+                API_PASSWORD_RESET(values.email).then(() => {
                   this.setState({ showSent: true });
                 });
 

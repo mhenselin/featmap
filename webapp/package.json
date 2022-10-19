@@ -56,7 +56,15 @@
         "warn",
         "type"
       ],
-      "import/no-extraneous-dependencies": "error"
+      "import/no-extraneous-dependencies": "error",
+      "tailwindcss/no-custom-classname": [
+        "warn",
+        {
+          "whitelist": [
+            "material-icons"
+          ]
+        }
+      ]
     },
     "parserOptions": {
       "ecmaVersion": 2021,

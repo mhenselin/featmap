@@ -1,31 +1,31 @@
-import React, { Component } from "react";
+import { Component } from "react";
 import { connect } from "react-redux";
-import { AppState } from "../store";
 import type { RouteComponentProps } from "react-router";
+import EntityDetailsModal from "../components/EntityDetailsModal";
+import { isEditor, subIsInactive } from "../core/misc";
+import { AppState } from "../store";
+import {
+  application,
+  getMembership,
+  getSubscription,
+  getWorkspaceByName,
+} from "../store/application/selectors";
 import { IApplication } from "../store/application/types";
-import { milestones, getMilestone } from "../store/milestones/selectors";
-import { features, getFeature } from "../store/features/selectors";
 import {
   featureComments,
   filterFeatureCommentsOnFeature,
 } from "../store/featurecomments/selectors";
-import { workflows, getWorkflow } from "../store/workflows/selectors";
+import { IFeatureComment } from "../store/featurecomments/types";
+import { features, getFeature } from "../store/features/selectors";
+import { IFeature } from "../store/features/types";
+import { getMilestone, milestones } from "../store/milestones/selectors";
 import { IMilestone } from "../store/milestones/types";
-import EntityDetailsModal from "../components/EntityDetailsModal";
+import { getProjectById, projects } from "../store/projects/selectors";
+import { IProject } from "../store/projects/types";
 import { getSubWorkflow, subWorkflows } from "../store/subworkflows/selectors";
 import { ISubWorkflow } from "../store/subworkflows/types";
+import { getWorkflow, workflows } from "../store/workflows/selectors";
 import { IWorkflow } from "../store/workflows/types";
-import { IFeature } from "../store/features/types";
-import { projects, getProjectById } from "../store/projects/selectors";
-import { IProject } from "../store/projects/types";
-import {
-  getWorkspaceByName,
-  getMembership,
-  application,
-  getSubscription,
-} from "../store/application/selectors";
-import { isEditor, subIsInactive } from "../core/misc";
-import { IFeatureComment } from "../store/featurecomments/types";
 
 const mapStateToProps = (state: AppState) => ({
   application: application(state),
@@ -49,9 +49,9 @@ type PropsFromState = {
   featureComments: IFeatureComment[];
 };
 
-type PropsFromDispatch = {};
+type PropsFromDispatch = Record<string, never>;
 
-type RouterProps = {} & RouteComponentProps<{
+type RouterProps = RouteComponentProps<{
   projectId: string;
   projectId2: string;
   milestoneId: string;
@@ -61,11 +61,11 @@ type RouterProps = {} & RouteComponentProps<{
   workspaceName: string;
 }>;
 
-type SelfProps = {};
+type SelfProps = Record<string, never>;
 
 type Props = RouterProps & PropsFromState & PropsFromDispatch & SelfProps;
 
-type State = {};
+type State = Record<string, never>;
 
 class EntityDetailsPage extends Component<Props, State> {
   close = () => {
@@ -167,6 +167,7 @@ class EntityDetailsPage extends Component<Props, State> {
         />
       );
     }
+    return null;
   }
 }
 

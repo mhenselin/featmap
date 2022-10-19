@@ -1,11 +1,11 @@
-import React, { Component } from "react";
+import { Component } from "react";
 import type { RouteComponentProps } from "react-router";
 import { Link } from "react-router-dom";
 
-type PropsFromState = {};
-type RouterProps = {} & RouteComponentProps<{}>;
-type PropsFromDispatch = {};
-type SelfProps = {};
+type PropsFromState = Record<string, never>;
+type RouterProps = RouteComponentProps;
+type PropsFromDispatch = Record<string, never>;
+type SelfProps = Record<string, never>;
 type Props = RouterProps & PropsFromState & PropsFromDispatch & SelfProps;
 
 type State = {
@@ -22,7 +22,9 @@ class CancelPage extends Component<Props, State> {
               {" "}
               <h2>
                 {" "}
-                <i className="material-icons text-red text-3xl">error</i>{" "}
+                <i className="material-icons text-3xl text-red-500">
+                  error
+                </i>{" "}
                 Something went wrong
               </h2>
             </div>

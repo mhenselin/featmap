@@ -1,27 +1,25 @@
-import React, { Component, Dispatch } from "react";
-import { Button, CardLayout } from "../components/elements";
-import Header from "../components/Header";
-import { RouteComponentProps } from "react-router";
-import { AppState, AllActions } from "../store";
-import { connect } from "react-redux";
-import { Link } from "react-router-dom";
-import {
-  Formik,
+import type {
+  FieldProps,
   FormikHelpers as FormikActions,
   FormikProps,
-  Form,
-  Field,
-  FieldProps,
 } from "formik";
+import { Field, Form, Formik } from "formik";
+import { Component, Dispatch } from "react";
+import { connect } from "react-redux";
+import type { RouteComponentProps } from "react-router";
+import { Link } from "react-router-dom";
 import * as Yup from "yup";
 import {
-  API_CHANGE_EMAIL_REQ,
   API_CHANGE_EMAIL,
-  API_RESEND_EMAIL,
+  API_CHANGE_EMAIL_REQ,
   API_CHANGE_NAME,
   API_CHANGE_NAME_REQ,
   API_DELETE_ACCOUNT,
+  API_RESEND_EMAIL,
 } from "../api";
+import { Button, CardLayout } from "../components/elements";
+import Header from "../components/Header";
+import { AllActions, AppState } from "../store";
 import { newMessage } from "../store/application/actions";
 
 const mapDispatchToProps = (dispatch: Dispatch<AllActions>) => ({
@@ -35,11 +33,11 @@ const mapStateToProps = (state: AppState) => ({
 type PropsFromState = {
   state: AppState;
 };
-type RouterProps = {} & RouteComponentProps<{}>;
+type RouterProps = RouteComponentProps;
 type PropsFromDispatch = {
   newMessage: ReturnType<typeof newMessage>;
 };
-type OwnProps = {};
+type OwnProps = Record<string, never>;
 type Props = RouterProps & PropsFromState & PropsFromDispatch & OwnProps;
 
 type State = {
@@ -80,7 +78,10 @@ class WorkspacesPage extends Component<Props, State> {
               <Formik
                 initialValues={{}}
                 initialStatus=""
-                onSubmit={(values: {}, actions: FormikActions<{}>) => {
+                onSubmit={(
+                  _,
+                  actions: FormikActions<Record<string, never>>
+                ) => {
                   actions.setStatus("");
                   API_RESEND_EMAIL().then((response) => {
                     if (response.ok) {
@@ -93,10 +94,10 @@ class WorkspacesPage extends Component<Props, State> {
                   actions.setSubmitting(false);
                 }}
               >
-                {(formikBag: FormikProps<{}>) => (
+                {(formikBag: FormikProps<Record<string, never>>) => (
                   <Form>
                     <Field name="email">
-                      {({ field, form }: FieldProps<{}>) => (
+                      {() => (
                         <div>
                           <div className="flex  flex-row items-baseline">
                             <div className=" w-full text-xs">
@@ -312,12 +313,12 @@ class WorkspacesPage extends Component<Props, State> {
             </p>
             <Formik
               initialValues={{}}
-              onSubmit={(values: {}, actions: FormikActions<{}>) => {
+              onSubmit={() => {
                 API_DELETE_ACCOUNT().then((response) => {
                   if (response.ok) {
                     window.location.href = "/";
                   } else {
-                    response.json().then((data: any) => {
+                    response.json().then((data: { message: string }) => {
                       // noinspection JSIgnoredPromiseFromCall
                       this.props.newMessage("fail", data.message);
                     });
@@ -325,7 +326,7 @@ class WorkspacesPage extends Component<Props, State> {
                 });
               }}
             >
-              {(formikBag: FormikProps<{}>) => (
+              {() => (
                 <Form>
                   <p className="text-xs">
                     <Button

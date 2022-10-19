@@ -1,16 +1,14 @@
-import React, { Component } from "react";
-import { RouteComponentProps } from "react-router";
-import * as Yup from "yup";
-import {
-  Formik,
+import type {
+  FieldProps,
   FormikHelpers as FormikActions,
   FormikProps,
-  Form,
-  Field,
-  FieldProps,
 } from "formik";
-import { API_SIGN_UP_REQ, API_SIGN_UP as SignUpApi } from "../api";
+import { Field, Form, Formik } from "formik";
+import { Component } from "react";
+import type { RouteComponentProps } from "react-router";
 import { Link } from "react-router-dom";
+import * as Yup from "yup";
+import { API_SIGN_UP as SignUpApi, API_SIGN_UP_REQ } from "../api";
 import { Button } from "../components/elements";
 
 const SignupSchema = Yup.object().shape({
@@ -31,10 +29,10 @@ const SignupSchema = Yup.object().shape({
     .required("Required."),
 });
 
-type PropsFromState = {};
-type RouterProps = {} & RouteComponentProps<{}>;
-type PropsFromDispatch = {};
-type SelfProps = {};
+type PropsFromState = Record<string, never>;
+type RouterProps = RouteComponentProps;
+type PropsFromDispatch = Record<string, never>;
+type SelfProps = Record<string, never>;
 type Props = RouterProps & PropsFromState & PropsFromDispatch & SelfProps;
 class SignUp extends Component<Props> {
   render() {
@@ -71,7 +69,7 @@ class SignUp extends Component<Props> {
               ) => {
                 SignUpApi(values).then((response) => {
                   if (response.ok) {
-                    response.json().then((data) => {
+                    response.json().then(() => {
                       history.push("/");
                     });
                   } else {
@@ -130,7 +128,7 @@ class SignUp extends Component<Props> {
                     <div>{formikBag.status.msg}</div>
                   )}
                   <Field name="workspaceName">
-                    {({ field, form }: FieldProps<API_SIGN_UP_REQ>) => (
+                    {({ form }: FieldProps<API_SIGN_UP_REQ>) => (
                       <div className="flex flex-col    items-baseline sm:flex-row">
                         <div className=" flex w-full flex-col">
                           <div>
@@ -153,7 +151,7 @@ class SignUp extends Component<Props> {
                     )}
                   </Field>
                   <Field name="name">
-                    {({ field, form }: FieldProps<API_SIGN_UP_REQ>) => (
+                    {({ form }: FieldProps<API_SIGN_UP_REQ>) => (
                       <div className="flex  flex-row items-baseline">
                         <div className=" flex w-full flex-col">
                           <div>
@@ -176,7 +174,7 @@ class SignUp extends Component<Props> {
                     )}
                   </Field>
                   <Field name="email">
-                    {({ field, form }: FieldProps<API_SIGN_UP_REQ>) => (
+                    {({ form }: FieldProps<API_SIGN_UP_REQ>) => (
                       <div className="flex  flex-row items-baseline">
                         <div className="flex w-full flex-col">
                           <div>
@@ -199,7 +197,7 @@ class SignUp extends Component<Props> {
                     )}
                   </Field>
                   <Field name="password">
-                    {({ field, form }: FieldProps<API_SIGN_UP_REQ>) => (
+                    {({ form }: FieldProps<API_SIGN_UP_REQ>) => (
                       <div className="flex flex-row items-baseline">
                         <div className="flex w-full flex-col">
                           <div>

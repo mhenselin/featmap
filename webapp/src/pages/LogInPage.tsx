@@ -1,13 +1,11 @@
-import {
-  Field,
+import type {
   FieldProps,
-  Form,
-  Formik,
   FormikHelpers as FormikActions,
   FormikProps,
 } from "formik";
+import { Field, Form, Formik } from "formik";
 import { Component } from "react";
-import { RouteComponentProps } from "react-router";
+import type { RouteComponentProps } from "react-router";
 import { Link } from "react-router-dom";
 import * as Yup from "yup";
 import { API_LOG_IN as LoginApi, API_LOG_IN_REQ } from "../api";
@@ -21,10 +19,10 @@ const SignupSchema = Yup.object().shape({
     .required("Password required."),
 });
 
-type PropsFromState = {};
-type RouterProps = {} & RouteComponentProps<{}>;
-type PropsFromDispatch = {};
-type SelfProps = {};
+type PropsFromState = Record<string, never>;
+type RouterProps = RouteComponentProps;
+type PropsFromDispatch = Record<string, never>;
+type SelfProps = Record<string, never>;
 type Props = RouterProps & PropsFromState & PropsFromDispatch & SelfProps;
 class LogIn extends Component<Props> {
   render() {
@@ -55,7 +53,7 @@ class LogIn extends Component<Props> {
                 actions.setStatus("");
                 LoginApi(values).then((response) => {
                   if (response.ok) {
-                    response.json().then((data) => {
+                    response.json().then(() => {
                       history.push("/");
                     });
                   } else {

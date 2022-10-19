@@ -1,56 +1,54 @@
-import React, { Component, FocusEvent } from "react";
-import { connect } from "react-redux";
-import { AppState } from "../store";
-import {
-  deleteMilestoneAction,
-  updateMilestoneAction,
-  createMilestoneAction,
-} from "../store/milestones/actions";
-import {
-  deleteSubWorkflowAction,
-  updateSubWorkflowAction,
-  createSubWorkflowAction,
-} from "../store/subworkflows/actions";
-import {
-  deleteWorkflowAction,
-  updateWorkflowAction,
-  createWorkflowAction,
-} from "../store/workflows/actions";
-import {
-  deleteFeatureAction,
-  updateFeatureAction,
-  createFeatureAction,
-} from "../store/features/actions";
-import {
-  deleteProjectAction,
-  updateProjectAction,
-  createProjectAction,
-} from "../store/projects/actions";
-import {
-  Formik,
+import type {
+  FieldProps,
   FormikHelpers as FormikActions,
   FormikProps,
-  Form,
-  Field,
-  FieldProps,
 } from "formik";
+import { Field, Form, Formik } from "formik";
+import { Component, FocusEvent, MouseEventHandler } from "react";
+import onClickOutside from "react-onclickoutside";
+import { connect } from "react-redux";
+import * as Yup from "yup";
 import {
+  API_RENAME_FEATURE,
   API_RENAME_MILESTONE,
+  API_RENAME_PROJECT,
   API_RENAME_SUBWORKFLOW,
   API_RENAME_WORKFLOW,
-  API_RENAME_FEATURE,
-  API_RENAME_PROJECT,
 } from "../api";
-import * as Yup from "yup";
-import { IMilestone } from "../store/milestones/types";
+import { EntityTypes } from "../core/card";
+import { AppState } from "../store";
 import { application } from "../store/application/selectors";
 import { IApplication } from "../store/application/types";
-import { ISubWorkflow } from "../store/subworkflows/types";
-import { EntityTypes } from "../core/card";
-import { IWorkflow } from "../store/workflows/types";
+import {
+  createFeatureAction,
+  deleteFeatureAction,
+  updateFeatureAction,
+} from "../store/features/actions";
 import { IFeature } from "../store/features/types";
-import onClickOutside from "react-onclickoutside";
+import {
+  createMilestoneAction,
+  deleteMilestoneAction,
+  updateMilestoneAction,
+} from "../store/milestones/actions";
+import { IMilestone } from "../store/milestones/types";
+import {
+  createProjectAction,
+  deleteProjectAction,
+  updateProjectAction,
+} from "../store/projects/actions";
 import { IProject } from "../store/projects/types";
+import {
+  createSubWorkflowAction,
+  deleteSubWorkflowAction,
+  updateSubWorkflowAction,
+} from "../store/subworkflows/actions";
+import { ISubWorkflow } from "../store/subworkflows/types";
+import {
+  createWorkflowAction,
+  deleteWorkflowAction,
+  updateWorkflowAction,
+} from "../store/workflows/actions";
+import { IWorkflow } from "../store/workflows/types";
 
 const mapStateToProps = (state: AppState) => ({
   application: application(state),
@@ -113,19 +111,17 @@ type State = {
 class EntityDetailsTitle extends Component<Props, State> {
   constructor(props: Props) {
     super(props);
-    this.submitForm = () => {};
-
     this.state = { edit: false };
   }
 
-  handleClickOutside = () => {
+  handleClickOutside: MouseEventHandler<void> = () => {
     if (this.state.edit) {
       this.setState({ edit: false });
       this.submitForm();
     }
   };
 
-  submitForm: () => void;
+  submitForm!: FormikProps<{ title: string }>["submitForm"];
 
   submit = (
     values: { title: string },
@@ -330,7 +326,6 @@ class EntityDetailsTitle extends Component<Props, State> {
                       <div className="flex flex-col ">
                         <div>
                           <input
-                            autoFocus
                             onFocus={handleFocus}
                             type="text"
                             value={form.values.title}

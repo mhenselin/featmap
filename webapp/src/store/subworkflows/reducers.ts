@@ -15,10 +15,7 @@ export const initialState: State = {
   items: [],
 };
 
-export function reducer(
-  state: State = initialState,
-  action: Actions
-) {
+export function reducer(state: State = initialState, action: Actions) {
   switch (action.type) {
     case ActionTypes.CREATE_SUBWORKFLOW: {
       const ms = action.payload;
