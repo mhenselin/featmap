@@ -6,6 +6,7 @@ on:
     branches:
       - master
       - main
+      - wip/revision
   pull_request:
 permissions:
   contents: read
