@@ -11,7 +11,7 @@ import {
   API_CREATE_SUBWORKFLOW,
   API_CREATE_WORKFLOW,
 } from "../api";
-import { CardStatus, Color } from "../core/misc";
+import { Color } from "../core/misc";
 import { AppState } from "../store";
 import { application } from "../store/application/selectors";
 import { IApplication } from "../store/application/types";
@@ -39,6 +39,7 @@ import {
   updateWorkflowAction,
 } from "../store/workflows/actions";
 import { IWorkflow } from "../store/workflows/types";
+import { CardStatus } from "./Card";
 import { Button } from "./elements";
 
 export enum Types {

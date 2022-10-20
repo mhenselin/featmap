@@ -2,7 +2,7 @@ import { Component } from "react";
 import { connect } from "react-redux";
 import { Route, Switch } from "react-router-dom";
 import "./App.css";
-import Messages from "./components/Messages";
+import { MessageTray } from "./components/MessageTray";
 import AcceptInvitePage from "./pages/AcceptInvitePage";
 import CancelPage from "./pages/CancelPage";
 import ContactPage from "./pages/ContactPage";
@@ -53,7 +53,7 @@ class App extends Component<Props, Record<string, never>> {
           <Route path={"/account/verify/:key"} component={VerifyEmailPage} />
           <Route path="/" component={IndexPage} />
         </Switch>
-        <Messages />
+        <MessageTray />
       </div>
     );
   }

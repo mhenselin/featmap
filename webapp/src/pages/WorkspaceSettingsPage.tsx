@@ -17,6 +17,7 @@ import {
   API_UPDATE_MEMBER_LEVEL,
 } from "../api";
 import { Button, CardLayout } from "../components/elements";
+import { MessageType } from "../components/Message";
 import { TimeAgo } from "../components/TimeAgo";
 import {
   isEditor,
@@ -194,12 +195,18 @@ class WorkspaceSettingsPage extends Component<Props, State> {
                           props.member.id,
                           values.level
                         ).then((response) => {
-                          response.json().then((data: any) => {
+                          response.json().then((data: { message: string }) => {
                             if (response.ok) {
                               this.loadMembers();
-                              this.props.newMessage("success", "role changed");
+                              this.props.newMessage(
+                                MessageType.SUCCESS,
+                                "role changed"
+                              );
                             } else {
-                              this.props.newMessage("fail", data.message);
+                              this.props.newMessage(
+                                MessageType.FAILURE,
+                                data.message
+                              );
                             }
                           });
                         });
@@ -252,13 +259,18 @@ class WorkspaceSettingsPage extends Component<Props, State> {
                           if (response.ok) {
                             this.loadMembers();
                             this.props.newMessage(
-                              "success",
+                              MessageType.SUCCESS,
                               "membership removed"
                             );
                           } else {
-                            response.json().then((data: any) => {
-                              this.props.newMessage("fail", data.message);
-                            });
+                            response
+                              .json()
+                              .then((data: { message: string }) => {
+                                this.props.newMessage(
+                                  MessageType.FAILURE,
+                                  data.message
+                                );
+                              });
                           }
                         }
                       );
@@ -296,11 +308,17 @@ class WorkspaceSettingsPage extends Component<Props, State> {
                   onSubmit={() => {
                     API_LEAVE(ws.id).then((response) => {
                       if (response.ok) {
-                        this.props.newMessage("success", "left workspace");
+                        this.props.newMessage(
+                          MessageType.SUCCESS,
+                          "left workspace"
+                        );
                         window.location.href = "/";
                       } else {
-                        response.json().then((data: any) => {
-                          this.props.newMessage("fail", data.message);
+                        response.json().then((data: { message: string }) => {
+                          this.props.newMessage(
+                            MessageType.FAILURE,
+                            data.message
+                          );
                         });
                       }
                     });
@@ -417,14 +435,20 @@ class WorkspaceSettingsPage extends Component<Props, State> {
                     values.externalBillingEmail
                   ).then((response) => {
                     if (response.ok) {
-                      this.props.newMessage("success", "settings changed");
+                      this.props.newMessage(
+                        MessageType.SUCCESS,
+                        "settings changed"
+                      );
                       this.setState({
                         euVat: values.euVat,
                         externalBillingEmail: values.externalBillingEmail,
                       });
                     } else {
-                      response.json().then((data: any) => {
-                        this.props.newMessage("fail", data.message);
+                      response.json().then((data: { message: string }) => {
+                        this.props.newMessage(
+                          MessageType.FAILURE,
+                          data.message
+                        );
                       });
                     }
                   });
@@ -484,11 +508,10 @@ class WorkspaceSettingsPage extends Component<Props, State> {
                                             if (response.ok) {
                                                 this.setState({ allowExternalSharing: !this.state.allowExternalSharing })
 
-                                                this.props.newMessage("success", "setting changed")
+                                                this.props.newMessage(MessageType.SUCCESS, "setting changed")
                                             }
-                                            else {
-                                                response.json().then((data: any) => {
-                                                    this.props.newMessage("fail", data.message)
+                                            else MessageType.SUCCESS().then((data: {message:string}) => {
+                                                    this.props.newMessage(MessageType.FAILURE, data.message)
                                                 })
                                             }
                                         }
@@ -530,11 +553,19 @@ class WorkspaceSettingsPage extends Component<Props, State> {
                           ).then((response) => {
                             if (response.ok) {
                               this.loadInvites();
-                              this.props.newMessage("success", "invite sent");
+                              this.props.newMessage(
+                                MessageType.SUCCESS,
+                                "invite sent"
+                              );
                             } else {
-                              response.json().then((data: any) => {
-                                this.props.newMessage("fail", data.message);
-                              });
+                              response
+                                .json()
+                                .then((data: { message: string }) => {
+                                  this.props.newMessage(
+                                    MessageType.FAILURE,
+                                    data.message
+                                  );
+                                });
                             }
                           });
                         }}
@@ -618,16 +649,20 @@ class WorkspaceSettingsPage extends Component<Props, State> {
                                         if (response.ok) {
                                           this.loadInvites();
                                           this.props.newMessage(
-                                            "success",
+                                            MessageType.SUCCESS,
                                             "invite canceled"
                                           );
                                         } else {
-                                          response.json().then((data: any) => {
-                                            this.props.newMessage(
-                                              "fail",
-                                              data.message
+                                          response
+                                            .json()
+                                            .then(
+                                              (data: { message: string }) => {
+                                                this.props.newMessage(
+                                                  MessageType.FAILURE,
+                                                  data.message
+                                                );
+                                              }
                                             );
-                                          });
                                         }
                                       }
                                     );
@@ -656,7 +691,7 @@ class WorkspaceSettingsPage extends Component<Props, State> {
                                           if (response.ok) {
                                             this.loadInvites();
                                             this.props.newMessage(
-                                              "success",
+                                              MessageType.SUCCESS,
                                               "invite resent"
                                             );
                                           } else {
@@ -665,7 +700,7 @@ class WorkspaceSettingsPage extends Component<Props, State> {
                                               .then(
                                                 (data: { message: string }) => {
                                                   this.props.newMessage(
-                                                    "fail",
+                                                    MessageType.FAILURE,
                                                     data.message
                                                   );
                                                 }
@@ -741,11 +776,17 @@ class WorkspaceSettingsPage extends Component<Props, State> {
                   onSubmit={() => {
                     API_DELETE_WORKSPACE(ws.id).then((response) => {
                       if (response.ok) {
-                        this.props.newMessage("success", "workspace deleted");
+                        this.props.newMessage(
+                          MessageType.SUCCESS,
+                          "workspace deleted"
+                        );
                         window.location.href = "/";
                       } else {
                         response.json().then((data: { message: string }) => {
-                          this.props.newMessage("fail", data.message);
+                          this.props.newMessage(
+                            MessageType.FAILURE,
+                            data.message
+                          );
                         });
                       }
                     });

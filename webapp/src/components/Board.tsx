@@ -74,13 +74,13 @@ import {
   filterOutClosedWorkflows,
 } from "../store/workflows/selectors";
 import { IWorkflow } from "../store/workflows/types";
-import Card from "./Card";
+import { Card } from "./Card";
 import ContextMenu from "./ContextMenu";
 import CreateCardModal, { Types } from "./CreateCardModal";
 import { Button } from "./elements";
 import EmptyCard from "./EmptyCard";
-import NewCard from "./NewCard";
-import NewDimCard from "./NewDimCard";
+import { NewCard } from "./NewCard";
+import { DimCard } from "./DimCard";
 import Personas from "./Personas";
 
 type SelfProps = {
@@ -171,7 +171,7 @@ class Board extends Component<Props, State> {
     const by =
       this.props.application.account === undefined
         ? "demo"
-        : this.props.application.account!.name;
+        : this.props.application.account.name;
     if (!destination) {
       return;
     }
@@ -1257,12 +1257,14 @@ class Board extends Component<Props, State> {
                                                                             "/f/" +
                                                                             f.id
                                                                           }
-                                                                          bottomLink={
+                                                                          bottomAction={
                                                                             index ===
                                                                               ff.length -
                                                                                 1 &&
-                                                                            !viewOnly
-                                                                              ? () =>
+                                                                            !viewOnly ? (
+                                                                              <button
+                                                                                className="text-gray-500 hover:text-gray-800"
+                                                                                onClick={() =>
                                                                                   this.setState(
                                                                                     {
                                                                                       showCreateFeatureModal:
@@ -1273,7 +1275,11 @@ class Board extends Component<Props, State> {
                                                                                         sw.id,
                                                                                     }
                                                                                   )
-                                                                              : undefined
+                                                                                }
+                                                                              >
+                                                                                +
+                                                                              </button>
+                                                                            ) : undefined
                                                                           }
                                                                         />
                                                                       </div>
@@ -1290,7 +1296,7 @@ class Board extends Component<Props, State> {
                                                           {ff.length === 0 ? (
                                                             <div className="flex  p-1 text-xs">
                                                               {!viewOnly ? (
-                                                                <NewDimCard>
+                                                                <DimCard>
                                                                   <button
                                                                     className=" text-2xl text-gray-400 hover:text-gray-800"
                                                                     onClick={() =>
@@ -1308,7 +1314,7 @@ class Board extends Component<Props, State> {
                                                                   >
                                                                     +
                                                                   </button>
-                                                                </NewDimCard>
+                                                                </DimCard>
                                                               ) : (
                                                                 <EmptyCard />
                                                               )}

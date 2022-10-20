@@ -3,7 +3,7 @@ import { connect } from "react-redux";
 import type { RouteComponentProps } from "react-router";
 import { Link, Redirect, Route, Switch } from "react-router-dom";
 import { API_GET_PROJECTS } from "../api";
-import Header from "../components/Header";
+import { Header } from "../components/Header";
 import { daysBetween, subIsInactive, subIsTrial } from "../core/misc";
 import { AppState } from "../store";
 import {

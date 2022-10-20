@@ -18,7 +18,8 @@ import {
   API_RESEND_EMAIL,
 } from "../api";
 import { Button, CardLayout } from "../components/elements";
-import Header from "../components/Header";
+import { Header } from "../components/Header";
+import { MessageType } from "../components/Message";
 import { AllActions, AppState } from "../store";
 import { newMessage } from "../store/application/actions";
 
@@ -319,8 +320,7 @@ class WorkspacesPage extends Component<Props, State> {
                     window.location.href = "/";
                   } else {
                     response.json().then((data: { message: string }) => {
-                      // noinspection JSIgnoredPromiseFromCall
-                      this.props.newMessage("fail", data.message);
+                      this.props.newMessage(MessageType.FAILURE, data.message);
                     });
                   }
                 });

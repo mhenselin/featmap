@@ -24,11 +24,6 @@ export const daysBetween = (fromDate: Date, toDate: Date) => {
   return Math.round(Math.abs((fromDate.getTime() - toDate.getTime()) / oneDay));
 };
 
-export enum CardStatus {
-  OPEN = "OPEN",
-  CLOSED = "CLOSED",
-}
-
 export type personaBarState =
   | { page: "all" }
   | { page: "persona"; personaId: string; edit: boolean }
@@ -168,18 +163,6 @@ export const annotationsToEnums = (text: string): (Annotation2 | null)[] => {
 
   return ann;
 };
-
-// export const allAnnotations = () => {
-
-//     let all: Annotation2[] = []
-
-//     for (let ann in Annotation2) {
-//         const a: Annotation2 = Annotation2[ann as keyof typeof Annotation2];
-//         all.push(a)
-//     }
-
-//     return all
-// }
 
 export const Colors = new Array<Color>(
   Color.WHITE,

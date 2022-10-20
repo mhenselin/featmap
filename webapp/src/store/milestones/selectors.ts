@@ -1,7 +1,7 @@
 import { AppState } from "..";
 import { IMilestone } from "./types";
 import { createSelector } from "reselect";
-import { CardStatus } from "../../core/misc";
+import { CardStatus } from "../../components/Card";
 
 const getMilestonesState = (state: AppState) => state.milestones;
 

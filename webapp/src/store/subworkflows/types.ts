@@ -1,5 +1,5 @@
+import { CardStatus } from "../../components/Card";
 import { ICard } from "../../core/card";
-import { CardStatus } from "../../core/misc";
 
 export type ISubWorkflow = {
   kind: "subworkflow";

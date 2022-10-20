@@ -4,7 +4,7 @@ import type { RouteComponentProps } from "react-router";
 import { Link } from "react-router-dom";
 import CreateWorkspaceModal from "../components/CreateWorkspaceModal";
 import { Button, CardLayout } from "../components/elements";
-import Header from "../components/Header";
+import { Header } from "../components/Header";
 import { TimeAgo } from "../components/TimeAgo";
 import { AppState } from "../store";
 

@@ -2,7 +2,6 @@ import {
   IWorkspace,
   IMembership,
   IAccount,
-  IMessage,
   ISubscription,
 } from "../store/application/types";
 import { IProject } from "../store/projects/types";
@@ -14,6 +13,7 @@ import { Color } from "../core/misc";
 import { IFeatureComment } from "../store/featurecomments/types";
 import { IPersona } from "../store/personas/types";
 import { IWorkflowPersona } from "../store/workflowpersonas/types";
+import type { MessageEntity } from "../components/Message";
 
 const endpoint = process.env.REACT_APP_API_ENDPOINT
   ? process.env.REACT_APP_API_ENDPOINT
@@ -198,7 +198,7 @@ export type API_FETCH_APP_RESP = {
   workspaces: IWorkspace[];
   memberships: IMembership[];
   account: IAccount;
-  messages: IMessage[];
+  messages: Array<MessageEntity>;
   subscriptions: ISubscription[];
 };
 

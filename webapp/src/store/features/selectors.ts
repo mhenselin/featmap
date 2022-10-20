@@ -1,7 +1,7 @@
 import { AppState } from "..";
 import { createSelector } from "reselect";
 import { IFeature } from "./types";
-import { CardStatus } from "../../core/misc";
+import { CardStatus } from "../../components/Card";
 
 const getFeaturesState = (state: AppState) => state.features;
 
