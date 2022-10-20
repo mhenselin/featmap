@@ -1,7 +1,7 @@
 import { AppState } from "..";
 import { createSelector } from "reselect";
 import { ISubWorkflow } from "./types";
-import { CardStatus } from "../../core/misc";
+import { CardStatus } from "../../components/Card";
 
 const getSubWorkflowsState = (state: AppState) => state.subWorkflows;
 

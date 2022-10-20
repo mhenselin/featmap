@@ -1,125 +1,90 @@
-import { Component } from "react";
 import { Link } from "react-router-dom";
 import {
   Color,
   colorToBorderColorClass,
   dbAnnotationsFromNames,
 } from "../core/misc";
+import { CardFlag } from "./CardFlag";
 
-type Props = {
+export enum CardStatus {
+  OPEN = "OPEN",
+  CLOSED = "CLOSED",
+}
+
+type CardProps = {
   title: string;
   link: string;
-  status?: string;
-  small?: boolean;
+  status?: CardStatus;
   color?: Color;
-  bottomLink?: () => void;
+  bottomAction?: React.ReactElement;
   nbrOfItems?: number;
   nbrOfComments?: number;
   annotations: string;
   estimate?: number;
 };
 
-type State = Record<string, never>;
+export const Card: React.FunctionComponent<Readonly<CardProps>> = (props) => {
+  const {
+    annotations,
+    color = Color.WHITE,
+    title,
+    nbrOfItems = 0,
+    nbrOfComments = 0,
+    link,
+    bottomAction,
+    estimate = 0,
+    status = CardStatus.OPEN,
+  } = props;
+  const filteredAnnotations = dbAnnotationsFromNames(annotations);
 
-class Card extends Component<Props, State> {
-  render() {
-    const annos = dbAnnotationsFromNames(this.props.annotations);
-
-    const color =
-      this.props.color && this.props.color !== Color.WHITE
-        ? this.props.color
-        : null;
-
-    const title = this.props.title;
-
-    return (
-      <div>
-        <div
-          style={{ fontSize: "12px" }}
-          className={
-            "flex w-36 shrink-0 flex-row overflow-hidden   rounded-sm  border bg-white   " +
-            (this.props.small ? " " : " h-24 ") +
-            (color
-              ? " border-l-4 " + colorToBorderColorClass(color) + " "
-              : " " + colorToBorderColorClass(Color.WHITE) + " ")
-          }
-        >
-          <Link className="flex grow flex-col" to={this.props.link}>
-            <div className="grow overflow-hidden p-2     font-normal ">
-              <span
-                className={this.props.status === "CLOSED" ? "line-through" : ""}
-              >
-                {" "}
-                {title}{" "}
-              </span>
-            </div>
-
-            <div className=" flex flex-row p-2">
-              {this.props.nbrOfItems && !(this.props.nbrOfItems === 0) ? (
-                <div className=" flex ">
-                  <div>{this.props.nbrOfItems} items</div>
-                </div>
-              ) : null}
-
-              {this.props.nbrOfComments! > 0 ? (
-                <div
-                  title={this.props.nbrOfComments + " comments"}
-                  className="whitespace-nowrap "
-                >
-                  {this.props.nbrOfComments!}
-                  <i
-                    style={{ fontSize: "12px" }}
-                    className="material-icons align-middle"
-                  >
-                    chat_bubble_outline{" "}
-                  </i>
-                </div>
-              ) : null}
-              <div className="flex grow"></div>
-
-              {this.props.annotations
-                ? annos.annotations.map((a, i) => {
-                    return (
-                      <div className="bg-gray-200" key={i}>
-                        {" "}
-                        <i
-                          style={{ fontSize: "14px" }}
-                          title={a.description}
-                          className=" material-icons align-middle text-gray-700"
-                        >
-                          {a.icon}
-                        </i>
-                      </div>
-                    );
-                  })
-                : null}
-
-              {this.props.estimate && !(this.props.estimate === 0) ? (
-                <div className="whitespace-nowrap bg-gray-200 px-1 ">
-                  <span title={"Size is " + this.props.estimate}>
-                    {" "}
-                    {this.props.estimate}
-                  </span>
-                </div>
-              ) : null}
-            </div>
-          </Link>
-        </div>
-        {this.props.bottomLink && (
-          <div className=" -mt-1 -mb-2 flex  h-6 w-36 shrink-0  justify-center">
-            <div className="showme flex text-xl font-bold   ">
-              <button
-                className=" text-gray-500 hover:text-gray-800"
-                onClick={this.props.bottomLink}
-              >
-                +
-              </button>
-            </div>
+  return (
+    <div>
+      <div
+        className={`flex w-36 shrink-0 flex-row overflow-hidden rounded-sm border border-l-4 bg-white text-xs ${colorToBorderColorClass(
+          color
+        )}`}
+      >
+        <Link className="flex grow flex-col" to={link}>
+          <div
+            className={`grow overflow-hidden p-2 font-normal ${
+              status === "CLOSED" ? "line-through" : ""
+            }`}
+          >
+            {title}
           </div>
-        )}
-      </div>
-    );
-  }
-}
 
-export default Card;
+          <div className="flex flex-row p-2">
+            <CardFlag
+              shouldRender={nbrOfItems > 0}
+              text={`${nbrOfItems} items`}
+            />
+            <CardFlag
+              shouldRender={nbrOfComments > 0}
+              tooltip={`${nbrOfComments} comments`}
+              icon="chat_bubble_outline"
+              text={nbrOfComments}
+            />
+            <div className="flex grow"></div>
+            {filteredAnnotations.annotations.map((annotation, index) => (
+              <CardFlag
+                key={index}
+                tooltip={annotation.description}
+                icon={annotation.icon}
+              />
+            ))}
+            <CardFlag
+              shouldRender={estimate > 0}
+              tooltip={"Size is " + estimate}
+              text={estimate}
+            />
+          </div>
+        </Link>
+      </div>
+      {bottomAction && (
+        <div className="-mt-1 -mb-2 flex h-6 w-36 shrink-0 justify-center">
+          <div className="showme flex text-xl font-bold">{bottomAction}</div>
+        </div>
+      )}
+    </div>
+  );
+};

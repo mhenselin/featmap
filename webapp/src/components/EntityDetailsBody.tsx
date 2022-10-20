@@ -25,7 +25,6 @@ import {
 } from "../api";
 import { EntityTypes } from "../core/card";
 import {
-  CardStatus,
   Color,
   Colors,
   colorToBackgroundColorClass,
@@ -70,6 +69,7 @@ import {
   updateWorkflowAction,
 } from "../store/workflows/actions";
 import { IWorkflow } from "../store/workflows/types";
+import { CardStatus } from "./Card";
 import ContextMenu from "./ContextMenu";
 import { Button } from "./elements";
 import EntityDetailsAnnotations from "./EntityDetailsAnnotations";
