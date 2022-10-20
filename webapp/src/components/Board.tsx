@@ -79,8 +79,8 @@ import ContextMenu from "./ContextMenu";
 import CreateCardModal, { Types } from "./CreateCardModal";
 import { Button } from "./elements";
 import EmptyCard from "./EmptyCard";
-import NewCard from "./NewCard";
-import NewDimCard from "./NewDimCard";
+import { NewCard } from "./NewCard";
+import { DimCard } from "./DimCard";
 import Personas from "./Personas";
 
 type SelfProps = {
@@ -1296,7 +1296,7 @@ class Board extends Component<Props, State> {
                                                           {ff.length === 0 ? (
                                                             <div className="flex  p-1 text-xs">
                                                               {!viewOnly ? (
-                                                                <NewDimCard>
+                                                                <DimCard>
                                                                   <button
                                                                     className=" text-2xl text-gray-400 hover:text-gray-800"
                                                                     onClick={() =>
@@ -1314,7 +1314,7 @@ class Board extends Component<Props, State> {
                                                                   >
                                                                     +
                                                                   </button>
-                                                                </NewDimCard>
+                                                                </DimCard>
                                                               ) : (
                                                                 <EmptyCard />
                                                               )}

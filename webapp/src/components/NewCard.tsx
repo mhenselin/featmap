@@ -1,11 +1,10 @@
-import { FunctionComponent, PropsWithChildren } from "react";
+type NewCardProps = React.PropsWithChildren;
 
-const NewCard: FunctionComponent<PropsWithChildren> = (props) => {
+export const NewCard: React.FunctionComponent<NewCardProps> = (props) => {
+  const { children } = props;
   return (
-    <div className="h-24 w-36 items-center  justify-center rounded-sm border border-dashed border-gray-300 p-1 ">
-      <div className="flex h-full">{props.children}</div>
+    <div className="h-24 w-36 items-center justify-center rounded-sm border border-dashed border-gray-300 p-1">
+      <div className="flex h-full">{children}</div>
     </div>
   );
 };
-
-export default NewCard;

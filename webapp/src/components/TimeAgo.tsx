@@ -1,5 +1,3 @@
-import { FunctionComponent } from "react";
-
 type TimeAgoProps = {
   date: string;
 };
@@ -23,7 +21,7 @@ export const daysToReadableString = (date: string) => {
   return `${days}d`;
 };
 
-export const TimeAgo: FunctionComponent<Readonly<TimeAgoProps>> = ({
+export const TimeAgo: React.FunctionComponent<Readonly<TimeAgoProps>> = ({
   date,
 }) => {
   let content: string | null = null;
