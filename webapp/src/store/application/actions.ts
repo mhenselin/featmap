@@ -1,9 +1,9 @@
 import { action } from "typesafe-actions";
 import { API_FETCH_APP, API_FETCH_APP_RESP } from "../../api";
-import { IMessage, messageTypes } from "./types";
 import { Dispatch } from "react";
 import { AllActions } from "..";
 import { v4 as uuid } from "uuid";
+import type { MessageEntity, MessageType } from "../../components/Message";
 
 export enum AppActions {
   LOAD_APPLICATION = "LOAD_APPLICATION",
@@ -22,7 +22,7 @@ export type resetApp = {
 };
 export type createMessage = {
   type: AppActions.CREATE_MESSAGE;
-  payload: IMessage;
+  payload: MessageEntity;
 };
 export type deleteMessage = {
   type: AppActions.DELETE_MESSAGE;
@@ -34,7 +34,7 @@ export const receiveAppAction = (s: API_FETCH_APP_RESP) => {
 };
 
 export const resetAppAction = () => action(AppActions.RESET_APPLICATION);
-export const createMessageAction = (m: IMessage) =>
+export const createMessageAction = (m: MessageEntity) =>
   action(AppActions.CREATE_MESSAGE, m);
 export const deleteMessageAction = (id: string) =>
   action(AppActions.DELETE_MESSAGE, id);
@@ -43,7 +43,7 @@ export type Actions = receiveApp | resetApp | createMessage | deleteMessage;
 
 export const newMessage =
   (dispatch: Dispatch<AllActions>) =>
-  async (type: messageTypes, message: string) => {
+  async (type: MessageType, message: string) => {
     const id = uuid();
 
     dispatch(createMessageAction({ id, type, message }));

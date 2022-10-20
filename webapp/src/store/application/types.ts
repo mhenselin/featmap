@@ -1,3 +1,4 @@
+import type { MessageEntity } from "../../components/Message";
 import { Roles, SubscriptionLevels } from "../../core/misc";
 
 export type IApplication = {
@@ -5,7 +6,7 @@ export type IApplication = {
   workspaces: IWorkspace[];
   memberships: IMembership[];
   account?: IAccount;
-  messages: IMessage[];
+  messages: Array<MessageEntity>;
   subscriptions: ISubscription[];
 };
 
@@ -65,12 +66,4 @@ export type IInvite = {
   createdAt: string;
   createdByEmail: string;
   workspaceName: string;
-};
-
-export type messageTypes = "success" | "fail";
-
-export type IMessage = {
-  id: string;
-  type: messageTypes;
-  message: string;
 };
