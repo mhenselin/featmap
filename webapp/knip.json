@@ -1,0 +1,4 @@
+{
+  "entryFiles": ["src/index.tsx"],
+  "projectFiles": ["src/**/*.{ts,tsx}", "!**/*.spec.ts", "!**/*.test.ts"]
+}

@@ -1,148 +1,162 @@
-import React, { Component } from 'react';
-import { connect } from 'react-redux'
-import { AppState } from '../store'
-import { application, getWorkspaceByName } from '../store/application/selectors'
-import { createProjectAction } from '../store/projects/actions';
-import { Dispatch } from "react";
-import { AllActions } from "../store";
-import { IProject } from "../store/projects/types";
-import { Formik, FormikHelpers as FormikActions, FormikProps, Form, Field, FieldProps } from 'formik';
+import type { FieldProps, FormikHelpers, FormikProps } from "formik";
+import { Field, Form, Formik } from "formik";
+import { Component, Dispatch } from "react";
+import { connect } from "react-redux";
+import { v4 as uuid } from "uuid";
+import * as Yup from "yup";
 import { API_CREATE_PROJECT } from "../api";
-import { v4 as uuid } from 'uuid'
-import * as Yup from 'yup';
-import { IApplication } from '../store/application/types';
-import { Button } from './elements';
+import { AllActions, AppState } from "../store";
+import {
+  application,
+  getWorkspaceByName,
+} from "../store/application/selectors";
+import { IApplication } from "../store/application/types";
+import { createProjectAction } from "../store/projects/actions";
+import { IProject } from "../store/projects/types";
+import { Button } from "./elements";
 
 const mapStateToProps = (state: AppState) => ({
-  application: application(state)
-})
-
+  application: application(state),
+});
 
 const mapDispatchToProps = {
-  createProject: createProjectAction
-}
+  createProject: createProjectAction,
+};
 
-interface PropsFromState {
-  application: IApplication
+type PropsFromState = {
+  application: IApplication;
+};
 
-}
+type PropsFromDispatch = {
+  createProject: typeof createProjectAction;
+};
+type SelfProps = {
+  workspaceName: string;
+  close: () => void;
+};
+type Props = PropsFromState & PropsFromDispatch & SelfProps;
 
-interface PropsFromDispatch {
-  createProject: typeof createProjectAction,
-}
-interface SelfProps {
-  workspaceName: string,
-  close: () => void
-}
-type Props = PropsFromState & PropsFromDispatch & SelfProps
-
-interface State {
-  show: boolean
-}
+type State = {
+  show: boolean;
+};
 
 const Schema = Yup.object().shape({
   title: Yup.string()
-    .min(1, 'Project minimum 1 characters.')
-    .max(200, 'Project  maximum 200 characters.')
-    .required('Title required.')
+    .min(1, "Project minimum 1 characters.")
+    .max(200, "Project  maximum 200 characters.")
+    .required("Title required."),
 });
-
 
 export const submit = (dispatch: Dispatch<AllActions>) => {
   return (workspaceId: string, title: string) => {
+    const projectId = uuid();
 
-    const projectId = uuid()
-
-    return API_CREATE_PROJECT(workspaceId, projectId, title)
-      .then(response => {
+    return API_CREATE_PROJECT(workspaceId, projectId, title).then(
+      (response) => {
         if (response.ok) {
           response.json().then((data: IProject) => {
-            dispatch(createProjectAction(data))
-          })
+            dispatch(createProjectAction(data));
+          });
         }
       }
-      )
-  }
-}
+    );
+  };
+};
 
-
-interface formValues {
-  title: string
-}
+type formValues = {
+  title: string;
+};
 
 class CreateProjectModal extends Component<Props, State> {
-
   keydownHandler = (event: KeyboardEvent) => {
     if (event.keyCode === 27) {
-      this.props.close()
+      this.props.close();
     }
-  }
-
+  };
 
   componentDidMount() {
     document.addEventListener("keydown", this.keydownHandler, false);
   }
 
   render() {
-
     const bg = {
-      background: ' rgba(0,0,0,.75)',
+      background: " rgba(0,0,0,.75)",
     };
 
     return (
-      <div style={bg} className="fixed p-1 z-0 top-0 left-0 w-full h-full flex items-center justify-center bg-gray-100 text-sm">
-        <div className="bg-white p-3 w-full  max-w-xs">
-
+      <div
+        style={bg}
+        className="fixed top-0 left-0 z-0 flex h-full w-full items-center justify-center bg-gray-100 p-1 text-sm"
+      >
+        <div className="w-full max-w-xs bg-white  p-3">
           <Formik
-            initialValues={{ title: '' }}
-
+            initialValues={{ title: "" }}
             validationSchema={Schema}
+            onSubmit={(
+              values: formValues,
+              actions: FormikHelpers<formValues>
+            ) => {
+              const projectId = uuid();
 
-            onSubmit={(values: formValues, actions: FormikActions<formValues>) => {
-              const projectId = uuid()
+              const workspaceId = getWorkspaceByName(
+                this.props.application,
+                this.props.workspaceName
+              )!.id;
 
-              const workspaceId = getWorkspaceByName(this.props.application, this.props.workspaceName)!.id
-
-              API_CREATE_PROJECT(workspaceId, projectId, values.title)
-                .then(response => {
+              API_CREATE_PROJECT(workspaceId, projectId, values.title).then(
+                (response) => {
                   if (response.ok) {
                     response.json().then((data: IProject) => {
-                      this.props.createProject(data)
-                      this.props.close()
-                    })
+                      this.props.createProject(data);
+                      this.props.close();
+                    });
                   } else {
-                    response.json().then(data => {
+                    response.json().then((data) => {
                       switch (data.message) {
                         case "title_invalid": {
-                          actions.setFieldError("title", "Title is invalid.")
-                          break
+                          actions.setFieldError("title", "Title is invalid.");
+                          break;
                         }
                         default: {
-                          break
+                          break;
                         }
                       }
-                    })
+                    });
                   }
-                })
+                }
+              );
 
-
-              actions.setSubmitting(false)
+              actions.setSubmitting(false);
             }}
           >
             {(formikBag: FormikProps<formValues>) => (
               <Form>
-                {formikBag.status && formikBag.status.msg && <div>{formikBag.status.msg}</div>}
+                {formikBag.status && formikBag.status.msg && (
+                  <div>{formikBag.status.msg}</div>
+                )}
 
                 <div className="flex flex-col ">
                   <div className="mb-2"> Create project </div>
 
                   <div>
-
-                    <Field name="title" >
+                    <Field name="title">
                       {({ form }: FieldProps<formValues>) => (
                         <div className="flex flex-col">
-                          <div><input autoFocus type="text" value={form.values.title} onChange={form.handleChange} placeholder="Title" id="title" className="rounded p-2 border w-full	" /></div>
-                          <div className="p-1 text-red-500 text-xs font-bold">{form.touched.title && form.errors.title}</div>
+                          <div>
+                            <input
+                              type="text"
+                              value={form.values.title}
+                              onChange={form.handleChange}
+                              placeholder="Title"
+                              id="title"
+                              className="w-full rounded border p-2	"
+                            />
+                          </div>
+                          <div className="p-1 text-xs font-bold text-red-500">
+                            {form.touched.title &&
+                              form.errors.title &&
+                              form.errors.title.toString()}
+                          </div>
                         </div>
                       )}
                     </Field>
@@ -154,12 +168,14 @@ class CreateProjectModal extends Component<Props, State> {
                         <Button submit title="Create" primary />
                       </div>
                       <div>
-                        <Button title="Cancel" handleOnClick={this.props.close} />
+                        <Button
+                          title="Cancel"
+                          handleOnClick={this.props.close}
+                        />
                       </div>
                     </div>
                   </div>
                 </div>
-
               </Form>
             )}
           </Formik>
@@ -169,4 +185,4 @@ class CreateProjectModal extends Component<Props, State> {
   }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(CreateProjectModal)
+export default connect(mapStateToProps, mapDispatchToProps)(CreateProjectModal);

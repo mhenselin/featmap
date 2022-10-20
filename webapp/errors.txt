@@ -1,0 +1,138 @@
+
+> featmap-client@0.1.0 lint:ts
+> eslint ./src/**/*.{ts,tsx}
+
+
+/home/ezi/projects/featmap/webapp/src/components/Board.tsx
+  174:11  warning  Forbidden non-null assertion              @typescript-eslint/no-non-null-assertion
+  319:56  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+/home/ezi/projects/featmap/webapp/src/components/Card.tsx
+  64:16  warning  Forbidden non-null assertion  @typescript-eslint/no-non-null-assertion
+  69:20  warning  Forbidden non-null assertion  @typescript-eslint/no-non-null-assertion
+
+/home/ezi/projects/featmap/webapp/src/components/CreateProjectModal.tsx
+  101:35  warning  Forbidden non-null assertion  @typescript-eslint/no-non-null-assertion
+
+/home/ezi/projects/featmap/webapp/src/components/EntityDetailsBody.tsx
+    1:32  warning  'FormikActions' is defined but never used  @typescript-eslint/no-unused-vars
+  162:7   warning  Forbidden non-null assertion               @typescript-eslint/no-non-null-assertion
+  687:36  warning  Forbidden non-null assertion               @typescript-eslint/no-non-null-assertion
+
+/home/ezi/projects/featmap/webapp/src/components/EntityDetailsComments.tsx
+    7:20  warning  'FormikActions' is defined but never used  @typescript-eslint/no-unused-vars
+  135:23  warning  Forbidden non-null assertion               @typescript-eslint/no-non-null-assertion
+
+/home/ezi/projects/featmap/webapp/src/components/EntityDetailsDescription.tsx
+  125:23  warning  Forbidden non-null assertion  @typescript-eslint/no-non-null-assertion
+  155:23  warning  Forbidden non-null assertion  @typescript-eslint/no-non-null-assertion
+  184:23  warning  Forbidden non-null assertion  @typescript-eslint/no-non-null-assertion
+  214:23  warning  Forbidden non-null assertion  @typescript-eslint/no-non-null-assertion
+  244:23  warning  Forbidden non-null assertion  @typescript-eslint/no-non-null-assertion
+
+/home/ezi/projects/featmap/webapp/src/components/EntityDetailsTitle.tsx
+    8:15  warning  'HandleClickOutside' is defined but never used  @typescript-eslint/no-unused-vars
+  139:15  warning  Forbidden non-null assertion                    @typescript-eslint/no-non-null-assertion
+  168:15  warning  Forbidden non-null assertion                    @typescript-eslint/no-non-null-assertion
+  197:15  warning  Forbidden non-null assertion                    @typescript-eslint/no-non-null-assertion
+  226:15  warning  Forbidden non-null assertion                    @typescript-eslint/no-non-null-assertion
+  255:15  warning  Forbidden non-null assertion                    @typescript-eslint/no-non-null-assertion
+
+/home/ezi/projects/featmap/webapp/src/configureStore.ts
+  4:55  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+/home/ezi/projects/featmap/webapp/src/pages/AcceptInvitePage.tsx
+  65:40  warning  Forbidden non-null assertion  @typescript-eslint/no-non-null-assertion
+  87:41  warning  Forbidden non-null assertion  @typescript-eslint/no-non-null-assertion
+  89:38  warning  Forbidden non-null assertion  @typescript-eslint/no-non-null-assertion
+
+/home/ezi/projects/featmap/webapp/src/pages/AccountPage.tsx
+   56:26  warning  Forbidden non-null assertion  @typescript-eslint/no-non-null-assertion
+   60:12  warning  Forbidden non-null assertion  @typescript-eslint/no-non-null-assertion
+   71:21  warning  Forbidden non-null assertion  @typescript-eslint/no-non-null-assertion
+  122:16  warning  Forbidden non-null assertion  @typescript-eslint/no-non-null-assertion
+  125:14  warning  Forbidden non-null assertion  @typescript-eslint/no-non-null-assertion
+  214:16  warning  Forbidden non-null assertion  @typescript-eslint/no-non-null-assertion
+  221:25  warning  Forbidden non-null assertion  @typescript-eslint/no-non-null-assertion
+  300:19  warning  Forbidden non-null assertion  @typescript-eslint/no-non-null-assertion
+
+/home/ezi/projects/featmap/webapp/src/pages/EntityDetailsPage.tsx
+   81:16  warning  Forbidden non-null assertion  @typescript-eslint/no-non-null-assertion
+  155:17  warning  Forbidden non-null assertion  @typescript-eslint/no-non-null-assertion
+
+/home/ezi/projects/featmap/webapp/src/pages/ExternalEntityDetailsPage.tsx
+  143:17  warning  Forbidden non-null assertion  @typescript-eslint/no-non-null-assertion
+
+/home/ezi/projects/featmap/webapp/src/pages/ExternalLinkPage.tsx
+  149:23  warning  Forbidden non-null assertion              @typescript-eslint/no-non-null-assertion
+  272:31  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  279:31  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  286:31  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  293:31  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  300:31  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+/home/ezi/projects/featmap/webapp/src/pages/ProjectPage.tsx
+  141:16  warning  Forbidden non-null assertion  @typescript-eslint/no-non-null-assertion
+  164:18  warning  Forbidden non-null assertion  @typescript-eslint/no-non-null-assertion
+  228:7   warning  Forbidden non-null assertion  @typescript-eslint/no-non-null-assertion
+  242:16  warning  Forbidden non-null assertion  @typescript-eslint/no-non-null-assertion
+  243:18  warning  Forbidden non-null assertion  @typescript-eslint/no-non-null-assertion
+
+/home/ezi/projects/featmap/webapp/src/pages/ProjectsPage.tsx
+  67:16  warning  Forbidden non-null assertion  @typescript-eslint/no-non-null-assertion
+
+/home/ezi/projects/featmap/webapp/src/pages/SubscriptionPage.tsx
+   62:16  warning  Forbidden non-null assertion  @typescript-eslint/no-non-null-assertion
+   82:16  warning  Forbidden non-null assertion  @typescript-eslint/no-non-null-assertion
+  100:16  warning  Forbidden non-null assertion  @typescript-eslint/no-non-null-assertion
+
+/home/ezi/projects/featmap/webapp/src/pages/WorkspacePage.tsx
+  81:16  warning  Forbidden non-null assertion  @typescript-eslint/no-non-null-assertion
+  94:22  warning  Forbidden non-null assertion  @typescript-eslint/no-non-null-assertion
+
+/home/ezi/projects/featmap/webapp/src/pages/WorkspaceSettingsPage.tsx
+    2:32  warning  'FormikActions' is defined but never used  @typescript-eslint/no-unused-vars
+   92:16  warning  Forbidden non-null assertion               @typescript-eslint/no-non-null-assertion
+  103:16  warning  Forbidden non-null assertion               @typescript-eslint/no-non-null-assertion
+  117:16  warning  Forbidden non-null assertion               @typescript-eslint/no-non-null-assertion
+  135:18  warning  Forbidden non-null assertion               @typescript-eslint/no-non-null-assertion
+  152:38  warning  Forbidden non-null assertion               @typescript-eslint/no-non-null-assertion
+  197:55  warning  Unexpected any. Specify a different type   @typescript-eslint/no-explicit-any
+  259:57  warning  Unexpected any. Specify a different type   @typescript-eslint/no-explicit-any
+  302:53  warning  Unexpected any. Specify a different type   @typescript-eslint/no-explicit-any
+  426:51  warning  Unexpected any. Specify a different type   @typescript-eslint/no-explicit-any
+  535:59  warning  Unexpected any. Specify a different type   @typescript-eslint/no-explicit-any
+  625:71  warning  Unexpected any. Specify a different type   @typescript-eslint/no-explicit-any
+
+/home/ezi/projects/featmap/webapp/src/pages/WorkspacesPage.tsx
+  42:26  warning  Forbidden non-null assertion  @typescript-eslint/no-non-null-assertion
+
+/home/ezi/projects/featmap/webapp/src/store/application/selectors.ts
+  14:3   warning  Forbidden non-null assertion  @typescript-eslint/no-non-null-assertion
+  16:3   warning  Forbidden non-null assertion  @typescript-eslint/no-non-null-assertion
+  17:48  warning  Forbidden non-null assertion  @typescript-eslint/no-non-null-assertion
+
+/home/ezi/projects/featmap/webapp/src/store/featurecomments/selectors.ts
+  30:10  warning  Forbidden non-null assertion  @typescript-eslint/no-non-null-assertion
+
+/home/ezi/projects/featmap/webapp/src/store/features/selectors.ts
+  47:10  warning  Forbidden non-null assertion  @typescript-eslint/no-non-null-assertion
+
+/home/ezi/projects/featmap/webapp/src/store/milestones/selectors.ts
+  19:10  warning  Forbidden non-null assertion  @typescript-eslint/no-non-null-assertion
+
+/home/ezi/projects/featmap/webapp/src/store/personas/selectors.ts
+  16:10  warning  Forbidden non-null assertion  @typescript-eslint/no-non-null-assertion
+
+/home/ezi/projects/featmap/webapp/src/store/subworkflows/selectors.ts
+  19:10  warning  Forbidden non-null assertion  @typescript-eslint/no-non-null-assertion
+
+/home/ezi/projects/featmap/webapp/src/store/workflowpersonas/selectors.ts
+  15:10  warning  Forbidden non-null assertion  @typescript-eslint/no-non-null-assertion
+  22:10  warning  Forbidden non-null assertion  @typescript-eslint/no-non-null-assertion
+
+/home/ezi/projects/featmap/webapp/src/store/workflows/selectors.ts
+  19:10  warning  Forbidden non-null assertion  @typescript-eslint/no-non-null-assertion
+
+✖ 77 problems (0 errors, 77 warnings)
+

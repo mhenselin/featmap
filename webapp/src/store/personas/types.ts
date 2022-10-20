@@ -1,13 +1,12 @@
-import { ICard } from '../../core/card'
-import { CardStatus } from "../../core/misc";
+import { AvatarName } from "../../avatars";
 
-export interface IPersona {
-    workspaceId: string
-    projectId: string
-    id: string
-    name: string
-    role: string
-    avatar: string
-    description: string
-    createdAt: string
-}
+export type IPersona = {
+  workspaceId: string;
+  projectId: string;
+  id: string;
+  name: string;
+  role: string;
+  avatar: AvatarName;
+  description: string;
+  createdAt: string;
+};

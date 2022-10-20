@@ -1,12 +1,8 @@
-import React, { Component } from 'react';
+import { Component } from "react";
 
 class EmptyCard extends Component {
   render() {
-    return (
-      <div className="p-1 w-36 h-24  ">
-
-      </div>
-    );
+    return <div className="h-24 w-36 p-1  "></div>;
   }
 }
 

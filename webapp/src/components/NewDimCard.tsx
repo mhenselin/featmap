@@ -1,15 +1,11 @@
-import React, { Component } from 'react';
+import { PropsWithChildren, FunctionComponent } from "react";
 
-class NewDimCard extends Component {
-  render() {
-    return (
-      <div className="flex p-1 w-36 h-24  border border-dashed border-gray-200 rounded items-center justify-center ">
-        <div className="flex">
-          {this.props.children}
-        </div>
-      </div >
-    );
-  }
-}
+const NewDimCard: FunctionComponent<PropsWithChildren> = (props) => {
+  return (
+    <div className="flex h-24 w-36 items-center  justify-center rounded border border-dashed border-gray-200 p-1 ">
+      <div className="flex">{props.children}</div>
+    </div>
+  );
+};
 
 export default NewDimCard;
