@@ -8,7 +8,7 @@ import CancelPage from "./pages/CancelPage";
 import ContactPage from "./pages/ContactPage";
 import ExternalLinkPage from "./pages/ExternalLinkPage";
 import IndexPage from "./pages/IndexPage";
-import LoginPage from "./pages/LogInPage";
+import { Login } from "./pages/Login";
 import LogoutPage from "./pages/LogOutPage";
 import ResetPasswordPage from "./pages/ResetPasswordPage";
 import ResetPasswordWithKeyPage from "./pages/ResetPasswordWithKeyPage";
@@ -40,7 +40,7 @@ class App extends Component<Props, Record<string, never>> {
           <Route path="/account/contact" component={ContactPage} />
           <Route path="/account/logout" component={LogoutPage} />
           <Route path="/account/signup" component={SignUpPage} />
-          <Route path="/account/login" component={LoginPage} />
+          <Route path="/account/login" component={Login} />
           <Route path="/account/reset" component={ResetPasswordPage} />
           <Route
             path="/account/reset/:key"

@@ -7,7 +7,7 @@ const HOUR_IN_MILLISECONDS = 3_600_000;
 const MINUTE_IN_MILLISECONDS = 60_000;
 
 export const daysToReadableString = (date: string) => {
-  const diffInMilliseconds = new Date(date).getTime() - new Date().getTime();
+  const diffInMilliseconds = new Date().getTime() - new Date(date).getTime();
   const days = Math.ceil(diffInMilliseconds / DAY_IN_MILLISECONDS);
   const hours = Math.ceil(diffInMilliseconds / HOUR_IN_MILLISECONDS);
   const minutes = Math.ceil(diffInMilliseconds / MINUTE_IN_MILLISECONDS);
