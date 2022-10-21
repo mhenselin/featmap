@@ -12,7 +12,7 @@ export const Error: React.FunctionComponent<Readonly<ErrorProps>> = (props) => {
       className="flex items-center gap-2 rounded border border-red-500 bg-red-50 p-2 leading-5"
       role="alert"
     >
-      <span className="text-red-600">
+      <span className="flex items-center text-red-600">
         <Icon type="error_outline" />
       </span>
       <div>{message}</div>

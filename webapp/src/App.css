@@ -3,7 +3,7 @@
 @tailwind utilities;
 
 * {
-  outline:none;
+  outline: none;
 }
 
 h3 {
@@ -27,7 +27,7 @@ a.link {
 
 @layer components {
   .focus {
-    @apply ring-indigo-600 ring-opacity-50 focus:ring-4 rounded;
+    @apply rounded ring-indigo-600 ring-opacity-50 focus:ring-4;
   }
 }
 

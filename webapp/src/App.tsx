@@ -11,7 +11,7 @@ import IndexPage from "./pages/IndexPage";
 import { Login } from "./pages/Login";
 import LogoutPage from "./pages/LogOutPage";
 import { Reset } from "./pages/Reset";
-import ResetPasswordWithKeyPage from "./pages/ResetPasswordWithKeyPage";
+import { ResetWithKey } from "./pages/ResetWithKey";
 import SignUpPage from "./pages/SignUpPage";
 import SignupSuccessPage from "./pages/SignupSuccessPage";
 import SuccessPage from "./pages/SuccessPage";
@@ -41,11 +41,8 @@ class App extends Component<Props, Record<string, never>> {
           <Route path="/account/logout" component={LogoutPage} />
           <Route path="/account/signup" component={SignUpPage} />
           <Route path="/account/login" component={Login} />
-          <Route path="/account/reset" component={Reset} />
-          <Route
-            path="/account/reset/:key"
-            component={ResetPasswordWithKeyPage}
-          />
+          <Route exact path="/account/reset" component={Reset} />
+          <Route path="/account/reset/:key" component={ResetWithKey} />
           <Route
             path="/account/invitation/:code"
             component={AcceptInvitePage}

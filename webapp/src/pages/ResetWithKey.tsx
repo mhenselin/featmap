@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useForm } from "react-hook-form";
-import { Link } from "react-router-dom";
-import { API_PASSWORD_RESET } from "../api";
+import { Link, useRouteMatch } from "react-router-dom";
+import { API_SET_PASSWORD } from "../api";
 import { Button } from "../components/Button";
 import { Container } from "../components/Container";
 import { Error } from "../components/Error";
@@ -11,7 +11,7 @@ import { Input } from "../components/Input";
 import { OneColumnLayout } from "../components/OneColumnLayout";
 import { Success } from "../components/Success";
 
-export const Reset: React.FunctionComponent = () => {
+export const ResetWithKey: React.FunctionComponent = () => {
   const [apiErrorMessage, setApiErrorMessage] = useState<null | string>(null);
   const {
     register,
@@ -19,7 +19,9 @@ export const Reset: React.FunctionComponent = () => {
     formState: { errors, isSubmitting, isSubmitSuccessful },
   } = useForm();
 
-  const emailSent = isSubmitSuccessful && !errors.email && !apiErrorMessage;
+  const { params } = useRouteMatch<{ key: string }>();
+  const passwordChanged =
+    isSubmitSuccessful && !errors.password && !apiErrorMessage;
 
   return (
     <OneColumnLayout>
@@ -31,36 +33,51 @@ export const Reset: React.FunctionComponent = () => {
           src="/apple-touch-icon.png"
           alt=""
         />
-        <Headline level={1}>Reset your password</Headline>
+        <Headline level={1}>Set your new password</Headline>
         <p className="mt-4">
-          Enter your <b>email</b> below. An email with instructions on how to
-          reset your password will be sent.
+          Enter your <b>new password</b> below.
         </p>
         <form
-          onSubmit={handleSubmit(({ email }) => {
-            return API_PASSWORD_RESET(email).catch((error) => {
-              setApiErrorMessage(error.toString());
-            });
+          onSubmit={handleSubmit(({ password }) => {
+            return API_SET_PASSWORD({ key: params.key, password })
+              .then((response) => {
+                if (!response.ok) {
+                  response.json().then((data) => {
+                    if (data.message === "password_invalid") {
+                      setApiErrorMessage(
+                        "You tried to use an invalid password."
+                      );
+                    }
+                  });
+                }
+              })
+              .catch((error) => {
+                setApiErrorMessage(error.toString());
+              });
           })}
           className="mt-4 flex flex-col gap-4"
         >
           <Input
-            icon={<Icon type="email" />}
-            label="Email address"
-            {...register("email", { required: true })}
-            placeholder="you@website.com"
-            error={errors.email}
+            type="password"
+            icon={<Icon type="vpn_key" />}
+            label="New Password"
+            {...register("password", { required: true })}
+            error={errors.password}
           />
           <Error message={apiErrorMessage} />
           <Success
             message={
-              emailSent
-                ? "An email has been sent with further instructions on how to reset your password."
+              passwordChanged
+                ? "Your password was changed succesfully. Go on and log in!"
                 : ""
             }
           />
-          <Button isLoading={isSubmitting} disabled={emailSent} type="submit">
-            Reset password
+          <Button
+            isLoading={isSubmitting}
+            disabled={passwordChanged}
+            type="submit"
+          >
+            Change password
           </Button>
         </form>
         <div className="mt-4 flex justify-between">
