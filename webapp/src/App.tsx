@@ -10,7 +10,7 @@ import ExternalLinkPage from "./pages/ExternalLinkPage";
 import IndexPage from "./pages/IndexPage";
 import { Login } from "./pages/Login";
 import LogoutPage from "./pages/LogOutPage";
-import ResetPasswordPage from "./pages/ResetPasswordPage";
+import { Reset } from "./pages/Reset";
 import ResetPasswordWithKeyPage from "./pages/ResetPasswordWithKeyPage";
 import SignUpPage from "./pages/SignUpPage";
 import SignupSuccessPage from "./pages/SignupSuccessPage";
@@ -41,7 +41,7 @@ class App extends Component<Props, Record<string, never>> {
           <Route path="/account/logout" component={LogoutPage} />
           <Route path="/account/signup" component={SignUpPage} />
           <Route path="/account/login" component={Login} />
-          <Route path="/account/reset" component={ResetPasswordPage} />
+          <Route path="/account/reset" component={Reset} />
           <Route
             path="/account/reset/:key"
             component={ResetPasswordWithKeyPage}

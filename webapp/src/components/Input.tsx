@@ -52,11 +52,9 @@ export const Input = forwardRef<HTMLInputElement, Readonly<InputProps>>(
             ref={ref}
             type={type}
             id={id}
-            className={`focus w-full rounded border px-3 py-2 ${
+            className={`focus w-full rounded border bg-white px-3 py-2 ${
               icon ? "pl-10" : ""
-            } ${
-              error ? "border-red-500 bg-red-200 " : "border-gray-400 bg-white"
-            }`}
+            } ${error ? "border-red-500" : "border-gray-400"}`}
           />
         </div>
         <Error message={getErrorMessage(error?.type, label)} />
