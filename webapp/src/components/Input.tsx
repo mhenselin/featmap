@@ -52,7 +52,7 @@ export const Input = forwardRef<HTMLInputElement, Readonly<InputProps>>(
             ref={ref}
             type={type}
             id={id}
-            className={`w-full rounded border px-3 py-2 ring-indigo-600 ring-opacity-50 focus:ring-4 ${
+            className={`focus w-full rounded border px-3 py-2 ${
               icon ? "pl-10" : ""
             } ${
               error ? "border-red-500 bg-red-200 " : "border-gray-400 bg-white"

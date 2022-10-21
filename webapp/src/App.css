@@ -25,6 +25,12 @@ a.link {
   text-decoration: underline;
 }
 
+@layer components {
+  .focus {
+    @apply ring-indigo-600 ring-opacity-50 focus:ring-4 rounded;
+  }
+}
+
 .delete-child {
   visibility: hidden;
 }

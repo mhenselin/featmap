@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { useHistory } from "react-router";
+import { Link } from "react-router-dom";
 import { API_LOG_IN as LoginApi } from "../api";
 import { Button } from "../components/Button";
 import { Container } from "../components/Container";
@@ -69,6 +70,14 @@ export const Login: React.FunctionComponent = () => {
             Log in
           </Button>
         </form>
+        <div className="mt-4 flex justify-between">
+          <Link className="link focus" to="/account/reset">
+            Reset your password
+          </Link>
+          <Link className="link focus" to="/account/signup">
+            Create a new account
+          </Link>
+        </div>
       </Container>
     </OneColumnLayout>
   );
