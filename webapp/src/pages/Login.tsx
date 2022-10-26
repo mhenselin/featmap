@@ -6,9 +6,9 @@ import { API_LOG_IN as LoginApi } from "../api";
 import { Button } from "../components/Button";
 import { Container } from "../components/Container";
 import { Error } from "../components/Error";
+import { EmailField } from "../components/FormElements/EmailField";
+import { PasswordField } from "../components/FormElements/PasswordField";
 import { Headline } from "../components/Headline";
-import { Icon } from "../components/Icon";
-import { Input } from "../components/Input";
 import { OneColumnLayout } from "../components/OneColumnLayout";
 
 export const Login: React.FunctionComponent = () => {
@@ -51,33 +51,8 @@ export const Login: React.FunctionComponent = () => {
           })}
           className="mt-4 flex flex-col gap-4"
         >
-          <Input
-            icon={<Icon type="email" />}
-            label="Email address"
-            {...register("email", {
-              required: "Email Address is a required field.",
-            })}
-            placeholder="you@website.com"
-            error={errors.email}
-          />
-          <Input
-            icon={<Icon type="vpn_key" />}
-            label="Password"
-            {...register("password", {
-              required: "Password is a required field.",
-              minLength: {
-                value: 6,
-                message: "Your password must at least consist of 6 characters.",
-              },
-              maxLength: {
-                value: 200,
-                message:
-                  "Your password exceeds the maximum length of 200 characters. Please shorten your password.",
-              },
-            })}
-            type="password"
-            error={errors.password}
-          />
+          <EmailField register={register} errors={errors} />
+          <PasswordField register={register} errors={errors} />
           <Error message={apiErrorMessage} />
           <Button isLoading={isSubmitting} type="submit">
             Log in

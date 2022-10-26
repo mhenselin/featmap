@@ -27,7 +27,7 @@ a.link {
 
 @layer components {
   .focus {
-    @apply rounded ring-indigo-600 ring-opacity-50 focus:ring-4;
+    @apply rounded ring-indigo-700 ring-opacity-50 focus:ring-4;
   }
 }
 

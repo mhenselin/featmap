@@ -5,9 +5,8 @@ import { API_SET_PASSWORD } from "../api";
 import { Button } from "../components/Button";
 import { Container } from "../components/Container";
 import { Error } from "../components/Error";
+import { PasswordField } from "../components/FormElements/PasswordField";
 import { Headline } from "../components/Headline";
-import { Icon } from "../components/Icon";
-import { Input } from "../components/Input";
 import { OneColumnLayout } from "../components/OneColumnLayout";
 import { Success } from "../components/Success";
 
@@ -57,24 +56,7 @@ export const ResetWithKey: React.FunctionComponent = () => {
           })}
           className="mt-4 flex flex-col gap-4"
         >
-          <Input
-            type="password"
-            icon={<Icon type="vpn_key" />}
-            label="New Password"
-            {...register("password", {
-              required: "Password is a required field.",
-              minLength: {
-                value: 6,
-                message: "Your password must at least consist of 6 characters.",
-              },
-              maxLength: {
-                value: 200,
-                message:
-                  "Your password exceeds the maximum length of 200 characters. Please shorten your password.",
-              },
-            })}
-            error={errors.password}
-          />
+          <PasswordField register={register} errors={errors} />
           <Error message={apiErrorMessage} />
           <Success
             message={

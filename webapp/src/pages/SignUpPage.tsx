@@ -5,9 +5,11 @@ import { API_SIGN_UP } from "../api";
 import { Button } from "../components/Button";
 import { Container } from "../components/Container";
 import { Error } from "../components/Error";
+import { EmailField } from "../components/FormElements/EmailField";
+import { NameField } from "../components/FormElements/NameField";
+import { PasswordField } from "../components/FormElements/PasswordField";
+import { WorkspaceNameField } from "../components/FormElements/WorkspaceNameField";
 import { Headline } from "../components/Headline";
-import { Icon } from "../components/Icon";
-import { Input } from "../components/Input";
 import { OneColumnLayout } from "../components/OneColumnLayout";
 
 export const SignUp: React.FunctionComponent = () => {
@@ -86,66 +88,10 @@ export const SignUp: React.FunctionComponent = () => {
           })}
           className="mt-4 flex flex-col gap-4"
         >
-          <Input
-            icon={<Icon type="workspaces" />}
-            label="Workspace Name"
-            {...register("workspaceName", {
-              required: "Workspace Name is a required field.",
-              pattern: {
-                value: /^[a-z0-9]+$/,
-                message:
-                  "The workspace name must only consist of alphanumeric lowercase characters. Alos spaces are not allowed.",
-              },
-              maxLength: {
-                value: 200,
-                message:
-                  "Your workspace name exceeds the maximum length of 200 characters. Please shorten your workspace name.",
-              },
-            })}
-            placeholder="workspace"
-            error={errors.workspaceName}
-          />
-          <Input
-            icon={<Icon type="person" />}
-            label="Your Name"
-            {...register("name", {
-              required: "Your Name is a required field.",
-              maxLength: {
-                value: 200,
-                message:
-                  "Your name exceeds the maximum length of 200 characters. Please shorten your name.",
-              },
-            })}
-            placeholder="you@website.com"
-            error={errors.name}
-          />
-          <Input
-            icon={<Icon type="email" />}
-            label="Email Address"
-            {...register("email", {
-              required: "Email Address is a required field.",
-            })}
-            placeholder="you@website.com"
-            error={errors.email}
-          />
-          <Input
-            icon={<Icon type="vpn_key" />}
-            type="password"
-            label="Password"
-            {...register("password", {
-              required: "Password is a required field.",
-              minLength: {
-                value: 6,
-                message: "Your password must at least consist of 6 characters.",
-              },
-              maxLength: {
-                value: 200,
-                message:
-                  "Your password exceeds the maximum length of 200 characters. Please shorten your password.",
-              },
-            })}
-            error={errors.password}
-          />
+          <WorkspaceNameField register={register} errors={errors} />
+          <NameField register={register} errors={errors} />
+          <EmailField register={register} errors={errors} />
+          <PasswordField register={register} errors={errors} />
           <Error message={apiErrorMessage} />
           <Button isLoading={isSubmitting} type="submit">
             Create account

@@ -18,7 +18,6 @@ import { IProject } from "../store/projects/types";
 import NotFound from "./NotFound";
 import ProjectPage from "./ProjectPage";
 import ProjectsPage from "./ProjectsPage";
-import SubscriptionPage from "./SubscriptionPage";
 import WorkspaceSettingsPage from "./WorkspaceSettingsPage";
 
 const mapStateToProps = (state: AppState) => ({
@@ -122,7 +121,7 @@ class WorkspacePage extends Component<Props, State> {
                   className="link"
                   to={"/" + workspaceName + "/subscription"}
                 >
-                  here
+                  THIS PAGE WAS DROPPED
                 </Link>
                 .
               </div>
@@ -140,12 +139,6 @@ class WorkspacePage extends Component<Props, State> {
               strict
               path={this.props.match.path + "/settings"}
               component={WorkspaceSettingsPage}
-            />
-            <Route
-              exact
-              strict
-              path={this.props.match.path + "/subscription"}
-              component={SubscriptionPage}
             />
             <Route
               strict

@@ -409,7 +409,7 @@ class WorkspaceSettingsPage extends Component<Props, State> {
                     handleOnClick={() =>
                       this.props.history.push("/" + ws.name + "/subscription")
                     }
-                    title={"Change plan"}
+                    title={"Change plan - THIS WAS DROPPED"}
                   ></Button>
                 </div>
               </div>

@@ -16,7 +16,7 @@ export const Button: React.FunctionComponent<Readonly<ButtonProps>> = (
     <button
       {...rest}
       disabled={isLoading || disabled}
-      className="focus rounded border border-indigo-700 bg-indigo-500 px-3 py-2 font-medium text-white disabled:cursor-not-allowed disabled:opacity-75"
+      className="focus rounded border border-indigo-900 bg-indigo-700 px-3 py-2 font-medium text-white disabled:cursor-not-allowed disabled:opacity-75"
       type={type}
     >
       {isLoading ? <Spinner /> : children}
