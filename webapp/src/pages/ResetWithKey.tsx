@@ -61,7 +61,18 @@ export const ResetWithKey: React.FunctionComponent = () => {
             type="password"
             icon={<Icon type="vpn_key" />}
             label="New Password"
-            {...register("password", { required: true })}
+            {...register("password", {
+              required: "Password is a required field.",
+              minLength: {
+                value: 6,
+                message: "Your password must at least consist of 6 characters.",
+              },
+              maxLength: {
+                value: 200,
+                message:
+                  "Your password exceeds the maximum length of 200 characters. Please shorten your password.",
+              },
+            })}
             error={errors.password}
           />
           <Error message={apiErrorMessage} />

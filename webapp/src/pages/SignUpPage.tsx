@@ -1,243 +1,165 @@
-import type {
-  FieldProps,
-  FormikHelpers as FormikActions,
-  FormikProps,
-} from "formik";
-import { Field, Form, Formik } from "formik";
-import { Component } from "react";
-import type { RouteComponentProps } from "react-router";
-import { Link } from "react-router-dom";
-import * as Yup from "yup";
-import { API_SIGN_UP as SignUpApi, API_SIGN_UP_REQ } from "../api";
-import { Button } from "../components/elements";
+import { useState } from "react";
+import { useForm } from "react-hook-form";
+import { Link, useHistory } from "react-router-dom";
+import { API_SIGN_UP } from "../api";
+import { Button } from "../components/Button";
+import { Container } from "../components/Container";
+import { Error } from "../components/Error";
+import { Headline } from "../components/Headline";
+import { Icon } from "../components/Icon";
+import { Input } from "../components/Input";
+import { OneColumnLayout } from "../components/OneColumnLayout";
 
-const SignupSchema = Yup.object().shape({
-  workspaceName: Yup.string()
-    .matches(/^[a-z0-9]+$/, "Lowercase alphanumerics only. Spaces not allowed.")
-    .min(2, "Minimum 2 characters.")
-    .max(200, "Maximum 200 characters.")
-    .required("Required."),
-  name: Yup.string()
-    .min(1, "Minimum 1 characters.")
-    .max(200, "Maximum 200 characters.")
-    .required("Required."),
+export const SignUp: React.FunctionComponent = () => {
+  const [apiErrorMessage, setApiErrorMessage] = useState<null | string>(null);
+  const { push } = useHistory();
+  const {
+    register,
+    handleSubmit,
+    formState: { errors, isSubmitting },
+  } = useForm();
 
-  email: Yup.string().email("Invalid email adress.").required("Required."),
-  password: Yup.string()
-    .min(6, "Minimum 6 characters.")
-    .max(200, "Maximum 200 characters.")
-    .required("Required."),
-});
-
-type PropsFromState = Record<string, never>;
-type RouterProps = RouteComponentProps;
-type PropsFromDispatch = Record<string, never>;
-type SelfProps = Record<string, never>;
-type Props = RouterProps & PropsFromState & PropsFromDispatch & SelfProps;
-class SignUp extends Component<Props> {
-  render() {
-    const { history } = this.props;
-    return (
-      <div className="flex w-full  flex-col  items-center justify-center p-2 ">
-        <div className="flex  w-full  max-w-xl flex-col   items-center  p-3  ">
-          <div className="flex  flex-col items-baseline p-2">
-            <div className="p-1 ">
-              <h1 className={"text-3xl font-medium"}>
-                Create a Featmap account
-              </h1>
-            </div>
-          </div>
-          <div className="flex  flex-col items-baseline p-2">
-            <div className="p-1 ">
-              Enter the name of your <b>workspace</b>, <b>work email adress</b>{" "}
-              and <b>password</b>.
-            </div>
-          </div>
-
-          <div className="flex max-w-xs">
-            <Formik
-              initialValues={{
-                workspaceName: "",
-                name: "",
-                email: "",
-                password: "",
-              }}
-              validationSchema={SignupSchema}
-              onSubmit={(
-                values: API_SIGN_UP_REQ,
-                actions: FormikActions<API_SIGN_UP_REQ>
-              ) => {
-                SignUpApi(values).then((response) => {
-                  if (response.ok) {
-                    response.json().then(() => {
-                      history.push("/");
-                    });
-                  } else {
-                    response.json().then((data) => {
+  return (
+    <OneColumnLayout>
+      <Container small className="rounded bg-white shadow-lg">
+        <img
+          className="mx-auto mb-4"
+          width="64"
+          height="64"
+          src="/apple-touch-icon.png"
+          alt=""
+        />
+        <Headline level={1}>Create a Featmap account</Headline>
+        <form
+          onSubmit={handleSubmit(({ email, name, workspaceName, password }) => {
+            return API_SIGN_UP({ email, name, workspaceName, password })
+              .then((response) => {
+                if (response.ok) {
+                  response.json().then(() => {
+                    push("/");
+                  });
+                } else {
+                  response
+                    .json()
+                    .then((data) => {
                       switch (data.message) {
                         case "email_invalid": {
-                          actions.setFieldError("email", "Email is invalid.");
+                          setApiErrorMessage("Email is invalid.");
                           break;
                         }
                         case "workspace_invalid": {
-                          actions.setFieldError(
-                            "workspaceName",
-                            "Workspace is invalid."
-                          );
+                          setApiErrorMessage("Workspace is invalid.");
                           break;
                         }
                         case "name_invalid": {
-                          actions.setFieldError("name", "Name is invalid.");
+                          setApiErrorMessage("Name is invalid.");
                           break;
                         }
                         case "password_invalid": {
-                          actions.setFieldError(
-                            "password",
-                            "Password is invalid."
-                          );
+                          setApiErrorMessage("Password is invalid.");
                           break;
                         }
                         case "email_taken": {
-                          actions.setFieldError(
-                            "email",
-                            "Email is already registered."
-                          );
+                          setApiErrorMessage("Email is already registered.");
                           break;
                         }
                         case "workspace_taken": {
-                          actions.setFieldError(
-                            "workspaceName",
+                          setApiErrorMessage(
                             "Workspace name is already registrered."
                           );
                           break;
                         }
                         default: {
+                          setApiErrorMessage("An unknown error occured.");
                           break;
                         }
                       }
+                    })
+                    .catch((error) => {
+                      setApiErrorMessage(error.toString());
                     });
-                  }
-                });
-
-                actions.setSubmitting(false);
-              }}
-            >
-              {(formikBag: FormikProps<API_SIGN_UP_REQ>) => (
-                <Form>
-                  {formikBag.status && formikBag.status.msg && (
-                    <div>{formikBag.status.msg}</div>
-                  )}
-                  <Field name="workspaceName">
-                    {({ form }: FieldProps<API_SIGN_UP_REQ>) => (
-                      <div className="flex flex-col    items-baseline sm:flex-row">
-                        <div className=" flex w-full flex-col">
-                          <div>
-                            <input
-                              type="text"
-                              value={form.values.workspace}
-                              onChange={form.handleChange}
-                              placeholder="workspace name"
-                              id="workspaceName"
-                              className="w-full rounded border p-2 text-lg	"
-                            />
-                          </div>
-                          <div className="m-1 text-xs font-bold text-red-500">
-                            {form.touched.workspaceName &&
-                              form.errors.workspaceName &&
-                              form.errors.workspaceName.toString()}
-                          </div>
-                        </div>
-                      </div>
-                    )}
-                  </Field>
-                  <Field name="name">
-                    {({ form }: FieldProps<API_SIGN_UP_REQ>) => (
-                      <div className="flex  flex-row items-baseline">
-                        <div className=" flex w-full flex-col">
-                          <div>
-                            <input
-                              type="text"
-                              value={form.values.name}
-                              onChange={form.handleChange}
-                              placeholder="Name, e.g. John Smith"
-                              id="name"
-                              className=" w-full rounded border p-2  text-lg	"
-                            />
-                          </div>
-                          <div className="m-1 text-xs font-bold text-red-500">
-                            {form.touched.name &&
-                              form.errors.name &&
-                              form.errors.name.toString()}
-                          </div>
-                        </div>
-                      </div>
-                    )}
-                  </Field>
-                  <Field name="email">
-                    {({ form }: FieldProps<API_SIGN_UP_REQ>) => (
-                      <div className="flex  flex-row items-baseline">
-                        <div className="flex w-full flex-col">
-                          <div>
-                            <input
-                              type="text"
-                              value={form.values.email}
-                              onChange={form.handleChange}
-                              placeholder="Work email"
-                              id="email"
-                              className="w-full rounded border p-2 text-lg	"
-                            />
-                          </div>
-                          <div className="p-1 text-xs font-bold text-red-500">
-                            {form.touched.email &&
-                              form.errors.email &&
-                              form.errors.email.toString()}
-                          </div>
-                        </div>
-                      </div>
-                    )}
-                  </Field>
-                  <Field name="password">
-                    {({ form }: FieldProps<API_SIGN_UP_REQ>) => (
-                      <div className="flex flex-row items-baseline">
-                        <div className="flex w-full flex-col">
-                          <div>
-                            <input
-                              type="password"
-                              value={form.values.password}
-                              onChange={form.handleChange}
-                              placeholder="Password"
-                              id="password"
-                              className="w-full rounded border p-2 text-lg	"
-                            />
-                          </div>
-                          <div className="p-1 text-xs font-bold text-red-500">
-                            {form.touched.password &&
-                              form.errors.password &&
-                              form.errors.password.toString()}
-                          </div>
-                        </div>
-                      </div>
-                    )}
-                  </Field>
-                  <div className="flex justify-center">
-                    <Button submit primary title="Create account" />
-                  </div>
-                </Form>
-              )}
-            </Formik>
-          </div>
-          <div className="flex  flex-col p-2 ">
-            <div className="p-1 text-center">
-              Already have an account?{" "}
-              <Link className="link" to="/account/login">
-                Login
-              </Link>
-            </div>
-          </div>
+                }
+              })
+              .catch((error) => {
+                setApiErrorMessage(error.toString());
+              });
+          })}
+          className="mt-4 flex flex-col gap-4"
+        >
+          <Input
+            icon={<Icon type="workspaces" />}
+            label="Workspace Name"
+            {...register("workspaceName", {
+              required: "Workspace Name is a required field.",
+              pattern: {
+                value: /^[a-z0-9]+$/,
+                message:
+                  "The workspace name must only consist of alphanumeric lowercase characters. Alos spaces are not allowed.",
+              },
+              maxLength: {
+                value: 200,
+                message:
+                  "Your workspace name exceeds the maximum length of 200 characters. Please shorten your workspace name.",
+              },
+            })}
+            placeholder="workspace"
+            error={errors.workspaceName}
+          />
+          <Input
+            icon={<Icon type="person" />}
+            label="Your Name"
+            {...register("name", {
+              required: "Your Name is a required field.",
+              maxLength: {
+                value: 200,
+                message:
+                  "Your name exceeds the maximum length of 200 characters. Please shorten your name.",
+              },
+            })}
+            placeholder="you@website.com"
+            error={errors.name}
+          />
+          <Input
+            icon={<Icon type="email" />}
+            label="Email Address"
+            {...register("email", {
+              required: "Email Address is a required field.",
+            })}
+            placeholder="you@website.com"
+            error={errors.email}
+          />
+          <Input
+            icon={<Icon type="vpn_key" />}
+            type="password"
+            label="Password"
+            {...register("password", {
+              required: "Password is a required field.",
+              minLength: {
+                value: 6,
+                message: "Your password must at least consist of 6 characters.",
+              },
+              maxLength: {
+                value: 200,
+                message:
+                  "Your password exceeds the maximum length of 200 characters. Please shorten your password.",
+              },
+            })}
+            error={errors.password}
+          />
+          <Error message={apiErrorMessage} />
+          <Button isLoading={isSubmitting} type="submit">
+            Create account
+          </Button>
+        </form>
+        <div className="mt-4 flex justify-between">
+          <Link className="link focus" to="/account/login">
+            Log in
+          </Link>
+          <Link className="link focus" to="/account/reset">
+            Reset your password
+          </Link>
         </div>
-      </div>
-    );
-  }
-}
-
-export default SignUp;
+      </Container>
+    </OneColumnLayout>
+  );
+};

@@ -47,7 +47,9 @@ export const Reset: React.FunctionComponent = () => {
           <Input
             icon={<Icon type="email" />}
             label="Email address"
-            {...register("email", { required: true })}
+            {...register("email", {
+              required: "Email Address is a required field.",
+            })}
             placeholder="you@website.com"
             error={errors.email}
           />

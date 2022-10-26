@@ -3,18 +3,6 @@ import { FieldError, FieldErrorsImpl, Merge } from "react-hook-form";
 import { WithHTMLProps } from "../types";
 import { Error } from "./Error";
 
-const getErrorMessage = (
-  type: FormError["type"],
-  label: string
-): string | null => {
-  switch (type) {
-    case "required":
-      return `${label} is a required field. Please help us out by providing a value.`;
-    default:
-      return null;
-  }
-};
-
 type FormError = FieldError | Merge<FieldError, FieldErrorsImpl>;
 
 type InputProps = Omit<
@@ -57,7 +45,7 @@ export const Input = forwardRef<HTMLInputElement, Readonly<InputProps>>(
             } ${error ? "border-red-500" : "border-gray-400"}`}
           />
         </div>
-        <Error message={getErrorMessage(error?.type, label)} />
+        <Error message={error?.message as string} />
       </label>
     );
   }

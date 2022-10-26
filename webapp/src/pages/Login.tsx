@@ -54,14 +54,27 @@ export const Login: React.FunctionComponent = () => {
           <Input
             icon={<Icon type="email" />}
             label="Email address"
-            {...register("email", { required: true })}
+            {...register("email", {
+              required: "Email Address is a required field.",
+            })}
             placeholder="you@website.com"
             error={errors.email}
           />
           <Input
             icon={<Icon type="vpn_key" />}
             label="Password"
-            {...register("password", { required: true })}
+            {...register("password", {
+              required: "Password is a required field.",
+              minLength: {
+                value: 6,
+                message: "Your password must at least consist of 6 characters.",
+              },
+              maxLength: {
+                value: 200,
+                message:
+                  "Your password exceeds the maximum length of 200 characters. Please shorten your password.",
+              },
+            })}
             type="password"
             error={errors.password}
           />
