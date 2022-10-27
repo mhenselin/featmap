@@ -32,7 +32,7 @@ import {
 } from "../core/misc";
 import { AppState } from "../store";
 import { application } from "../store/application/selectors";
-import { IApplication } from "../store/application/types";
+import { Application } from "../store/application/types";
 import { IFeatureComment } from "../store/featurecomments/types";
 import {
   createFeatureAction,
@@ -104,7 +104,7 @@ const mapDispatchToProps = {
 };
 
 type PropsFromState = {
-  application: IApplication;
+  application: Application;
   subWorkflows: ISubWorkflow[];
 };
 

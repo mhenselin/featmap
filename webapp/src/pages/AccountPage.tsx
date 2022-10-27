@@ -18,8 +18,8 @@ import {
   API_RESEND_EMAIL,
 } from "../api";
 import { Button, CardLayout } from "../components/elements";
-import { Header } from "../components/Header";
 import { MessageType } from "../components/Message";
+import { OneColumnLayout } from "../components/OneColumnLayout";
 import { AllActions, AppState } from "../store";
 import { newMessage } from "../store/application/actions";
 
@@ -53,13 +53,12 @@ class WorkspacesPage extends Component<Props, State> {
 
   render() {
     return (
-      <div>
-        <Header account={this.props.state.application.application.account!} />
+      <OneColumnLayout>
         <div>
           <h3 className="p-2">Account settings</h3>
 
-          {this.props.state.application.application.account!
-            .emailConfirmationPending && (
+          {this.props.state.application.application.account
+            ?.emailConfirmationPending && (
             <CardLayout title="">
               <span className="text-xl text-red-500">⬤</span>{" "}
               <em>Email adress verfication missing</em>
@@ -69,8 +68,8 @@ class WorkspacesPage extends Component<Props, State> {
                 A mail has been sent to{" "}
                 <i>
                   {
-                    this.props.state.application.application.account!
-                      .emailConfirmationSentTo
+                    this.props.state.application.application.account
+                      ?.emailConfirmationSentTo
                   }
                 </i>
                 , but we have not yet received verfication.{" "}
@@ -120,11 +119,11 @@ class WorkspacesPage extends Component<Props, State> {
           <CardLayout title="Email adress">
             <p>
               Your email adress is{" "}
-              {this.props.state.application.application.account!.email}
+              {this.props.state.application.application.account?.email}
             </p>
 
-            {this.props.state.application.application.account!
-              .emailConfirmed ? (
+            {this.props.state.application.application.account
+              ?.emailConfirmed ? (
               <p>
                 <span className="text-xl text-green-500 ">⬤</span> The email
                 adress is verified..{" "}
@@ -212,14 +211,16 @@ class WorkspacesPage extends Component<Props, State> {
           <CardLayout title="Name">
             <p>
               Your name is{" "}
-              {this.props.state.application.application.account!.name}.{" "}
+              {this.props.state.application.application.account?.name}.{" "}
             </p>
 
             <hr />
             <div className="flex flex-row items-baseline">
               <Formik
                 initialValues={{
-                  name: this.props.state.application.application.account!.name,
+                  name:
+                    this.props.state.application.application.account?.name ??
+                    "",
                 }}
                 initialStatus=""
                 validationSchema={Yup.object().shape({
@@ -298,7 +299,7 @@ class WorkspacesPage extends Component<Props, State> {
                 className="link"
                 to={
                   "/account/reset?email=" +
-                  this.props.state.application.application.account!.email
+                  this.props.state.application.application.account?.email
                 }
               >
                 password reset
@@ -346,7 +347,7 @@ class WorkspacesPage extends Component<Props, State> {
             </Formik>
           </CardLayout>
         </div>
-      </div>
+      </OneColumnLayout>
     );
   }
 }

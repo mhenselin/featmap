@@ -19,7 +19,7 @@ import { v4 as uuid } from "uuid";
 import * as Yup from "yup";
 import { EntityTypes } from "../core/card";
 import { application, getMembership } from "../store/application/selectors";
-import { IApplication } from "../store/application/types";
+import { Application } from "../store/application/types";
 import { IFeatureComment } from "../store/featurecomments/types";
 import Comment from "./Comment";
 import { Button } from "./elements";
@@ -35,7 +35,7 @@ const mapDispatchToProps = {
 };
 
 type PropsFromState = {
-  application: IApplication;
+  application: Application;
 };
 
 type PropsFromDispatch = {
@@ -46,7 +46,7 @@ type PropsFromDispatch = {
 type SelfProps = {
   entity: EntityTypes;
   comments: IFeatureComment[];
-  app: IApplication;
+  app: Application;
   viewOnly: boolean;
   demo: boolean;
   open: boolean;

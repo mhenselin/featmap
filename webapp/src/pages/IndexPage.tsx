@@ -1,113 +1,143 @@
-import { Component } from "react";
-import { connect } from "react-redux";
-import type { RouteComponentProps } from "react-router";
-import { Redirect, Route, Switch } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { Redirect, Route, Switch, useHistory } from "react-router-dom";
 import { API_FETCH_APP, API_FETCH_APP_RESP } from "../api";
+import { ApplicationDataProvider } from "../components/ApplicationContext";
+import { Error } from "../components/Error";
 import { Loading } from "../components/Loading";
 import { OneColumnLayout } from "../components/OneColumnLayout";
-import { AppState } from "../store";
+import { Roles, SubscriptionLevels } from "../core/misc";
 import { receiveAppAction } from "../store/application/actions";
-import { IApplication } from "../store/application/types";
+import { Application } from "../store/application/types";
 import AccountPage from "./AccountPage";
 import NotFound from "./NotFound";
-import WorkspacePage from "./WorkspacePage";
-import WorkspacesPage from "./WorkspacesPage";
+import { WorkspacePage } from "./WorkspacePage";
+import { Workspaces } from "./Workspaces";
 
-const mapDispatchToProps = {
-  applicationReceived: receiveAppAction,
-};
+export const Internal = () => {
+  const [applicationData, setApplicationData] = useState<Application>({
+    memberships: [],
+    messages: [],
+    subscriptions: [],
+    workspaces: [],
+  });
+  const [isLoading, setLoadingState] = useState(true);
+  const [apiErrorMessage, setApiErrorMessage] = useState<null | string>(null);
+  const { push } = useHistory();
 
-const mapStateToProps = (state: AppState) => ({
-  application: state.application.application,
-});
-
-type PropsFromState = {
-  application: IApplication;
-};
-type RouterProps = RouteComponentProps;
-type PropsFromDispatch = {
-  applicationReceived: typeof receiveAppAction;
-};
-type SelfProps = Record<string, never>;
-type Props = RouterProps & PropsFromState & PropsFromDispatch & SelfProps;
-
-type State = {
-  loading: boolean;
-};
-
-class Index extends Component<Props, State> {
-  constructor(props: Props) {
-    super(props);
-    this.state = {
-      loading: true,
-    };
-  }
-
-  componentDidMount() {
+  useEffect(() => {
     API_FETCH_APP()
       .then((response) => {
         if (response.ok) {
           response.json().then((data: API_FETCH_APP_RESP) => {
-            this.props.applicationReceived(data);
-            this.setState({ loading: false });
+            setApplicationData(data);
+            receiveAppAction(data);
+            setLoadingState(false);
           });
         } else {
-          this.props.history.push("/account/login");
+          push("/account/login");
         }
       })
-      .catch(() => {
-        //this.setState({ loading: false });
+      .catch((error) => {
+        if (process.env.NODE_ENV === "production") {
+          setApiErrorMessage(error.toString());
+        } else {
+          const data = {
+            account: {
+              createdAt: String(new Date()),
+              email: "",
+              emailConfirmationPending: true,
+              emailConfirmationSentTo: "",
+              emailConfirmed: false,
+              id: "1",
+              name: "Eric",
+            },
+            memberships: [
+              {
+                id: "string",
+                workspaceId: "string",
+                accountId: "string",
+                level: Roles.OWNER,
+                name: "string",
+                email: "string",
+                createdAt: String(new Date()),
+              },
+            ],
+            messages: [],
+            subscriptions: [
+              {
+                id: "string",
+                workspaceId: "string",
+                level: SubscriptionLevels.TRIAL,
+                numberOfEditors: 1,
+                fromDate: "string",
+                expirationDate: new Date("2022-10-30").toString(),
+                createdByName: "string",
+                createdAt: "string",
+                lastModified: "string",
+                lastModifiedByName: "string",
+                externalStatus: "trialing",
+                externalPlanId: "string",
+              },
+            ],
+            workspaces: [
+              {
+                id: "string",
+                name: "fakeboard",
+                createdAt: String(new Date()),
+                allowExternalSharing: false,
+                euVat: "string",
+                externalBillingEmail: "string",
+                status: "string",
+              },
+            ],
+          };
+          setApplicationData(data);
+          receiveAppAction(data);
+        }
+        setLoadingState(false);
       });
+  }, []);
+
+  if (isLoading) {
+    return (
+      <OneColumnLayout>
+        <Loading />
+      </OneColumnLayout>
+    );
   }
 
-  render() {
-    if (this.state.loading) {
-      return (
-        <OneColumnLayout>
-          <Loading />
-        </OneColumnLayout>
-      );
-    }
+  if (apiErrorMessage) {
+    <OneColumnLayout>
+      <Error message={apiErrorMessage} />
+    </OneColumnLayout>;
+  }
 
-    if (!this.props.application.account) {
-      return <Redirect to="/account/login" />;
-    }
+  if (!applicationData.account) {
+    return <Redirect to="/account/login" />;
+  }
 
-    return (
+  return (
+    <ApplicationDataProvider value={applicationData}>
       <Switch>
         <Route
           exact
-          path={this.props.match.path + ""}
-          render={() => {
-            const app = this.props.application;
-
-            if (app.workspaces && app.workspaces.length === 1) {
-              return <Redirect to={app.workspaces[0].name} />;
-            }
-            return (
-              <Redirect to={this.props.match.path + "account/workspaces"} />
-            );
-          }}
+          path="/"
+          render={() => (
+            <Redirect
+              to={
+                applicationData.workspaces.length === 1
+                  ? applicationData.workspaces[0].name
+                  : "/account/workspaces"
+              }
+            />
+          )}
         />
-        <Route
-          exact
-          path={this.props.match.path + "account/workspaces"}
-          component={WorkspacesPage}
-        />
-        <Route
-          exact
-          path={this.props.match.path + "account/settings"}
-          component={AccountPage}
-        />
-        <Route path={this.props.match.path + "account/"} component={NotFound} />
-        <Route
-          path={this.props.match.path + ":workspaceName"}
-          component={WorkspacePage}
-        />
-        <Route path={this.props.match.path} component={NotFound} />
+        <Route exact path={"/account/workspaces"} component={Workspaces} />
+        <Route exact path={"/account/settings"} component={AccountPage} />
+        <Route path={"/account/"} component={NotFound} />
+        <Route path={"/:workspaceName"} component={WorkspacePage} />
+        <Route path={"/"} component={NotFound} />
       </Switch>
-    );
-  }
-}
-
-export default connect(mapStateToProps, mapDispatchToProps)(Index);
+    </ApplicationDataProvider>
+  );
+};

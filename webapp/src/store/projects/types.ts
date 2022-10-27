@@ -1,4 +1,4 @@
-export type IProject = {
+export type Project = {
   kind: "project";
   workspaceId: string;
   id: string;

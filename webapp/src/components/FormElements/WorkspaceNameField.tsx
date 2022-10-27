@@ -1,4 +1,3 @@
-import { Icon } from "../Icon";
 import { Input } from "../Input";
 import type { FormFieldComponent } from "./types";
 
@@ -7,7 +6,7 @@ export const WorkspaceNameField: FormFieldComponent = (props) => {
 
   return (
     <Input
-      icon={<Icon type="workspaces" />}
+      icon="workspaces"
       label="Workspace Name"
       {...register("workspaceName", {
         required: "Workspace Name is a required field.",

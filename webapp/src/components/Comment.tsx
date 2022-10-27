@@ -3,7 +3,7 @@ import { Field, Form, Formik } from "formik";
 import { Component } from "react";
 import ReactMarkdown from "react-markdown";
 import * as Yup from "yup";
-import { IMembership } from "../store/application/types";
+import { Membership } from "../store/application/types";
 import { IFeatureComment } from "../store/featurecomments/types";
 import ContextMenu from "./ContextMenu";
 import { Button } from "./elements";
@@ -11,7 +11,7 @@ import { TimeAgo } from "./TimeAgo";
 
 type Props = {
   comment: IFeatureComment;
-  member: IMembership;
+  member: Membership;
   viewOnly: boolean;
   demo: boolean;
   deleteComment: (id: string) => void;

@@ -7,7 +7,7 @@ import { API_GET_EXTERNAL_LINK, API_GET_PROJECT_RESP } from "../api";
 import Board from "../components/Board";
 import { Button } from "../components/elements";
 import { AppState } from "../store";
-import { IApplication } from "../store/application/types";
+import { Application } from "../store/application/types";
 import { loadFeatureCommentsAction } from "../store/featurecomments/actions";
 import {
   featureComments,
@@ -28,7 +28,7 @@ import { filterPersonasOnProject, personas } from "../store/personas/selectors";
 import { IPersona } from "../store/personas/types";
 import { loadProjectsAction } from "../store/projects/actions";
 import { getProjectById, projects } from "../store/projects/selectors";
-import { IProject } from "../store/projects/types";
+import { Project } from "../store/projects/types";
 import { loadSubWorkflowsAction } from "../store/subworkflows/actions";
 import { subWorkflows } from "../store/subworkflows/selectors";
 import { ISubWorkflow } from "../store/subworkflows/types";
@@ -70,10 +70,10 @@ const mapStateToProps = (state: AppState) => ({
 });
 
 type PropsFromState = {
-  application: IApplication;
+  application: Application;
   features: IFeature[];
   featureComments: IFeatureComment[];
-  projects: IProject[];
+  projects: Project[];
   milestones: IMilestone[];
   workflows: IWorkflow[];
   subWorkflows: ISubWorkflow[];

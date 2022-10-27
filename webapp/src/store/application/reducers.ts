@@ -1,13 +1,12 @@
-import { IApplication } from "./types";
+import { Application } from "./types";
 import { AppActions, Actions } from "./actions";
 
 export type State = {
-  application: IApplication;
+  application: Application;
 };
 
 export const applicationInitialState: State = {
   application: {
-    mode: "",
     workspaces: [],
     memberships: [],
     messages: [],

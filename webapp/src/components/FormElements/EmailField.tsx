@@ -1,4 +1,3 @@
-import { Icon } from "../Icon";
 import { Input } from "../Input";
 import type { FormFieldComponent } from "./types";
 
@@ -7,7 +6,7 @@ export const EmailField: FormFieldComponent = (props) => {
 
   return (
     <Input
-      icon={<Icon type="email" />}
+      icon="email"
       label="Email Address"
       {...register("email", {
         required: "Email Address is a required field.",

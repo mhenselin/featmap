@@ -1,8 +1,8 @@
-import { IProject } from "./types";
+import { Project } from "./types";
 import { Actions, ProjectsActions } from "./actions";
 
 export type State = {
-  items: IProject[];
+  items: Project[];
 };
 
 export const initialState: State = {
@@ -23,7 +23,7 @@ export function reducer(state: State = initialState, action: Actions) {
 
     case ProjectsActions.LOAD_PROJECTS: {
       const items = action.payload.map(
-        (x) => ({ ...x, kind: "project" } as IProject)
+        (x) => ({ ...x, kind: "project" } as Project)
       ); // tag them appropriately
 
       return {

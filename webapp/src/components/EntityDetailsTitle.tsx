@@ -18,7 +18,7 @@ import {
 import { EntityTypes } from "../core/card";
 import { AppState } from "../store";
 import { application } from "../store/application/selectors";
-import { IApplication } from "../store/application/types";
+import { Application } from "../store/application/types";
 import {
   createFeatureAction,
   deleteFeatureAction,
@@ -36,7 +36,7 @@ import {
   deleteProjectAction,
   updateProjectAction,
 } from "../store/projects/actions";
-import { IProject } from "../store/projects/types";
+import { Project } from "../store/projects/types";
 import {
   createSubWorkflowAction,
   deleteSubWorkflowAction,
@@ -73,7 +73,7 @@ const mapDispatchToProps = {
 };
 
 type PropsFromState = {
-  application: IApplication;
+  application: Application;
 };
 
 type PropsFromDispatch = {
@@ -96,7 +96,7 @@ type PropsFromDispatch = {
 
 type SelfProps = {
   card: EntityTypes;
-  app: IApplication;
+  app: Application;
   url: string;
   close: () => void;
   viewOnly: boolean;
@@ -146,7 +146,7 @@ class EntityDetailsTitle extends Component<Props, State> {
             values.title
           ).then((response) => {
             if (response.ok) {
-              response.json().then((data: IProject) => {
+              response.json().then((data: Project) => {
                 this.props.updateProject(data);
               });
             } else {

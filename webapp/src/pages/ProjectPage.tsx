@@ -20,7 +20,7 @@ import {
   getSubscription,
   getWorkspaceByName,
 } from "../store/application/selectors";
-import { IApplication } from "../store/application/types";
+import { Application } from "../store/application/types";
 import { loadFeatureCommentsAction } from "../store/featurecomments/actions";
 import {
   featureComments,
@@ -43,7 +43,7 @@ import { loadPersonasAction } from "../store/personas/actions";
 import { filterPersonasOnProject, personas } from "../store/personas/selectors";
 import { IPersona } from "../store/personas/types";
 import { getProjectById, projects } from "../store/projects/selectors";
-import { IProject } from "../store/projects/types";
+import { Project } from "../store/projects/types";
 import { loadSubWorkflowsAction } from "../store/subworkflows/actions";
 import {
   getSubWorkflowByWorkflow,
@@ -87,8 +87,8 @@ const mapDispatchToProps = {
 };
 
 type PropsFromState = {
-  application: IApplication;
-  projects: IProject[];
+  application: Application;
+  projects: Project[];
   milestones: IMilestone[];
   subWorkflows: ISubWorkflow[];
   workflows: IWorkflow[];

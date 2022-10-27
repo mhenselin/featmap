@@ -15,7 +15,7 @@ import { avatar, AvatarName, avatarNames } from "../avatars";
 import { personaBarState } from "../core/misc";
 import { AppState } from "../store";
 import { application } from "../store/application/selectors";
-import { IApplication } from "../store/application/types";
+import { Application } from "../store/application/types";
 import {
   createPersonaAction,
   deletePersonaAction,
@@ -66,7 +66,7 @@ const mapDispatchToProps = {
 };
 
 type PropsFromState = {
-  application: IApplication;
+  application: Application;
 };
 
 type PropsFromDispatch = {

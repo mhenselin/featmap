@@ -8,9 +8,9 @@ const MINUTE_IN_MILLISECONDS = 60_000;
 
 export const daysToReadableString = (date: string) => {
   const diffInMilliseconds = new Date().getTime() - new Date(date).getTime();
-  const days = Math.ceil(diffInMilliseconds / DAY_IN_MILLISECONDS);
-  const hours = Math.ceil(diffInMilliseconds / HOUR_IN_MILLISECONDS);
-  const minutes = Math.ceil(diffInMilliseconds / MINUTE_IN_MILLISECONDS);
+  const days = Math.floor(diffInMilliseconds / DAY_IN_MILLISECONDS);
+  const hours = Math.floor(diffInMilliseconds / HOUR_IN_MILLISECONDS);
+  const minutes = Math.floor(diffInMilliseconds / MINUTE_IN_MILLISECONDS);
 
   if (minutes < 60) {
     return `${minutes}m`;

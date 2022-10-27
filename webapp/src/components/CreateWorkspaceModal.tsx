@@ -10,7 +10,7 @@ import * as Yup from "yup";
 import { API_CREATE_WORKSPACE } from "../api";
 import { AllActions, AppState } from "../store";
 import { application } from "../store/application/selectors";
-import { IApplication } from "../store/application/types";
+import { Application } from "../store/application/types";
 import { Button } from "./elements";
 
 import { getApp, newMessage } from "../store/application/actions";
@@ -25,7 +25,7 @@ const mapStateToProps = (state: AppState) => ({
 });
 
 type PropsFromState = {
-  application: IApplication;
+  application: Application;
 };
 
 type PropsFromDispatch = {

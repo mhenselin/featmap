@@ -1,156 +1,116 @@
-import { Component } from "react";
-import { connect } from "react-redux";
-import type { RouteComponentProps } from "react-router";
-import { Link, Redirect, Route, Switch } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { useRouteMatch } from "react-router";
+import { Route, Switch } from "react-router-dom";
 import { API_GET_PROJECTS } from "../api";
-import { Header } from "../components/Header";
-import { daysBetween, subIsInactive, subIsTrial } from "../core/misc";
-import { AppState } from "../store";
-import {
-  application,
-  getSubscription,
-  getWorkspaceByName,
-} from "../store/application/selectors";
-import { IApplication } from "../store/application/types";
-import { loadProjectsAction } from "../store/projects/actions";
-import { projects } from "../store/projects/selectors";
-import { IProject } from "../store/projects/types";
+import { useApplicationData } from "../components/ApplicationContext";
+import { Error } from "../components/Error";
+import { Loading } from "../components/Loading";
+import { OneColumnLayout } from "../components/OneColumnLayout";
+import { ProjectsDataProvider } from "../components/ProjectsContext";
+import { WorkspaceNameProvider } from "../components/WorkspaceContext";
+import { getWorkspaceByName } from "../store/application/selectors";
+import { Project } from "../store/projects/types";
 import NotFound from "./NotFound";
 import ProjectPage from "./ProjectPage";
-import ProjectsPage from "./ProjectsPage";
+import { Projects } from "./Projects";
 import WorkspaceSettingsPage from "./WorkspaceSettingsPage";
 
-const mapStateToProps = (state: AppState) => ({
-  application: application(state),
-  projects: projects(state),
-});
+export const WorkspacePage = () => {
+  const [isLoading, setLoadingState] = useState(true);
+  const [projectsData, setProjectsData] = useState<Array<Project>>([]);
+  const { params } = useRouteMatch<{ workspaceName: string }>();
+  const applicationData = useApplicationData();
+  const [apiErrorMessage, setApiErrorMessage] = useState<null | string>(null);
+  const currentWorkspace = getWorkspaceByName(
+    applicationData,
+    params.workspaceName
+  );
 
-const mapDispatchToProps = {
-  loadProjects: loadProjectsAction,
-};
-
-type PropsFromState = {
-  application: IApplication;
-  projects: IProject[];
-};
-type RouterProps = RouteComponentProps<{
-  workspaceName: string;
-}>;
-type PropsFromDispatch = {
-  //loadProjectsRequest: typeof loadProjectsRequest
-  loadProjects: typeof loadProjectsAction;
-};
-type SelfProps = Record<string, never>;
-type Props = RouterProps & PropsFromState & PropsFromDispatch & SelfProps;
-
-type State = {
-  loading: boolean;
-  notFound: boolean;
-};
-
-class WorkspacePage extends Component<Props, State> {
-  constructor(props: Props) {
-    super(props);
-    this.state = {
-      loading: true,
-      notFound: false,
-    };
-  }
-
-  componentDidMount() {
-    const { workspaceName } = this.props.match.params;
-    const ws = getWorkspaceByName(this.props.application, workspaceName);
-
-    if (!ws) this.setState({ notFound: true });
-
-    if (ws) {
-      API_GET_PROJECTS(ws.id).then((response) => {
-        if (response.ok) {
-          response.json().then((data: IProject[]) => {
-            this.props.loadProjects(data);
-            this.setState({ loading: false });
-          });
-        }
-      });
+  useEffect(() => {
+    if (!currentWorkspace?.id) {
+      // todo error handling
+      return;
     }
+
+    API_GET_PROJECTS(currentWorkspace.id)
+      .then((response) => {
+        if (response.ok) {
+          response
+            .json()
+            .then((data) => {
+              setProjectsData(data);
+              setLoadingState(false);
+            })
+            .catch((error) => {
+              setApiErrorMessage(error.toString());
+            });
+        }
+      })
+      .catch((error) => {
+        console.log(error);
+        if (process.env.NODE_ENV === "production") {
+          setApiErrorMessage(error.toString());
+        } else {
+          setProjectsData([
+            {
+              kind: "project",
+              workspaceId: "123-uuid-123",
+              id: "111-uuid-222",
+              title: "My awesome project title",
+              description: "Lorem, ipsum dolor sit aipsam voluptatum id quis?",
+              createdAt: new Date("2022-10-27").toString(),
+              createdBy: "333-uuid-333",
+              createdByName: "Creators Name",
+              lastModified: new Date(new Date().getTime() - 3600000).toString(),
+              lastModifiedByName: "Editors Name",
+              externalLink: "link_ok",
+              annotations: "whatever",
+            },
+          ]);
+        }
+        setLoadingState(false);
+      });
+  }, [currentWorkspace?.id]);
+
+  if (isLoading) {
+    return (
+      <OneColumnLayout>
+        <Loading />
+      </OneColumnLayout>
+    );
   }
 
-  render() {
-    const { workspaceName } = this.props.match.params;
-    const ws = getWorkspaceByName(this.props.application, workspaceName)!;
-    const s = getSubscription(this.props.application, ws.id);
-
-    return this.state.notFound ? (
-      <div>
-        <Redirect to="/" />
-      </div>
-    ) : this.state.loading ? (
-      <div className="p-2">Loading data...</div>
-    ) : (
-      <div>
-        <div>
-          <Header
-            account={this.props.application.account!}
-            workspaceName={workspaceName}
-          />
-          {subIsInactive(s) && (
-            <div className="bg-yellow-300 p-2">
-              The plan of this workspace is <b>inactive</b>. It is not possible
-              to create or edit projects. If you are an owner you can manage
-              workspace plans{" "}
-              <Link className="link" to={"/" + workspaceName + "/settings"}>
-                here
-              </Link>
-              .
+  return (
+    <WorkspaceNameProvider value={params.workspaceName}>
+      <ProjectsDataProvider value={projectsData}>
+        <OneColumnLayout workspaceName={params.workspaceName}>
+          {apiErrorMessage && (
+            <div className="mb-4">
+              <Error message={apiErrorMessage} />
             </div>
           )}
-          {subIsTrial(s) &&
-            !subIsInactive(s) &&
-            daysBetween(new Date(s.expirationDate), new Date()) < 6 && (
-              <div className="bg-yellow-300 p-2">
-                This workspace is running on a free trial. The trial will end{" "}
-                {daysBetween(new Date(s.expirationDate), new Date()) === 0 ? (
-                  <b>today</b>
-                ) : (
-                  "in " +
-                  daysBetween(new Date(s.expirationDate), new Date()) +
-                  " days"
-                )}
-                . If you are an owner you can sign up for a paid plan{" "}
-                <Link
-                  className="link"
-                  to={"/" + workspaceName + "/subscription"}
-                >
-                  THIS PAGE WAS DROPPED
-                </Link>
-                .
-              </div>
-            )}
-
           <Switch>
             <Route
               exact
               strict
-              path={this.props.match.path}
-              component={ProjectsPage}
+              path={`/${params.workspaceName}`}
+              component={Projects}
             />
             <Route
               exact
               strict
-              path={this.props.match.path + "/settings"}
+              path={`/${params.workspaceName}/settings`}
               component={WorkspaceSettingsPage}
             />
             <Route
               strict
-              path={this.props.match.path + "/projects/:projectId"}
+              path={`/${params.workspaceName}/projects/:projectId`}
               component={ProjectPage}
             />
-            <Route path={this.props.match.path} component={NotFound} />
+            <Route component={NotFound} />
           </Switch>
-        </div>
-      </div>
-    );
-  }
-}
-
-export default connect(mapStateToProps, mapDispatchToProps)(WorkspacePage);
+        </OneColumnLayout>
+      </ProjectsDataProvider>
+    </WorkspaceNameProvider>
+  );
+};

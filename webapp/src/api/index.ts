@@ -1,10 +1,10 @@
 import {
-  IWorkspace,
-  IMembership,
+  Workspace,
+  Membership,
   IAccount,
-  ISubscription,
+  Subscription,
 } from "../store/application/types";
-import { IProject } from "../store/projects/types";
+import { Project } from "../store/projects/types";
 import { IMilestone } from "../store/milestones/types";
 import { IWorkflow } from "../store/workflows/types";
 import { ISubWorkflow } from "../store/subworkflows/types";
@@ -194,12 +194,11 @@ export const API_DELETE_WORKSPACE = async (id: string) => {
 };
 
 export type API_FETCH_APP_RESP = {
-  mode: string;
-  workspaces: IWorkspace[];
-  memberships: IMembership[];
+  workspaces: Workspace[];
+  memberships: Membership[];
   account: IAccount;
   messages: Array<MessageEntity>;
-  subscriptions: ISubscription[];
+  subscriptions: Subscription[];
 };
 
 export const API_FETCH_APP = async () => {
@@ -352,7 +351,7 @@ export const API_RESEND_INVITE = async (workspaceId: string, id: string) => {
 // PROJECTS
 
 export type API_GET_PROJECTS_RESP = {
-  projects: IProject[];
+  projects: Project[];
 };
 
 export const API_GET_PROJECTS = async (workspaceId: string) => {
@@ -366,7 +365,7 @@ export const API_GET_PROJECTS = async (workspaceId: string) => {
 };
 
 export type API_GET_PROJECT_RESP = {
-  project: IProject;
+  project: Project;
   milestones: IMilestone[];
   workflows: IWorkflow[];
   subWorkflows: ISubWorkflow[];

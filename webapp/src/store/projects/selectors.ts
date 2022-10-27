@@ -1,4 +1,4 @@
-import { IProject } from "./types";
+import { Project } from "./types";
 import { AppState } from "..";
 import { createSelector } from "reselect";
 
@@ -8,15 +8,15 @@ export const projects = createSelector([getProjectsState], (s) => {
   return sortProjectsByCreateDate(s.items);
 });
 
-export const sortProjects = (pp: IProject[]): IProject[] => {
+export const sortProjects = (pp: Project[]): Project[] => {
   return pp.sort((a, b) => a.title.localeCompare(b.title));
 };
 
-export const sortProjectsByCreateDate = (pp: IProject[]): IProject[] => {
+export const sortProjectsByCreateDate = (pp: Project[]): Project[] => {
   return pp.sort(
     (a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
   );
 };
 
-export const getProjectById = (pp: IProject[], id: string) =>
+export const getProjectById = (pp: Project[], id: string) =>
   pp.find((x) => x.id === id);

@@ -1,4 +1,3 @@
-import { Icon } from "../Icon";
 import { Input } from "../Input";
 import type { FormFieldComponent } from "./types";
 
@@ -7,7 +6,7 @@ export const PasswordField: FormFieldComponent = (props) => {
 
   return (
     <Input
-      icon={<Icon type="vpn_key" />}
+      icon="vpn_key"
       label="Password"
       {...register("password", {
         required: "Password is a required field.",

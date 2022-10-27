@@ -2,6 +2,8 @@ import { forwardRef, useId } from "react";
 import { FieldError, FieldErrorsImpl, Merge } from "react-hook-form";
 import { WithHTMLProps } from "../types";
 import { Error } from "./Error";
+import { Icon } from "./Icon";
+import type { IconType } from "./Icon";
 
 type FormError = FieldError | Merge<FieldError, FieldErrorsImpl>;
 
@@ -12,7 +14,7 @@ type InputProps = Omit<
       type?: "password" | "text";
       label: string;
       error?: FormError;
-      icon?: React.ReactElement;
+      icon?: IconType;
     }
   >,
   "id" | "className"
@@ -32,7 +34,7 @@ export const Input = forwardRef<HTMLInputElement, Readonly<InputProps>>(
                 error ? "text-red-500" : "text-gray-500"
               }`}
             >
-              {icon}
+              <Icon type={icon} />
             </div>
           )}
           <input

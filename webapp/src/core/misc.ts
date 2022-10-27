@@ -1,4 +1,4 @@
-import { ISubscription } from "../store/application/types";
+import { Subscription } from "../store/application/types";
 
 export enum Roles {
   VIEWER = "VIEWER",
@@ -240,7 +240,7 @@ export const colorToBorderColorClass = (color: Color) => {
   }
 };
 
-export const subIsInactive = (sub: ISubscription) => {
+export const subIsInactive = (sub: Subscription) => {
   switch (sub.externalStatus) {
     case "incomplete_expired":
     case "incomplete":
@@ -256,7 +256,7 @@ export const subIsInactive = (sub: ISubscription) => {
   }
 };
 
-export const mustCreateNewSub = (sub: ISubscription) => {
+export const mustCreateNewSub = (sub: Subscription) => {
   switch (sub.externalStatus) {
     case "incomplete_expired":
     case "incomplete":
@@ -268,15 +268,15 @@ export const mustCreateNewSub = (sub: ISubscription) => {
   }
 };
 
-export const subIsTrial = (sub: ISubscription) => {
+export const subIsTrial = (sub: Subscription) => {
   return sub.externalStatus === "trialing";
 };
 
-export const subIsProOrAbove = (sub: ISubscription) => {
+export const subIsProOrAbove = (sub: Subscription) => {
   return sub.level === SubscriptionLevels.PRO;
 };
 
-export const subIsBasicOrAbove = (sub: ISubscription) => {
+export const subIsBasicOrAbove = (sub: Subscription) => {
   return (
     sub.level === SubscriptionLevels.PRO ||
     sub.level === SubscriptionLevels.BASIC

@@ -1,4 +1,4 @@
-import { IProject } from "./types";
+import { Project } from "./types";
 import { action } from "typesafe-actions";
 import { v4 as uuid } from "uuid";
 import { Dispatch } from "react";
@@ -14,23 +14,23 @@ export enum ProjectsActions {
 
 export type createProject = {
   type: ProjectsActions.CREATE_PROJECT;
-  payload: IProject;
+  payload: Project;
 };
-export const createProjectAction = (p: IProject) =>
+export const createProjectAction = (p: Project) =>
   action(ProjectsActions.CREATE_PROJECT, p);
 
 export type loadProjects = {
   type: ProjectsActions.LOAD_PROJECTS;
-  payload: IProject[];
+  payload: Project[];
 };
-export const loadProjectsAction = (pp: IProject[]) =>
+export const loadProjectsAction = (pp: Project[]) =>
   action(ProjectsActions.LOAD_PROJECTS, pp);
 
 export type updateProject = {
   type: ProjectsActions.UPDATE_PROJECT;
-  payload: IProject;
+  payload: Project;
 };
-export const updateProjectAction = (p: IProject) =>
+export const updateProjectAction = (p: Project) =>
   action(ProjectsActions.UPDATE_PROJECT, p);
 
 export type deleteProject = {
@@ -50,7 +50,7 @@ export const loadProjectsRequest = (dispatch: Dispatch<AllActions>) => {
   return (workspaceId: string) => {
     return API_GET_PROJECTS(workspaceId).then((response) => {
       if (response.ok) {
-        response.json().then((data: IProject[]) => {
+        response.json().then((data: Project[]) => {
           dispatch(loadProjectsAction(data));
         });
       }
@@ -65,7 +65,7 @@ export const createProjectRequest = (dispatch: Dispatch<AllActions>) => {
     return API_CREATE_PROJECT(workspaceId, projectId, title).then(
       (response) => {
         if (response.ok) {
-          response.json().then((data: IProject) => {
+          response.json().then((data: Project) => {
             dispatch(createProjectAction(data));
           });
         }

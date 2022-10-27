@@ -1,11 +1,11 @@
 import { connect } from "react-redux";
 import { AppState } from "../store";
 import { application } from "../store/application/selectors";
-import { IApplication } from "../store/application/types";
+import { Application } from "../store/application/types";
 import { Message } from "./Message";
 
 type MessageTrayProps = {
-  application: IApplication;
+  application: Application;
 };
 
 const UnconnectedMessageTray: React.FunctionComponent<MessageTrayProps> = (

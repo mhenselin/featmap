@@ -20,13 +20,13 @@ import {
 import { EntityTypes } from "../core/card";
 import { AppState } from "../store";
 import { application } from "../store/application/selectors";
-import { IApplication } from "../store/application/types";
+import { Application } from "../store/application/types";
 import { updateFeatureAction } from "../store/features/actions";
 import { IFeature } from "../store/features/types";
 import { updateMilestoneAction } from "../store/milestones/actions";
 import { IMilestone } from "../store/milestones/types";
 import { updateProjectAction } from "../store/projects/actions";
-import { IProject } from "../store/projects/types";
+import { Project } from "../store/projects/types";
 import { updateSubWorkflowAction } from "../store/subworkflows/actions";
 import { ISubWorkflow } from "../store/subworkflows/types";
 import { updateWorkflowAction } from "../store/workflows/actions";
@@ -46,7 +46,7 @@ const mapDispatchToProps = {
 };
 
 type PropsFromState = {
-  application: IApplication;
+  application: Application;
 };
 
 type PropsFromDispatch = {
@@ -59,7 +59,7 @@ type PropsFromDispatch = {
 
 type SelfProps = {
   entity: EntityTypes;
-  app: IApplication;
+  app: Application;
   url: string;
   close: () => void;
   viewOnly: boolean;
@@ -133,7 +133,7 @@ class EntityDetailsDescription
                     values.description
                   ).then((response) => {
                     if (response.ok) {
-                      response.json().then((data: IProject) => {
+                      response.json().then((data: Project) => {
                         this.props.updateProject(data);
                       });
                     } else {

@@ -1,16 +1,15 @@
 import type { MessageEntity } from "../../components/Message";
 import { Roles, SubscriptionLevels } from "../../core/misc";
 
-export type IApplication = {
-  mode: string;
-  workspaces: IWorkspace[];
-  memberships: IMembership[];
+export type Application = {
+  workspaces: Array<Workspace>;
+  memberships: Array<Membership>;
   account?: IAccount;
   messages: Array<MessageEntity>;
-  subscriptions: ISubscription[];
+  subscriptions: Array<Subscription>;
 };
 
-export type IMembership = {
+export type Membership = {
   id: string;
   workspaceId: string;
   accountId: string;
@@ -20,7 +19,7 @@ export type IMembership = {
   createdAt: string;
 };
 
-export type IWorkspace = {
+export type Workspace = {
   id: string;
   name: string;
   createdAt: string;
@@ -40,7 +39,7 @@ export type IAccount = {
   emailConfirmationPending: boolean;
 };
 
-export type ISubscription = {
+export type Subscription = {
   id: string;
   workspaceId: string;
   level: SubscriptionLevels;

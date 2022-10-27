@@ -27,11 +27,11 @@ a.link {
 
 @layer components {
   .focus {
-    @apply rounded ring-indigo-700 ring-opacity-50 focus:ring-4;
+    @apply rounded ring-indigo-700 ring-opacity-50 focus-visible:ring-4;
   }
 
   .focus-inverted {
-    @apply rounded ring-white ring-opacity-50 focus:ring-4;
+    @apply rounded ring-white ring-opacity-50 focus-visible:ring-4;
   }
 }
 

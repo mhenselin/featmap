@@ -21,7 +21,7 @@ import { avatar, AvatarName } from "../avatars";
 import { personaBarState } from "../core/misc";
 import { AppState } from "../store";
 import { application } from "../store/application/selectors";
-import { IApplication } from "../store/application/types";
+import { Application } from "../store/application/types";
 import { filterFeatureCommentsOnFeature } from "../store/featurecomments/selectors";
 import { IFeatureComment } from "../store/featurecomments/types";
 import {
@@ -103,7 +103,7 @@ type SelfProps = {
 };
 
 type PropsFromState = {
-  application: IApplication;
+  application: Application;
 };
 
 type PropsFromDispatch = {
