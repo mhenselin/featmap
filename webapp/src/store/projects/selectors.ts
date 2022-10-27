@@ -8,11 +8,7 @@ export const projects = createSelector([getProjectsState], (s) => {
   return sortProjectsByCreateDate(s.items);
 });
 
-export const sortProjects = (pp: Project[]): Project[] => {
-  return pp.sort((a, b) => a.title.localeCompare(b.title));
-};
-
-export const sortProjectsByCreateDate = (pp: Project[]): Project[] => {
+const sortProjectsByCreateDate = (pp: Project[]): Project[] => {
   return pp.sort(
     (a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
   );

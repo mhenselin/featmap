@@ -96,7 +96,7 @@ export const Internal = () => {
         }
         setLoadingState(false);
       });
-  }, []);
+  }, [push]);
 
   if (isLoading) {
     return (

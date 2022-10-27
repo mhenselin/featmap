@@ -1,9 +1,5 @@
-import { Project } from "./types";
 import { action } from "typesafe-actions";
-import { v4 as uuid } from "uuid";
-import { Dispatch } from "react";
-import { API_GET_PROJECTS, API_CREATE_PROJECT } from "../../api";
-import { AllActions } from "..";
+import { Project } from "./types";
 
 export enum ProjectsActions {
   CREATE_PROJECT = "CREATE_PROJECT",
@@ -45,31 +41,3 @@ export type Actions =
   | createProject
   | updateProject
   | deleteProject;
-
-export const loadProjectsRequest = (dispatch: Dispatch<AllActions>) => {
-  return (workspaceId: string) => {
-    return API_GET_PROJECTS(workspaceId).then((response) => {
-      if (response.ok) {
-        response.json().then((data: Project[]) => {
-          dispatch(loadProjectsAction(data));
-        });
-      }
-    });
-  };
-};
-
-export const createProjectRequest = (dispatch: Dispatch<AllActions>) => {
-  return (workspaceId: string, title: string) => {
-    const projectId = uuid();
-
-    return API_CREATE_PROJECT(workspaceId, projectId, title).then(
-      (response) => {
-        if (response.ok) {
-          response.json().then((data: Project) => {
-            dispatch(createProjectAction(data));
-          });
-        }
-      }
-    );
-  };
-};

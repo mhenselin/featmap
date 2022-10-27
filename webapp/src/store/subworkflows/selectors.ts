@@ -27,10 +27,6 @@ export const filterOutClosedSubWorkflows = (xx: ISubWorkflow[]) => {
   return xx.filter((f) => f.status === CardStatus.OPEN);
 };
 
-export const getNbrOfClosedSubWorkflows = (xx: ISubWorkflow[]) => {
-  return xx.filter((f) => f.status === CardStatus.CLOSED).length;
-};
-
 export const filterClosedSubWorkflows = (ff: ISubWorkflow[]) => {
   return ff.filter((f) => f.status === CardStatus.CLOSED);
 };

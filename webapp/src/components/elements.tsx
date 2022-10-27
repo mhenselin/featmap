@@ -1,11 +1,5 @@
 import { FunctionComponent, PropsWithChildren } from "react";
 
-export const OldButton: FunctionComponent<{ title: string }> = (props) => (
-  <div className="shrink-0 whitespace-nowrap rounded  bg-gray-200  p-2  text-xs font-bold uppercase ">
-    {props.title}
-  </div>
-);
-
 export const Button: FunctionComponent<{
   iconColor?: string;
   title?: string;

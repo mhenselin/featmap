@@ -1,6 +1,6 @@
 import { Container } from "./Container";
 import { Footer } from "./Footer";
-import { Header, HeaderProps } from "./NewHeader";
+import { Header, HeaderProps } from "./Header";
 
 type OneColumnLayoutProps = React.PropsWithChildren<
   Pick<HeaderProps, "workspaceName">

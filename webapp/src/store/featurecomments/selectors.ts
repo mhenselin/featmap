@@ -11,9 +11,7 @@ export const featureComments = createSelector(
   }
 );
 
-export const sortFeatureComments = (
-  ff: IFeatureComment[]
-): IFeatureComment[] => {
+const sortFeatureComments = (ff: IFeatureComment[]): IFeatureComment[] => {
   return ff.sort(
     (a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
   );
@@ -24,10 +22,6 @@ export const filterFeatureCommentsOnFeature = (
   featureId: string
 ) => {
   return ff.filter((f) => f.featureId === featureId);
-};
-
-export const getFeatureComment = (ff: IFeatureComment[], id: string) => {
-  return ff.find((f) => f.id === id)!;
 };
 
 export const filterFeatureCommentsOnProject = (

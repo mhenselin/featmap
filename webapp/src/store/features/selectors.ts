@@ -1,7 +1,6 @@
-import { AppState } from "..";
 import { createSelector } from "reselect";
+import { AppState } from "..";
 import { IFeature } from "./types";
-import { CardStatus } from "../../components/Card";
 
 const getFeaturesState = (state: AppState) => state.features;
 
@@ -37,10 +36,6 @@ export const filterFeaturesOnMilestone = (
   milestoneId: string
 ) => {
   return ff.filter((f) => f.milestoneId === milestoneId);
-};
-
-export const closedFeatures = (ff: IFeature[]) => {
-  return ff.filter((f) => f.status === CardStatus.CLOSED);
 };
 
 export const getFeature = (ff: IFeature[], id: string) => {

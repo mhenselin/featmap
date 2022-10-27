@@ -14,4 +14,3 @@ export const getMembership = (s: Application, workspaceId: string) =>
   s.memberships.find((x) => x.workspaceId === workspaceId)!;
 export const getSubscription = (s: Application, workspaceId: string) =>
   s.subscriptions.find((x) => x.workspaceId === workspaceId)!;
-export const getAccount = (s: Application) => s.account!;

@@ -5,7 +5,7 @@ export type State = {
   items: IFeatureComment[];
 };
 
-export const initialState: State = {
+const initialState: State = {
   items: [],
 };
 

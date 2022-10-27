@@ -34,9 +34,9 @@ export const receiveAppAction = (s: API_FETCH_APP_RESP) => {
 };
 
 export const resetAppAction = () => action(AppActions.RESET_APPLICATION);
-export const createMessageAction = (m: MessageEntity) =>
+const createMessageAction = (m: MessageEntity) =>
   action(AppActions.CREATE_MESSAGE, m);
-export const deleteMessageAction = (id: string) =>
+const deleteMessageAction = (id: string) =>
   action(AppActions.DELETE_MESSAGE, id);
 
 export type Actions = receiveApp | resetApp | createMessage | deleteMessage;
@@ -56,13 +56,3 @@ export const newMessage =
 
     del.then();
   };
-
-export const getApp = (dispatch: Dispatch<AllActions>) => async () => {
-  API_FETCH_APP().then((response) => {
-    if (response.ok) {
-      response.json().then((data: API_FETCH_APP_RESP) => {
-        dispatch(receiveAppAction(data));
-      });
-    }
-  });
-};

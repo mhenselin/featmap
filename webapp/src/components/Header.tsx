@@ -1,84 +1,52 @@
 import { Link } from "react-router-dom";
-import { IAccount } from "../store/application/types";
-import ContextMenu from "./ContextMenu";
+import { IconLink } from "./IconLink";
 
-type HeaderProps = {
-  account: IAccount;
+export type HeaderProps = {
   workspaceName?: string;
 };
 
-export const Header: React.FunctionComponent<HeaderProps> = (props) => {
+export const Header: React.FunctionComponent<Readonly<HeaderProps>> = (
+  props
+) => {
+  const { workspaceName } = props;
+
   return (
-    <header
-      style={{ background: "#2280a5" }}
-      className="flex items-center gap-4 px-4 text-lg text-white"
-    >
-      <Link to="/" className="mr-12">
-        <strong>Featmap</strong>
+    <header className="flex items-center justify-between bg-indigo-700 p-2 text-white md:px-4 md:py-2 lg:px-6">
+      <Link to="/" className="focus-inverted flex items-center gap-2 p-2">
+        <img
+          width="32"
+          height="32"
+          src="/apple-touch-icon.png"
+          alt=""
+          className="block"
+        />
+        <span className="sr-only sm:not-sr-only">Featmap</span>
       </Link>
 
-      {props.workspaceName && (
-        <Link to={"/" + props.workspaceName}>Projects</Link>
+      {workspaceName && (
+        <>
+          <span className="flex gap-2">
+            <IconLink
+              label="Projects"
+              to={`/${workspaceName}`}
+              type="category"
+            />
+            <IconLink
+              label="Settings"
+              to={`/${workspaceName}/settings`}
+              type="settings"
+            />
+            <IconLink
+              label="Spaces"
+              to="/account/workspaces"
+              type="workspaces"
+            />
+            <IconLink label="Account" to="/account/settings" type="person" />
+          </span>
+
+          <IconLink label="Logout" to="/account/logout" type="logout" />
+        </>
       )}
-
-      <div className="flex grow justify-end">
-        <div className="flex items-center rounded p-1 ">
-          <ContextMenu icon="account_circle">
-            <div className="absolute top-0 right-0 mt-8 min-w-full rounded bg-white text-sm shadow-md">
-              <ul className="">
-                {props.workspaceName && (
-                  <>
-                    <li className="block whitespace-nowrap px-4 py-2 text-gray-600">
-                      Current workspace:{" "}
-                      <b>
-                        <Link to={"/" + props.workspaceName}>
-                          {props.workspaceName}
-                        </Link>{" "}
-                      </b>{" "}
-                      <Link
-                        className="shrink-0 rounded bg-gray-300 p-1 text-xs  font-bold"
-                        to="/account/workspaces"
-                      >
-                        Change{" "}
-                      </Link>
-                    </li>
-                    <li className="block whitespace-nowrap px-4 py-2 text-black hover:bg-gray-200 ">
-                      <Link to={"/" + props.workspaceName + "/settings"}>
-                        Workspace settings
-                      </Link>
-                    </li>
-                  </>
-                )}
-
-                <li className="block whitespace-nowrap border-b px-4 py-2 text-black">
-                  <Link to={"/account/workspaces"}>My workspaces</Link>
-                </li>
-
-                <li className="block whitespace-nowrap px-4 py-2 text-gray-600">
-                  Logged in as <em>{props.account.email}</em>
-                </li>
-
-                <li>
-                  <Link
-                    className="block whitespace-nowrap px-4 py-2 text-black hover:bg-gray-200"
-                    to="/account/settings"
-                  >
-                    Account settings
-                  </Link>
-                </li>
-                <li>
-                  <Link
-                    className="block whitespace-nowrap px-4 py-2 text-black hover:bg-gray-200"
-                    to="/account/logout"
-                  >
-                    Log out
-                  </Link>
-                </li>
-              </ul>
-            </div>
-          </ContextMenu>
-        </div>
-      </div>
     </header>
   );
 };

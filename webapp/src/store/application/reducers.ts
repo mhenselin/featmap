@@ -5,7 +5,7 @@ export type State = {
   application: Application;
 };
 
-export const applicationInitialState: State = {
+const applicationInitialState: State = {
   application: {
     workspaces: [],
     memberships: [],

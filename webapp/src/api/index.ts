@@ -19,23 +19,6 @@ const endpoint = process.env.REACT_APP_API_ENDPOINT
   ? process.env.REACT_APP_API_ENDPOINT
   : "/v1";
 
-export const API_CHANGE_GENERAL_INFORMATION = async (
-  workspaceId: string,
-  euVat: string,
-  externalBillingEmail: string
-) => {
-  return await fetch(endpoint + "/settings/general-info", {
-    method: "POST",
-    headers: {
-      Accept: "application/json",
-      "Content-Type": "application/json",
-      Workspace: workspaceId,
-    },
-    credentials: "include",
-    body: JSON.stringify({ euVat, externalBillingEmail }),
-  });
-};
-
 export type API_SIGN_UP_REQ = {
   workspaceName: string;
   name: string;
@@ -1091,58 +1074,6 @@ export const API_CHANGE_SUBWORKFLOW_ANNOTATIONS = async (
     },
     credentials: "include",
     body: JSON.stringify({ annotations }),
-  });
-};
-
-export type API_CONTACT_INTERFACE = {
-  topic: string;
-  body: string;
-  sender: string;
-};
-export const API_CONTACT = async (data: API_CONTACT_INTERFACE) => {
-  return await fetch(endpoint + "/users/contact", {
-    method: "POST",
-    headers: {
-      Accept: "application/json",
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify(data),
-  });
-};
-
-// SUBSCRIPTIONS
-
-export const API_GET_CHECKOUT_SESSION = async (
-  workspaceId: string,
-  plan: string,
-  quantity: number
-) => {
-  return await fetch(endpoint + "/subscription/checkoutsession", {
-    method: "POST",
-    headers: {
-      Accept: "application/json",
-      "Content-Type": "application/json",
-      Workspace: workspaceId,
-    },
-    credentials: "include",
-    body: JSON.stringify({ plan, quantity }),
-  });
-};
-
-export const API_CHANGE_SUBSCRIPTION = async (
-  workspaceId: string,
-  plan: string,
-  quantity: number
-) => {
-  return await fetch(endpoint + "/subscription/change", {
-    method: "POST",
-    headers: {
-      Accept: "application/json",
-      "Content-Type": "application/json",
-      Workspace: workspaceId,
-    },
-    credentials: "include",
-    body: JSON.stringify({ plan, quantity }),
   });
 };
 

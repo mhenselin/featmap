@@ -13,20 +13,21 @@ const mapDispatchToProps = {
 type PropsFromDispatch = {
   resetApp: typeof resetAppAction;
 };
-type SelfProps = Record<string, never>;
-type Props = PropsFromDispatch & SelfProps;
+
+type Props = PropsFromDispatch;
 
 export const Logout: React.FunctionComponent<Readonly<Props>> = (props) => {
+  const { resetApp } = props;
   const { push } = useHistory();
 
   useEffect(() => {
     API_LOG_OUT().then((resp) => {
       if (resp.ok) {
-        props.resetApp();
+        resetApp();
       }
       push("/");
     });
-  }, []);
+  }, [resetApp, push]);
 
   return (
     <OneColumnLayout>

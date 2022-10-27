@@ -5,7 +5,7 @@ export type State = {
   items: IPersona[];
 };
 
-export const initialState: State = {
+const initialState: State = {
   items: [],
 };
 

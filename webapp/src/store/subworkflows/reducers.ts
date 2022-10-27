@@ -11,7 +11,7 @@ export type State = {
   items: ISubWorkflow[];
 };
 
-export const initialState: State = {
+const initialState: State = {
   items: [],
 };
 

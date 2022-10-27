@@ -1,8 +1,7 @@
-import { Dispatch, useState } from "react";
+import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { v4 as uuid } from "uuid";
 import { API_CREATE_PROJECT } from "../api";
-import { AllActions } from "../store";
 import { getWorkspaceByName } from "../store/application/selectors";
 import { createProjectAction } from "../store/projects/actions";
 import { Project } from "../store/projects/types";
@@ -12,22 +11,6 @@ import { Error } from "./Error";
 import { ProjectTitleField } from "./FormElements/ProjectTitleField";
 import { Headline } from "./Headline";
 import { useWorkspaceName } from "./WorkspaceContext";
-
-export const submit = (dispatch: Dispatch<AllActions>) => {
-  return (workspaceId: string, title: string) => {
-    const projectId = uuid();
-
-    return API_CREATE_PROJECT(workspaceId, projectId, title).then(
-      (response) => {
-        if (response.ok) {
-          response.json().then((data: Project) => {
-            dispatch(createProjectAction(data));
-          });
-        }
-      }
-    );
-  };
-};
 
 export const CreateProjectForm = () => {
   const [apiErrorMessage, setApiErrorMessage] = useState<null | string>(null);

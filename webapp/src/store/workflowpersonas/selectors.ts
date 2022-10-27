@@ -11,10 +11,6 @@ export const workflowPersonas = createSelector(
   }
 );
 
-export const getWorkflowPersona = (ff: IWorkflowPersona[], id: string) => {
-  return ff.find((f) => f.id === id)!;
-};
-
 export const filterWorkflowPersonasOnWorkflow = (
   ff: IWorkflowPersona[],
   id: string

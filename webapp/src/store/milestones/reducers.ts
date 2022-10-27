@@ -11,7 +11,7 @@ export type State = {
   items: IMilestone[];
 };
 
-export const milestonesInitialState = {
+const milestonesInitialState = {
   items: [],
 };
 

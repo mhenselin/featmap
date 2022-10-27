@@ -26,8 +26,6 @@ export type updateWorkflowPersona = {
   type: ActionTypes.UPDATE_WORKFLOW_PERSONA;
   payload: IWorkflowPersona;
 };
-export const updateWorkflowPersonaAction = (x: IWorkflowPersona) =>
-  action(ActionTypes.UPDATE_WORKFLOW_PERSONA, x);
 
 export type deleteWorkflowPersona = {
   type: ActionTypes.DELETE_WORKFLOW_PERSONA;
