@@ -25,8 +25,6 @@ import { updateFeatureAction } from "../store/features/actions";
 import { IFeature } from "../store/features/types";
 import { updateMilestoneAction } from "../store/milestones/actions";
 import { IMilestone } from "../store/milestones/types";
-import { updateProjectAction } from "../store/projects/actions";
-import { Project } from "../store/projects/types";
 import { updateSubWorkflowAction } from "../store/subworkflows/actions";
 import { ISubWorkflow } from "../store/subworkflows/types";
 import { updateWorkflowAction } from "../store/workflows/actions";
@@ -42,7 +40,6 @@ const mapDispatchToProps = {
   updateSubWorkflow: updateSubWorkflowAction,
   updateWorkflow: updateWorkflowAction,
   updateFeature: updateFeatureAction,
-  updateProject: updateProjectAction,
 };
 
 type PropsFromState = {
@@ -54,16 +51,14 @@ type PropsFromDispatch = {
   updateSubWorkflow: typeof updateSubWorkflowAction;
   updateWorkflow: typeof updateWorkflowAction;
   updateFeature: typeof updateFeatureAction;
-  updateProject: typeof updateProjectAction;
 };
 
 type SelfProps = {
-  entity: EntityTypes;
+  entity?: EntityTypes;
   app: Application;
   url: string;
   close: () => void;
   viewOnly: boolean;
-  demo: boolean;
 };
 type Props = PropsFromState & PropsFromDispatch & SelfProps;
 
@@ -91,12 +86,12 @@ class EntityDetailsDescription
 
   render() {
     let closed = false;
-    switch (this.props.entity.kind) {
+    switch (this.props.entity?.kind) {
       case "milestone":
       case "subworkflow":
       case "workflow":
       case "feature": {
-        closed = this.props.entity.status === "CLOSED";
+        closed = this.props.entity?.status === "CLOSED";
         break;
       }
       default:
@@ -106,7 +101,7 @@ class EntityDetailsDescription
     return (
       <div className=" mb-4 w-full self-start ">
         <Formik
-          initialValues={{ description: this.props.entity.description }}
+          initialValues={{ description: this.props.entity?.description ?? "" }}
           validationSchema={Yup.object().shape({
             description: Yup.string().max(10000, "Maximum 10000 characters."),
           })}
@@ -114,33 +109,31 @@ class EntityDetailsDescription
             values: { description: string },
             actions: FormikActions<{ description: string }>
           ) => {
-            switch (this.props.entity.kind) {
+            switch (this.props.entity?.kind) {
               case "project": {
                 const optimistic = this.props.entity;
                 optimistic.description = values.description;
                 optimistic.lastModified = new Date().toISOString();
                 optimistic.lastModifiedByName =
-                  this.props.app.account === undefined
-                    ? "demo"
-                    : this.props.app.account!.name;
+                  this.props.app.account?.name ?? "";
 
-                this.props.updateProject(optimistic);
+                // @TODO
+                // this.props.updateProject(optimistic);
 
-                if (!this.props.demo) {
-                  API_UPDATE_PROJECT_DESCRIPTION(
-                    this.props.entity.workspaceId,
-                    this.props.entity.id,
-                    values.description
-                  ).then((response) => {
-                    if (response.ok) {
-                      response.json().then((data: Project) => {
-                        this.props.updateProject(data);
-                      });
-                    } else {
-                      alert("Something went wrong when updating description.");
-                    }
-                  });
-                }
+                API_UPDATE_PROJECT_DESCRIPTION(
+                  this.props.entity.workspaceId,
+                  this.props.entity.id,
+                  values.description
+                ).then((response) => {
+                  if (response.ok) {
+                    // @todo
+                    // response.json().then((_data: Project) => {
+                    //   this.props.updateProject(data);
+                    // });
+                  } else {
+                    alert("Something went wrong when updating description.");
+                  }
+                });
 
                 break;
               }
@@ -150,26 +143,22 @@ class EntityDetailsDescription
                 optimistic.description = values.description;
                 optimistic.lastModified = new Date().toISOString();
                 optimistic.lastModifiedByName =
-                  this.props.app.account === undefined
-                    ? "demo"
-                    : this.props.app.account!.name;
+                  this.props.app.account?.name ?? "";
 
                 this.props.updateMilestone(optimistic);
-                if (!this.props.demo) {
-                  API_UPDATE_MILESTONE_DESCRIPTION(
-                    this.props.entity.workspaceId,
-                    this.props.entity.id,
-                    values.description
-                  ).then((response) => {
-                    if (response.ok) {
-                      response.json().then((data: IMilestone) => {
-                        this.props.updateMilestone(data);
-                      });
-                    } else {
-                      alert("Something went wrong when updating description.");
-                    }
-                  });
-                }
+                API_UPDATE_MILESTONE_DESCRIPTION(
+                  this.props.entity.workspaceId,
+                  this.props.entity.id,
+                  values.description
+                ).then((response) => {
+                  if (response.ok) {
+                    response.json().then((data: IMilestone) => {
+                      this.props.updateMilestone(data);
+                    });
+                  } else {
+                    alert("Something went wrong when updating description.");
+                  }
+                });
 
                 break;
               }
@@ -179,27 +168,23 @@ class EntityDetailsDescription
                 optimistic.description = values.description;
                 optimistic.lastModified = new Date().toISOString();
                 optimistic.lastModifiedByName =
-                  this.props.app.account === undefined
-                    ? "demo"
-                    : this.props.app.account!.name;
+                  this.props.app.account?.name ?? "";
 
                 this.props.updateSubWorkflow(optimistic);
 
-                if (!this.props.demo) {
-                  API_UPDATE_SUBWORKFLOW_DESCRIPTION(
-                    this.props.entity.workspaceId,
-                    this.props.entity.id,
-                    values.description
-                  ).then((response) => {
-                    if (response.ok) {
-                      response.json().then((data: ISubWorkflow) => {
-                        this.props.updateSubWorkflow(data);
-                      });
-                    } else {
-                      alert("Something went wrong when updating description.");
-                    }
-                  });
-                }
+                API_UPDATE_SUBWORKFLOW_DESCRIPTION(
+                  this.props.entity.workspaceId,
+                  this.props.entity.id,
+                  values.description
+                ).then((response) => {
+                  if (response.ok) {
+                    response.json().then((data: ISubWorkflow) => {
+                      this.props.updateSubWorkflow(data);
+                    });
+                  } else {
+                    alert("Something went wrong when updating description.");
+                  }
+                });
 
                 break;
               }
@@ -209,27 +194,23 @@ class EntityDetailsDescription
                 optimistic.description = values.description;
                 optimistic.lastModified = new Date().toISOString();
                 optimistic.lastModifiedByName =
-                  this.props.app.account === undefined
-                    ? "demo"
-                    : this.props.app.account!.name;
+                  this.props.app.account?.name ?? "";
 
                 this.props.updateWorkflow(optimistic);
 
-                if (!this.props.demo) {
-                  API_UPDATE_WORKFLOW_DESCRIPTION(
-                    this.props.entity.workspaceId,
-                    this.props.entity.id,
-                    values.description
-                  ).then((response) => {
-                    if (response.ok) {
-                      response.json().then((data: IWorkflow) => {
-                        this.props.updateWorkflow(data);
-                      });
-                    } else {
-                      alert("Something went wrong when updating description.");
-                    }
-                  });
-                }
+                API_UPDATE_WORKFLOW_DESCRIPTION(
+                  this.props.entity.workspaceId,
+                  this.props.entity.id,
+                  values.description
+                ).then((response) => {
+                  if (response.ok) {
+                    response.json().then((data: IWorkflow) => {
+                      this.props.updateWorkflow(data);
+                    });
+                  } else {
+                    alert("Something went wrong when updating description.");
+                  }
+                });
 
                 break;
               }
@@ -239,27 +220,23 @@ class EntityDetailsDescription
                 optimistic.description = values.description;
                 optimistic.lastModified = new Date().toISOString();
                 optimistic.lastModifiedByName =
-                  this.props.app.account === undefined
-                    ? "demo"
-                    : this.props.app.account!.name;
+                  this.props.app.account?.name ?? "";
 
                 this.props.updateFeature(optimistic);
 
-                if (!this.props.demo) {
-                  API_UPDATE_FEATURE_DESCRIPTION(
-                    this.props.entity.workspaceId,
-                    this.props.entity.id,
-                    values.description
-                  ).then((response) => {
-                    if (response.ok) {
-                      response.json().then((data: IFeature) => {
-                        this.props.updateFeature(data);
-                      });
-                    } else {
-                      alert("Something went wrong when updating description.");
-                    }
-                  });
-                }
+                API_UPDATE_FEATURE_DESCRIPTION(
+                  this.props.entity.workspaceId,
+                  this.props.entity.id,
+                  values.description
+                ).then((response) => {
+                  if (response.ok) {
+                    response.json().then((data: IFeature) => {
+                      this.props.updateFeature(data);
+                    });
+                  } else {
+                    alert("Something went wrong when updating description.");
+                  }
+                });
                 break;
               }
 
@@ -317,7 +294,7 @@ class EntityDetailsDescription
                 ) : (
                   <div className=" mt-2 ml-2 border border-white  ">
                     <div>
-                      {this.props.entity.description.length === 0 ? (
+                      {this.props.entity?.description.length === 0 ? (
                         <div>
                           <em>No description.</em>
                         </div>
@@ -325,7 +302,7 @@ class EntityDetailsDescription
                         <div>
                           <div className="markdown-body overflow-auto text-left">
                             <ReactMarkdown linkTarget="_blank">
-                              {this.props.entity.description}
+                              {this.props.entity?.description ?? ""}
                             </ReactMarkdown>
                           </div>
                         </div>

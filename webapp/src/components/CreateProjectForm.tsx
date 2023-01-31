@@ -3,13 +3,13 @@ import { useForm } from "react-hook-form";
 import { v4 as uuid } from "uuid";
 import { API_CREATE_PROJECT } from "../api";
 import { getWorkspaceByName } from "../store/application/selectors";
-import { createProjectAction } from "../store/projects/actions";
 import { Project } from "../store/projects/types";
 import { useApplicationData } from "./ApplicationContext";
 import { Button } from "./Button";
 import { Error } from "./Error";
 import { ProjectTitleField } from "./FormElements/ProjectTitleField";
 import { Headline } from "./Headline";
+import { useProjectsData } from "./ProjectsContext";
 import { useWorkspaceName } from "./WorkspaceContext";
 
 export const CreateProjectForm = () => {
@@ -22,6 +22,7 @@ export const CreateProjectForm = () => {
     formState: { errors, isSubmitting },
     reset,
   } = useForm();
+  const { setProjects } = useProjectsData();
 
   return (
     <div>
@@ -46,7 +47,7 @@ export const CreateProjectForm = () => {
                 response
                   .json()
                   .then((data: Project) => {
-                    createProjectAction(data);
+                    setProjects((prevState) => [...prevState, data]);
                     reset();
                   })
                   .catch((error) => {
@@ -72,6 +73,24 @@ export const CreateProjectForm = () => {
               }
             })
             .catch((error) => {
+              if (process.env.NODE_ENV === "development") {
+                const proj = {
+                  kind: "project" as const,
+                  annotations: "string",
+                  createdAt: new Date().toString(),
+                  createdBy: "string",
+                  createdByName: "Eric",
+                  description: "description",
+                  externalLink: "",
+                  id: projectId,
+                  lastModified: new Date().toString(),
+                  lastModifiedByName: "Eric",
+                  title,
+                  workspaceId,
+                };
+                console.log("create on catch");
+                setProjects((prevState) => [...prevState, proj]);
+              }
               setApiErrorMessage(error.toString());
             });
         })}

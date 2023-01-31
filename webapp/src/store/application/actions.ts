@@ -1,8 +1,8 @@
-import { action } from "typesafe-actions";
-import { API_FETCH_APP, API_FETCH_APP_RESP } from "../../api";
 import { Dispatch } from "react";
-import { AllActions } from "..";
+import { action } from "typesafe-actions";
 import { v4 as uuid } from "uuid";
+import { AllActions } from "..";
+import { API_FETCH_APP_RESP } from "../../api";
 import type { MessageEntity, MessageType } from "../../components/Message";
 
 export enum AppActions {

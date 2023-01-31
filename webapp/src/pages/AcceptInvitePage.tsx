@@ -62,7 +62,7 @@ class AcceptInvitePage extends Component<Props, State> {
       return (
         <div className="p-2">
           {" "}
-          You are now a member of <b> {this.state.invite!.workspaceName}</b>!
+          You are now a member of <b> {this.state.invite?.workspaceName}</b>!
           Back to{" "}
           <Link className="link" to="/">
             Featmap
@@ -84,9 +84,9 @@ class AcceptInvitePage extends Component<Props, State> {
               </div>
             </div>
             <p>
-              The workspace name is <b>{this.state.invite!.workspaceName}</b>{" "}
+              The workspace name is <b>{this.state.invite?.workspaceName}</b>{" "}
               and you will join as{" "}
-              <b>{memberLevelToTitle(this.state.invite!.level)}</b>.
+              <b>{memberLevelToTitle(this.state.invite?.level)}</b>.
             </p>
 
             <div>

@@ -14,12 +14,11 @@ type PropsFromState = Record<string, never>;
 type PropsFromDispatch = Record<string, unknown>;
 
 type SelfProps = {
-  entity: EntityTypes;
+  entity?: EntityTypes;
   comments: IFeatureComment[];
   url: string;
   close: () => void;
   viewOnly: boolean;
-  demo: boolean;
 };
 
 type Props = PropsFromState & PropsFromDispatch & SelfProps;
@@ -40,10 +39,9 @@ class EntityDetailsModal extends Component<Props, State> {
   render() {
     const Body = class Body extends Component<{
       comments: IFeatureComment[];
-      demo: boolean;
       viewOnly: boolean;
       url: string;
-      card: EntityTypes;
+      card?: EntityTypes;
       close: () => void;
     }> {
       handleClickOutside = () => {
@@ -54,7 +52,6 @@ class EntityDetailsModal extends Component<Props, State> {
         return (
           <div className=" fm-max-dialog  w-full   max-w-5xl  overflow-y-auto ">
             <EntityDetailsBody
-              demo={this.props.demo}
               viewOnly={this.props.viewOnly}
               url={this.props.url}
               comments={this.props.comments}
@@ -74,7 +71,6 @@ class EntityDetailsModal extends Component<Props, State> {
         className="fixed top-0 left-0 z-0 flex h-full w-full  items-start bg-gray-100  p-5 text-sm"
       >
         <DialogWithClickOutside
-          demo={this.props.demo}
           comments={this.props.comments}
           viewOnly={this.props.viewOnly}
           url={this.props.url}

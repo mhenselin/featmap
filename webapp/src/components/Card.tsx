@@ -38,51 +38,54 @@ export const Card: React.FunctionComponent<Readonly<CardProps>> = (props) => {
   const filteredAnnotations = dbAnnotationsFromNames(annotations);
 
   return (
-    <div>
+    <div className="flex w-40 flex-col gap-2">
       <div
-        className={`flex w-36 shrink-0 flex-row overflow-hidden rounded-sm border border-l-4 bg-white text-xs ${colorToBorderColorClass(
+        className={`rounded border border-l-[6px] bg-white text-sm shadow ${colorToBorderColorClass(
           color
         )}`}
+        style={{ minHeight: "6rem" }}
       >
-        <Link className="flex grow flex-col" to={link}>
+        <Link to={link} className="flex h-full w-full flex-col gap-2 p-2">
           <div
-            className={`grow overflow-hidden p-2 font-normal ${
-              status === "CLOSED" ? "line-through" : ""
+            className={`break-words leading-4 ${
+              status === CardStatus.CLOSED ? "line-through" : ""
             }`}
+            title={title}
           >
             {title}
           </div>
 
-          <div className="flex flex-row p-2">
-            <CardFlag
-              shouldRender={nbrOfItems > 0}
-              text={`${nbrOfItems} items`}
-            />
-            <CardFlag
-              shouldRender={nbrOfComments > 0}
-              tooltip={`${nbrOfComments} comments`}
-              icon="chat_bubble_outline"
-              text={nbrOfComments}
-            />
-            <div className="flex grow"></div>
-            {filteredAnnotations.annotations.map((annotation, index) => (
+          {(nbrOfItems > 0 ||
+            nbrOfComments > 0 ||
+            filteredAnnotations.annotations.length > 0 ||
+            estimate > 0) && (
+            <div className="flex flex-wrap gap-1">
+              <CardFlag shouldRender={nbrOfItems > 0} text={`${nbrOfItems}`} />
               <CardFlag
-                key={index}
-                tooltip={annotation.description}
-                icon={annotation.icon}
+                shouldRender={nbrOfComments > 0}
+                tooltip={`${nbrOfComments} comments`}
+                icon="chat_bubble_outline"
+                text={nbrOfComments}
               />
-            ))}
-            <CardFlag
-              shouldRender={estimate > 0}
-              tooltip={"Size is " + estimate}
-              text={estimate}
-            />
-          </div>
+              {filteredAnnotations.annotations.map((annotation, index) => (
+                <CardFlag
+                  key={index}
+                  tooltip={annotation.description}
+                  icon={annotation.icon}
+                />
+              ))}
+              <CardFlag
+                shouldRender={estimate > 0}
+                tooltip={"Size is " + estimate}
+                text={estimate}
+              />
+            </div>
+          )}
         </Link>
       </div>
       {bottomAction && (
-        <div className="-mt-1 -mb-2 flex h-6 w-36 shrink-0 justify-center">
-          <div className="showme flex text-xl font-bold">{bottomAction}</div>
+        <div className="flex h-6 w-40 shrink-0 justify-center">
+          <div className="flex text-xl font-bold">{bottomAction}</div>
         </div>
       )}
     </div>

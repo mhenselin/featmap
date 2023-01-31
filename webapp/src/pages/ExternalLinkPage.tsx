@@ -1,11 +1,11 @@
-import queryString from "query-string";
-import { Component } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import { connect } from "react-redux";
 import type { RouteComponentProps } from "react-router";
 import { Link, Route, Switch } from "react-router-dom";
 import { API_GET_EXTERNAL_LINK, API_GET_PROJECT_RESP } from "../api";
 import Board from "../components/Board";
 import { Button } from "../components/elements";
+import { ProjectsDataProvider } from "../components/ProjectsContext";
 import { AppState } from "../store";
 import { Application } from "../store/application/types";
 import { loadFeatureCommentsAction } from "../store/featurecomments/actions";
@@ -26,8 +26,6 @@ import { IMilestone } from "../store/milestones/types";
 import { loadPersonasAction } from "../store/personas/actions";
 import { filterPersonasOnProject, personas } from "../store/personas/selectors";
 import { IPersona } from "../store/personas/types";
-import { loadProjectsAction } from "../store/projects/actions";
-import { getProjectById, projects } from "../store/projects/selectors";
 import { Project } from "../store/projects/types";
 import { loadSubWorkflowsAction } from "../store/subworkflows/actions";
 import { subWorkflows } from "../store/subworkflows/selectors";
@@ -47,7 +45,6 @@ import { IWorkflow } from "../store/workflows/types";
 import ExternalEntityDetailsPage from "./ExternalEntityDetailsPage";
 
 const mapDispatchToProps = {
-  loadProjects: loadProjectsAction,
   loadMilestones: loadMilestonesAction,
   loadWorkflows: loadWorkflowsAction,
   loadSubWorkflows: loadSubWorkflowsAction,
@@ -61,7 +58,6 @@ const mapStateToProps = (state: AppState) => ({
   application: state.application.application,
   features: features(state),
   featureComments: featureComments(state),
-  projects: projects(state),
   milestones: milestones(state),
   workflows: workflows(state),
   subWorkflows: subWorkflows(state),
@@ -73,7 +69,6 @@ type PropsFromState = {
   application: Application;
   features: IFeature[];
   featureComments: IFeatureComment[];
-  projects: Project[];
   milestones: IMilestone[];
   workflows: IWorkflow[];
   subWorkflows: ISubWorkflow[];
@@ -84,7 +79,6 @@ type RouterProps = RouteComponentProps<{
   key: string;
 }>;
 type PropsFromDispatch = {
-  loadProjects: typeof loadProjectsAction;
   loadMilestones: typeof loadMilestonesAction;
   loadWorkflows: typeof loadWorkflowsAction;
   loadSubWorkflows: typeof loadSubWorkflowsAction;
@@ -100,58 +94,59 @@ type State = {
   loading: boolean;
   projectId?: string;
   showClosedMilestones: boolean;
-  demo: boolean;
   showPersonas: boolean;
 };
 
-class ExternalLinkPage extends Component<Props, State> {
-  constructor(props: Props) {
-    super(props);
-    this.state = {
-      loading: true,
-      projectId: undefined,
-      showClosedMilestones: false,
-      demo: false,
-      showPersonas: false,
-    };
-  }
+const ExternalLinkPage: React.FunctionComponent<Readonly<Props>> = (props) => {
+  const [projectsData, setProjectsData] = useState<Array<Project>>([]);
+  const [state, setState] = useState<State>({
+    loading: true,
+    projectId: undefined,
+    showClosedMilestones: false,
+    showPersonas: false,
+  });
 
-  componentDidMount() {
-    const values = queryString.parse(this.props.location.search);
-    const demo = values.demo as string;
-    if (demo === "1") this.setState({ demo: true });
-
-    API_GET_EXTERNAL_LINK(this.props.match.params.key).then((response) => {
+  useEffect(() => {
+    API_GET_EXTERNAL_LINK(props.match.params.key).then((response) => {
       if (!response.ok) {
-        this.setState({ loading: false });
+        setState((prevState) => ({ ...prevState, loading: false }));
       } else {
         response.json().then((data: API_GET_PROJECT_RESP) => {
-          this.props.loadProjects([data.project]);
-          this.props.loadFeatures(data.features);
-          this.props.loadFeatureComments(data.featureComments);
-          this.props.loadMilestones(data.milestones);
-          this.props.loadWorkflows(data.workflows);
-          this.props.loadSubWorkflows(data.subWorkflows);
-          this.props.loadPersonas(data.personas);
-          this.props.loadWorkflowPersonas(data.workflowPersonas);
+          setProjectsData([data.project]);
+          props.loadFeatures(data.features);
+          props.loadFeatureComments(data.featureComments);
+          props.loadMilestones(data.milestones);
+          props.loadWorkflows(data.workflows);
+          props.loadSubWorkflows(data.subWorkflows);
+          props.loadPersonas(data.personas);
+          props.loadWorkflowPersonas(data.workflowPersonas);
 
-          this.setState({ projectId: data.project.id });
-          this.setState({ loading: false });
+          setState((prevState) => ({
+            ...prevState,
+            loading: false,
+            projectId: data.project?.id,
+          }));
         });
       }
     });
-  }
+  }, []);
 
-  render() {
-    if (this.state.loading) {
-      return <div className="p-2">Loading data...</div>;
-    } else if (this.state.projectId) {
-      const project = getProjectById(
-        this.props.projects,
-        this.state.projectId
-      )!;
+  const projectsProviderValue = useMemo(() => {
+    return {
+      projects: projectsData,
+      setProjects: setProjectsData,
+    };
+  }, [projectsData]);
 
-      return (
+  if (state.loading) {
+    return <div className="p-2">Loading data...</div>;
+  } else if (state.projectId) {
+    const project: Project | undefined = projectsData.find(
+      (project) => project.id === state.projectId
+    );
+
+    return (
+      <ProjectsDataProvider value={projectsProviderValue}>
         <div>
           <header className="text-black">
             <div className="flex items-center bg-gray-200 p-1">
@@ -166,7 +161,7 @@ class ExternalLinkPage extends Component<Props, State> {
             <div className="flex flex-row p-2 ">
               <div className="m-1 flex grow items-center text-xl">
                 <div className="flex">
-                  <span className="font-semibold">{project.title} </span>
+                  <span className="font-semibold">{project?.title} </span>
                 </div>
                 <div className="ml-2 flex">
                   <span className="bg-gray-200 p-1 text-xs font-semibold ">
@@ -174,14 +169,6 @@ class ExternalLinkPage extends Component<Props, State> {
                     VIEW ONLY{" "}
                   </span>
                 </div>
-                {this.state.demo && (
-                  <div className="ml-2 flex">
-                    <span className="bg-pink-400 p-1 text-xs font-semibold text-white ">
-                      {" "}
-                      DEMO MODE{" "}
-                    </span>
-                  </div>
-                )}
               </div>
               <div className="flex items-center">
                 <div className=" flex items-center  text-sm">
@@ -191,19 +178,25 @@ class ExternalLinkPage extends Component<Props, State> {
                       icon="person_outline"
                       noborder
                       handleOnClick={() =>
-                        this.setState({ showPersonas: true })
+                        setState((prevState) => ({
+                          ...prevState,
+                          showPersonas: true,
+                        }))
                       }
                     />
                   </div>
                   <div>
-                    {this.state.showClosedMilestones ? (
+                    {state.showClosedMilestones ? (
                       <Button
                         noborder
                         iconColor="text-green-500"
                         icon="toggle_on"
                         title="Show closed"
                         handleOnClick={() =>
-                          this.setState({ showClosedMilestones: false })
+                          setState((prevState) => ({
+                            ...prevState,
+                            showClosedMilestones: false,
+                          }))
                         }
                       />
                     ) : (
@@ -212,16 +205,17 @@ class ExternalLinkPage extends Component<Props, State> {
                         icon="toggle_off "
                         title="Show closed"
                         handleOnClick={() =>
-                          this.setState({ showClosedMilestones: true })
+                          setState((prevState) => ({
+                            ...prevState,
+                            showClosedMilestones: true,
+                          }))
                         }
                       />
                     )}
                   </div>
                 </div>
                 <div className="ml-4">
-                  <Link
-                    to={this.props.match.url + "/p/" + this.state.projectId}
-                  >
+                  <Link to={props.match.url + "/p/" + state.projectId}>
                     <i className="material-icons text-gray-600">settings</i>
                   </Link>
                 </div>
@@ -229,37 +223,43 @@ class ExternalLinkPage extends Component<Props, State> {
             </div>
             <div className="mt-2">
               <Board
-                showClosed={this.state.showClosedMilestones}
+                showClosed={state.showClosedMilestones}
                 viewOnly={true}
-                url={this.props.match.url}
-                features={this.props.features}
+                url={props.match.url}
+                features={props.features}
                 workflows={filterWorkflowsOnProject(
-                  this.props.workflows,
-                  project.id
+                  props.workflows,
+                  project?.id
                 )}
-                subWorkflows={this.props.subWorkflows}
+                subWorkflows={props.subWorkflows}
                 milestones={filterMilestonesOnProject(
-                  this.props.milestones,
-                  project.id
+                  props.milestones,
+                  project?.id
                 )}
-                projectId={project.id}
-                workspaceId={project.workspaceId}
-                demo={this.state.demo}
+                projectId={project?.id}
+                workspaceId={project?.workspaceId}
                 comments={filterFeatureCommentsOnProject(
-                  this.props.featureComments,
-                  project.id
+                  props.featureComments,
+                  project?.id
                 )}
-                personas={filterPersonasOnProject(
-                  this.props.personas,
-                  project.id
-                )}
+                personas={filterPersonasOnProject(props.personas, project?.id)}
                 workflowPersonas={filterWorkflowPersonasOnProject(
-                  this.props.workflowPersonas,
-                  project.id
+                  props.workflowPersonas,
+                  project?.id
                 )}
-                showPersonas={this.state.showPersonas}
-                closePersonas={() => this.setState({ showPersonas: false })}
-                openPersonas={() => this.setState({ showPersonas: true })}
+                showPersonas={state.showPersonas}
+                closePersonas={() =>
+                  setState((prevState) => ({
+                    ...prevState,
+                    showPersonas: false,
+                  }))
+                }
+                openPersonas={() =>
+                  setState((prevState) => ({
+                    ...prevState,
+                    showPersonas: true,
+                  }))
+                }
               />
             </div>
           </div>
@@ -268,46 +268,36 @@ class ExternalLinkPage extends Component<Props, State> {
             <Route exact path="/" component={() => null} />
             <Route
               exact
-              path={this.props.match.path + "/m/:milestoneId"}
-              render={(props: any) => (
-                <ExternalEntityDetailsPage {...props} demo={this.state.demo} />
-              )}
+              path={props.match.path + "/m/:milestoneId"}
+              component={ExternalEntityDetailsPage}
             />
             <Route
               exact
-              path={this.props.match.path + "/sw/:subWorkflowId"}
-              render={(props: any) => (
-                <ExternalEntityDetailsPage {...props} demo={this.state.demo} />
-              )}
+              path={props.match.path + "/sw/:subWorkflowId"}
+              component={ExternalEntityDetailsPage}
             />
             <Route
               exact
-              path={this.props.match.path + "/f/:featureId"}
-              render={(props: any) => (
-                <ExternalEntityDetailsPage {...props} demo={this.state.demo} />
-              )}
+              path={props.match.path + "/f/:featureId"}
+              component={ExternalEntityDetailsPage}
             />
             <Route
               exact
-              path={this.props.match.path + "/w/:workflowId"}
-              render={(props: any) => (
-                <ExternalEntityDetailsPage {...props} demo={this.state.demo} />
-              )}
+              path={props.match.path + "/w/:workflowId"}
+              component={ExternalEntityDetailsPage}
             />
             <Route
               exact
-              path={this.props.match.path + "/p/:projectId2"}
-              render={(props: any) => (
-                <ExternalEntityDetailsPage {...props} demo={this.state.demo} />
-              )}
+              path={props.match.path + "/p/:projectId2"}
+              component={ExternalEntityDetailsPage}
             />
           </Switch>
         </div>
-      );
-    } else {
-      return <div className="p-2">Project not found. </div>;
-    }
+      </ProjectsDataProvider>
+    );
+  } else {
+    return <div className="p-2">Project not found. </div>;
   }
-}
+};
 
 export default connect(mapStateToProps, mapDispatchToProps)(ExternalLinkPage);

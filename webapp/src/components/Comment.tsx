@@ -11,9 +11,8 @@ import { TimeAgo } from "./TimeAgo";
 
 type Props = {
   comment: IFeatureComment;
-  member: Membership;
+  member?: Membership;
   viewOnly: boolean;
-  demo: boolean;
   deleteComment: (id: string) => void;
   editComment: (comment: IFeatureComment, post: string) => void;
 };
@@ -35,10 +34,7 @@ class Comment extends Component<Props, State> {
   submitForm!: FormikProps<{ comment: string }>["submitForm"];
 
   render() {
-    const owner =
-      this.props.member === undefined
-        ? "demo" === this.props.comment.memberId
-        : this.props.member.id === this.props.comment.memberId;
+    const owner = this.props.member?.id === this.props.comment.memberId;
 
     return (
       <div>

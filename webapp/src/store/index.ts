@@ -1,4 +1,3 @@
-import * as fromProjects from "./projects/reducers";
 import * as fromFeatures from "./features/reducers";
 import * as fromFeatureComments from "./featurecomments/reducers";
 import * as fromWorkflows from "./workflows/reducers";
@@ -13,7 +12,6 @@ import { combineReducers } from "redux";
 import { Actions as ApplicationActions } from "./application/actions";
 import { Actions as FeaturesActions } from "./features/actions";
 import { Actions as MilestonesActions } from "./milestones/actions";
-import { Actions as ProjectsActions } from "./projects/actions";
 import {
   Actions as WorkflowsActions,
   Actions as SubworkflowsActions,
@@ -21,7 +19,6 @@ import {
 import { Actions as PersonaActions } from "./personas/actions";
 
 export type AppState = {
-  projects: fromProjects.State;
   features: fromFeatures.State;
   featureComments: fromFeatureComments.State;
   workflows: fromWorkflows.State;
@@ -34,7 +31,6 @@ export type AppState = {
 
 export const reducer = () =>
   combineReducers<AppState>({
-    projects: fromProjects.reducer,
     features: fromFeatures.reducer,
     featureComments: fromFeatureComments.reducer,
     workflows: fromWorkflows.reducer,
@@ -49,7 +45,6 @@ export type AllActions =
   | ApplicationActions
   | FeaturesActions
   | MilestonesActions
-  | ProjectsActions
   | WorkflowsActions
   | SubworkflowsActions
   | PersonaActions;

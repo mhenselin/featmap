@@ -16,18 +16,18 @@ import {
 
 export const Projects = () => {
   const applicationData = useApplicationData();
-  const projectsData = useProjectsData();
+  const { projects } = useProjectsData();
   const workspaceName = useWorkspaceName();
-  const workspace = getWorkspaceByName(applicationData, workspaceName)!;
-  const member = getMembership(applicationData, workspace.id);
-  const canCreateProjects = member.level !== Roles.VIEWER;
+  const workspace = getWorkspaceByName(applicationData, workspaceName);
+  const member = getMembership(applicationData, workspace?.id);
+  const canCreateProjects = member?.level !== Roles.VIEWER;
 
   return (
     <ListWithSidebarLayout
       headline="Projects"
       sidebar={canCreateProjects && <CreateProjectForm />}
     >
-      {projectsData.map((project) => {
+      {projects.map((project) => {
         return (
           <ListCard key={project.id}>
             <Headline level={2}>

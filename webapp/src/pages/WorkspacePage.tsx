@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import { useRouteMatch } from "react-router";
 import { Route, Switch } from "react-router-dom";
 import { API_GET_PROJECTS } from "../api";
@@ -15,7 +15,7 @@ import ProjectPage from "./ProjectPage";
 import { Projects } from "./Projects";
 import WorkspaceSettingsPage from "./WorkspaceSettingsPage";
 
-export const WorkspacePage = () => {
+export const WorkspacePage: React.FunctionComponent = () => {
   const [isLoading, setLoadingState] = useState(true);
   const [projectsData, setProjectsData] = useState<Array<Project>>([]);
   const { params } = useRouteMatch<{ workspaceName: string }>();
@@ -47,42 +47,52 @@ export const WorkspacePage = () => {
         }
       })
       .catch((error) => {
-        console.log(error);
-        if (process.env.NODE_ENV === "production") {
-          setApiErrorMessage(error.toString());
-        } else {
-          setProjectsData([
+        if (process.env.NODE_ENV === "development") {
+          const data = [
             {
-              kind: "project",
-              workspaceId: "123-uuid-123",
-              id: "111-uuid-222",
+              kind: "project" as const,
+              workspaceId: "workspaceid",
+              id: "projectid",
               title: "My awesome project title",
               description: "Lorem, ipsum dolor sit aipsam voluptatum id quis?",
               createdAt: new Date("2022-10-27").toString(),
               createdBy: "333-uuid-333",
               createdByName: "Creators Name",
-              lastModified: new Date(new Date().getTime() - 3600000).toString(),
+              lastModified: new Date(
+                new Date().getTime() - 3_600_000
+              ).toString(),
               lastModifiedByName: "Editors Name",
               externalLink: "link_ok",
               annotations: "whatever",
             },
-          ]);
+          ];
+          console.log("reset");
+          setProjectsData(() => data);
+        } else {
+          setApiErrorMessage(error.toString());
         }
         setLoadingState(false);
       });
   }, [currentWorkspace?.id]);
 
+  const projectsProviderValue = useMemo(() => {
+    return {
+      projects: projectsData,
+      setProjects: setProjectsData,
+    };
+  }, [projectsData]);
+
   if (isLoading) {
     return (
       <OneColumnLayout>
-        <Loading />
+        <Loading label="available projects" />
       </OneColumnLayout>
     );
   }
 
   return (
     <WorkspaceNameProvider value={params.workspaceName}>
-      <ProjectsDataProvider value={projectsData}>
+      <ProjectsDataProvider value={projectsProviderValue}>
         <OneColumnLayout workspaceName={params.workspaceName}>
           {apiErrorMessage && (
             <div className="mb-4">

@@ -10,7 +10,5 @@ export const application = createSelector([getApplicationState], (s) => {
 
 export const getWorkspaceByName = (s: Application, name: string) =>
   s.workspaces.find((x) => x.name === name);
-export const getMembership = (s: Application, workspaceId: string) =>
-  s.memberships.find((x) => x.workspaceId === workspaceId)!;
-export const getSubscription = (s: Application, workspaceId: string) =>
-  s.subscriptions.find((x) => x.workspaceId === workspaceId)!;
+export const getMembership = (s: Application, workspaceId?: string) =>
+  s.memberships.find((x) => x.workspaceId === workspaceId);

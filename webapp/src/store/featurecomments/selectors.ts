@@ -26,7 +26,7 @@ export const filterFeatureCommentsOnFeature = (
 
 export const filterFeatureCommentsOnProject = (
   ff: IFeatureComment[],
-  projectId: string
+  projectId?: string
 ) => {
   return ff.filter((f) => f.projectId === projectId);
 };

@@ -18,37 +18,31 @@ import {
 import { EntityTypes } from "../core/card";
 import { AppState } from "../store";
 import { application } from "../store/application/selectors";
-import { Application } from "../store/application/types";
+import type { Application } from "../store/application/types";
 import {
   createFeatureAction,
   deleteFeatureAction,
   updateFeatureAction,
 } from "../store/features/actions";
-import { IFeature } from "../store/features/types";
+import type { IFeature } from "../store/features/types";
 import {
   createMilestoneAction,
   deleteMilestoneAction,
   updateMilestoneAction,
 } from "../store/milestones/actions";
-import { IMilestone } from "../store/milestones/types";
-import {
-  createProjectAction,
-  deleteProjectAction,
-  updateProjectAction,
-} from "../store/projects/actions";
-import { Project } from "../store/projects/types";
+import type { IMilestone } from "../store/milestones/types";
 import {
   createSubWorkflowAction,
   deleteSubWorkflowAction,
   updateSubWorkflowAction,
 } from "../store/subworkflows/actions";
-import { ISubWorkflow } from "../store/subworkflows/types";
+import type { ISubWorkflow } from "../store/subworkflows/types";
 import {
   createWorkflowAction,
   deleteWorkflowAction,
   updateWorkflowAction,
 } from "../store/workflows/actions";
-import { IWorkflow } from "../store/workflows/types";
+import type { IWorkflow } from "../store/workflows/types";
 
 const mapStateToProps = (state: AppState) => ({
   application: application(state),
@@ -67,9 +61,6 @@ const mapDispatchToProps = {
   updateFeature: updateFeatureAction,
   createFeature: createFeatureAction,
   deleteFeature: deleteFeatureAction,
-  updateProject: updateProjectAction,
-  createProject: createProjectAction,
-  deleteProject: deleteProjectAction,
 };
 
 type PropsFromState = {
@@ -89,18 +80,14 @@ type PropsFromDispatch = {
   updateFeature: typeof updateFeatureAction;
   createFeature: typeof createFeatureAction;
   deleteFeature: typeof deleteFeatureAction;
-  updateProject: typeof updateProjectAction;
-  createProject: typeof createProjectAction;
-  deleteProject: typeof deleteProjectAction;
 };
 
 type SelfProps = {
-  card: EntityTypes;
+  card?: EntityTypes;
   app: Application;
   url: string;
   close: () => void;
   viewOnly: boolean;
-  demo: boolean;
 };
 type Props = PropsFromState & PropsFromDispatch & SelfProps;
 
@@ -127,33 +114,30 @@ class EntityDetailsTitle extends Component<Props, State> {
     values: { title: string },
     actions: FormikActions<{ title: string }>
   ) => {
-    switch (this.props.card.kind) {
+    switch (this.props.card?.kind) {
       case "project": {
         const optimistic = this.props.card;
         optimistic.title = values.title;
         optimistic.lastModified = new Date().toISOString();
-        optimistic.lastModifiedByName =
-          this.props.app.account === undefined
-            ? "demo"
-            : this.props.app.account!.name;
+        optimistic.lastModifiedByName = this.props.app.account?.name ?? "";
 
-        this.props.updateProject(optimistic);
+        // @TODO
+        // this.props.updateProject(optimistic);
 
-        if (!this.props.demo) {
-          API_RENAME_PROJECT(
-            this.props.card.workspaceId,
-            this.props.card.id,
-            values.title
-          ).then((response) => {
-            if (response.ok) {
-              response.json().then((data: Project) => {
-                this.props.updateProject(data);
-              });
-            } else {
-              alert("Something went wrong when trying to rename.");
-            }
-          });
-        }
+        API_RENAME_PROJECT(
+          this.props.card.workspaceId,
+          this.props.card.id,
+          values.title
+        ).then((response) => {
+          if (response.ok) {
+            // @todo
+            // response.json().then((_data: Project) => {
+            //   this.props.updateProject(data);
+            // });
+          } else {
+            alert("Something went wrong when trying to rename.");
+          }
+        });
         break;
       }
 
@@ -161,28 +145,23 @@ class EntityDetailsTitle extends Component<Props, State> {
         const optimistic = this.props.card;
         optimistic.title = values.title;
         optimistic.lastModified = new Date().toISOString();
-        optimistic.lastModifiedByName =
-          this.props.app.account === undefined
-            ? "demo"
-            : this.props.app.account!.name;
+        optimistic.lastModifiedByName = this.props.app.account?.name ?? "";
 
         this.props.updateMilestone(optimistic);
 
-        if (!this.props.demo) {
-          API_RENAME_MILESTONE(
-            this.props.card.workspaceId,
-            this.props.card.id,
-            values.title
-          ).then((response) => {
-            if (response.ok) {
-              response.json().then((data: IMilestone) => {
-                this.props.updateMilestone(data);
-              });
-            } else {
-              alert("Something went wrong when trying to rename.");
-            }
-          });
-        }
+        API_RENAME_MILESTONE(
+          this.props.card.workspaceId,
+          this.props.card.id,
+          values.title
+        ).then((response) => {
+          if (response.ok) {
+            response.json().then((data: IMilestone) => {
+              this.props.updateMilestone(data);
+            });
+          } else {
+            alert("Something went wrong when trying to rename.");
+          }
+        });
         break;
       }
 
@@ -190,28 +169,23 @@ class EntityDetailsTitle extends Component<Props, State> {
         const optimistic = this.props.card;
         optimistic.title = values.title;
         optimistic.lastModified = new Date().toISOString();
-        optimistic.lastModifiedByName =
-          this.props.app.account === undefined
-            ? "demo"
-            : this.props.app.account!.name;
+        optimistic.lastModifiedByName = this.props.app.account?.name ?? "";
 
         this.props.updateSubWorkflow(optimistic);
 
-        if (!this.props.demo) {
-          API_RENAME_SUBWORKFLOW(
-            this.props.card.workspaceId,
-            this.props.card.id,
-            values.title
-          ).then((response) => {
-            if (response.ok) {
-              response.json().then((data: ISubWorkflow) => {
-                this.props.updateSubWorkflow(data);
-              });
-            } else {
-              alert("Something went wrong when trying to rename.");
-            }
-          });
-        }
+        API_RENAME_SUBWORKFLOW(
+          this.props.card.workspaceId,
+          this.props.card.id,
+          values.title
+        ).then((response) => {
+          if (response.ok) {
+            response.json().then((data: ISubWorkflow) => {
+              this.props.updateSubWorkflow(data);
+            });
+          } else {
+            alert("Something went wrong when trying to rename.");
+          }
+        });
         break;
       }
 
@@ -219,28 +193,23 @@ class EntityDetailsTitle extends Component<Props, State> {
         const optimistic = this.props.card;
         optimistic.title = values.title;
         optimistic.lastModified = new Date().toISOString();
-        optimistic.lastModifiedByName =
-          this.props.app.account === undefined
-            ? "demo"
-            : this.props.app.account!.name;
+        optimistic.lastModifiedByName = this.props.app.account?.name ?? "";
 
         this.props.updateWorkflow(optimistic);
 
-        if (!this.props.demo) {
-          API_RENAME_WORKFLOW(
-            this.props.card.workspaceId,
-            this.props.card.id,
-            values.title
-          ).then((response) => {
-            if (response.ok) {
-              response.json().then((data: IWorkflow) => {
-                this.props.updateWorkflow(data);
-              });
-            } else {
-              alert("Something went wrong when trying to rename.");
-            }
-          });
-        }
+        API_RENAME_WORKFLOW(
+          this.props.card.workspaceId,
+          this.props.card.id,
+          values.title
+        ).then((response) => {
+          if (response.ok) {
+            response.json().then((data: IWorkflow) => {
+              this.props.updateWorkflow(data);
+            });
+          } else {
+            alert("Something went wrong when trying to rename.");
+          }
+        });
         break;
       }
 
@@ -248,28 +217,23 @@ class EntityDetailsTitle extends Component<Props, State> {
         const optimistic = this.props.card;
         optimistic.title = values.title;
         optimistic.lastModified = new Date().toISOString();
-        optimistic.lastModifiedByName =
-          this.props.app.account === undefined
-            ? "demo"
-            : this.props.app.account!.name;
+        optimistic.lastModifiedByName = this.props.app.account?.name ?? "";
 
         this.props.updateFeature(optimistic);
 
-        if (!this.props.demo) {
-          API_RENAME_FEATURE(
-            this.props.card.workspaceId,
-            this.props.card.id,
-            values.title
-          ).then((response) => {
-            if (response.ok) {
-              response.json().then((data: IFeature) => {
-                this.props.updateFeature(data);
-              });
-            } else {
-              alert("Something went wrong when trying to rename.");
-            }
-          });
-        }
+        API_RENAME_FEATURE(
+          this.props.card.workspaceId,
+          this.props.card.id,
+          values.title
+        ).then((response) => {
+          if (response.ok) {
+            response.json().then((data: IFeature) => {
+              this.props.updateFeature(data);
+            });
+          } else {
+            alert("Something went wrong when trying to rename.");
+          }
+        });
         break;
       }
 
@@ -283,12 +247,12 @@ class EntityDetailsTitle extends Component<Props, State> {
 
   render() {
     let closed = false;
-    switch (this.props.card.kind) {
+    switch (this.props.card?.kind) {
       case "milestone":
       case "subworkflow":
       case "workflow":
       case "feature": {
-        closed = this.props.card.status === "CLOSED";
+        closed = this.props.card?.status === "CLOSED";
         break;
       }
       default:
@@ -298,7 +262,7 @@ class EntityDetailsTitle extends Component<Props, State> {
     return (
       <div className=" w-full self-start  ">
         <Formik
-          initialValues={{ title: this.props.card.title }}
+          initialValues={{ title: this.props.card?.title ?? "" }}
           validationSchema={Yup.object().shape({
             title: Yup.string()
               .min(1, "Minimum 1 characters.")
@@ -348,14 +312,14 @@ class EntityDetailsTitle extends Component<Props, State> {
                     {this.props.viewOnly || closed ? (
                       <span className={closed ? "line-through" : ""}>
                         {" "}
-                        {this.props.card.title}
+                        {this.props.card?.title}
                       </span>
                     ) : (
                       <button
                         className="text-left"
                         onClick={() => this.setState({ edit: true })}
                       >
-                        {this.props.card.title}
+                        {this.props.card?.title}
                       </button>
                     )}
                   </div>

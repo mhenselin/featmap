@@ -6,15 +6,9 @@ import { Loading } from "../components/Loading";
 import { OneColumnLayout } from "../components/OneColumnLayout";
 import { resetAppAction } from "../store/application/actions";
 
-const mapDispatchToProps = {
-  resetApp: resetAppAction,
-};
-
-type PropsFromDispatch = {
+type Props = {
   resetApp: typeof resetAppAction;
 };
-
-type Props = PropsFromDispatch;
 
 export const Logout: React.FunctionComponent<Readonly<Props>> = (props) => {
   const { resetApp } = props;
@@ -36,4 +30,6 @@ export const Logout: React.FunctionComponent<Readonly<Props>> = (props) => {
   );
 };
 
-export default connect(null, mapDispatchToProps)(Logout);
+export default connect(null, {
+  resetApp: resetAppAction,
+})(Logout);

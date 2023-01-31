@@ -16,12 +16,12 @@ export const sortMilestones = (mm: IMilestone[]) => {
 };
 
 export const getMilestone = (ff: IMilestone[], id: string) => {
-  return ff.find((f) => f.id === id)!;
+  return ff.find((f) => f.id === id);
 };
 
 export const filterMilestonesOnProject = (
   ff: IMilestone[],
-  projectId: string
+  projectId?: string
 ) => {
   return ff.filter((f) => f.projectId === projectId);
 };

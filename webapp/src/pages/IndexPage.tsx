@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { connect } from "react-redux";
 import { Redirect, Route, Switch, useHistory } from "react-router-dom";
 import { API_FETCH_APP, API_FETCH_APP_RESP } from "../api";
 import { ApplicationDataProvider } from "../components/ApplicationContext";
@@ -6,6 +7,7 @@ import { Error } from "../components/Error";
 import { Loading } from "../components/Loading";
 import { OneColumnLayout } from "../components/OneColumnLayout";
 import { Roles, SubscriptionLevels } from "../core/misc";
+import { AppState } from "../store";
 import { receiveAppAction } from "../store/application/actions";
 import { Application } from "../store/application/types";
 import AccountPage from "./AccountPage";
@@ -13,7 +15,12 @@ import NotFound from "./NotFound";
 import { WorkspacePage } from "./WorkspacePage";
 import { Workspaces } from "./Workspaces";
 
-export const Internal = () => {
+type Props = {
+  initApp: typeof receiveAppAction;
+};
+
+const IndexPage: React.FunctionComponent<Readonly<Props>> = (props) => {
+  const { initApp } = props;
   const [applicationData, setApplicationData] = useState<Application>({
     memberships: [],
     messages: [],
@@ -30,7 +37,7 @@ export const Internal = () => {
         if (response.ok) {
           response.json().then((data: API_FETCH_APP_RESP) => {
             setApplicationData(data);
-            receiveAppAction(data);
+            initApp(data); // @TODO remove at some point
             setLoadingState(false);
           });
         } else {
@@ -53,9 +60,9 @@ export const Internal = () => {
             },
             memberships: [
               {
-                id: "string",
-                workspaceId: "string",
-                accountId: "string",
+                id: "memberid",
+                workspaceId: "workspaceid",
+                accountId: "1",
                 level: Roles.OWNER,
                 name: "string",
                 email: "string",
@@ -65,51 +72,54 @@ export const Internal = () => {
             messages: [],
             subscriptions: [
               {
-                id: "string",
-                workspaceId: "string",
+                id: "subscriptionid",
+                workspaceId: "workspaceid",
                 level: SubscriptionLevels.TRIAL,
                 numberOfEditors: 1,
-                fromDate: "string",
-                expirationDate: new Date("2022-10-30").toString(),
-                createdByName: "string",
-                createdAt: "string",
-                lastModified: "string",
-                lastModifiedByName: "string",
+                fromDate: new Date().toString(),
+                expirationDate: new Date("2024-10-30").toString(),
+                createdByName: "Eric",
+                createdAt: new Date("2022-10-30").toString(),
+                lastModified: new Date().toString(),
+                lastModifiedByName: "Eric",
                 externalStatus: "trialing",
-                externalPlanId: "string",
+                externalPlanId: "externalPlanId",
               },
             ],
             workspaces: [
               {
-                id: "string",
+                id: "workspaceid",
                 name: "fakeboard",
-                createdAt: String(new Date()),
+                createdAt: new Date().toString(),
                 allowExternalSharing: false,
-                euVat: "string",
-                externalBillingEmail: "string",
+                euVat: "19",
+                externalBillingEmail: "email@example.com",
                 status: "string",
               },
             ],
           };
           setApplicationData(data);
+          initApp(data);
           receiveAppAction(data);
         }
         setLoadingState(false);
       });
-  }, [push]);
+  }, [push, initApp]);
 
   if (isLoading) {
     return (
       <OneColumnLayout>
-        <Loading />
+        <Loading label="application data" />
       </OneColumnLayout>
     );
   }
 
   if (apiErrorMessage) {
-    <OneColumnLayout>
-      <Error message={apiErrorMessage} />
-    </OneColumnLayout>;
+    return (
+      <OneColumnLayout>
+        <Error message={apiErrorMessage} />
+      </OneColumnLayout>
+    );
   }
 
   if (!applicationData.account) {
@@ -141,3 +151,10 @@ export const Internal = () => {
     </ApplicationDataProvider>
   );
 };
+
+export const Internal = connect(
+  (state: AppState) => ({
+    app: state.application,
+  }),
+  { initApp: receiveAppAction }
+)(IndexPage);

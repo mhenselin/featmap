@@ -39,5 +39,5 @@ export const filterFeaturesOnMilestone = (
 };
 
 export const getFeature = (ff: IFeature[], id: string) => {
-  return ff.find((f) => f.id === id)!;
+  return ff.find((f) => f.id === id);
 };

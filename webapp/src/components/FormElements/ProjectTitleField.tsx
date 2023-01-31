@@ -16,7 +16,7 @@ export const ProjectTitleField: FormFieldComponent = (props) => {
             "Your porject title exceeds the maximum length of 200 characters. Please shorten the project title.",
         },
       })}
-      placeholder="you@website.com"
+      placeholder="Neti Pot Manufacturer"
       error={errors.name}
     />
   );

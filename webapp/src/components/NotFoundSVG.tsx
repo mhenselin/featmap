@@ -7,7 +7,6 @@ export const NotFoundSVG = () => (
     height={600}
     fill="none"
     baselineShift={0}
-    className="gridItem__media"
     color="#3d3d3d"
     colorInterpolation="srgb"
     colorInterpolationFilters="linearRGB"

@@ -108,9 +108,8 @@ type PropsFromDispatch = {
 type SelfProps = {
   action: Actions;
   workspaceId: string;
-  projectId: string;
+  projectId?: string;
   close: () => void;
-  demo: boolean;
 };
 type Props = PropsFromState & PropsFromDispatch & SelfProps;
 
@@ -165,7 +164,7 @@ class CreateCardModal extends Component<Props, State> {
                       kind: "workflow",
                       id: id,
                       workspaceId: parentProps.workspaceId,
-                      projectId: parentProps.projectId,
+                      projectId: parentProps.projectId ?? "",
                       rank: "",
                       title: values.title,
                       description: "",
@@ -175,21 +174,17 @@ class CreateCardModal extends Component<Props, State> {
                           ? ""
                           : parentProps.application.account.id,
                       createdByName:
-                        parentProps.application.account === undefined
-                          ? "demo"
-                          : parentProps.application.account.name,
+                        parentProps.application.account?.name ?? "",
                       lastModified: t,
                       lastModifiedByName:
-                        parentProps.application.account === undefined
-                          ? "demo"
-                          : parentProps.application.account.name,
+                        parentProps.application.account?.name ?? "",
                       color: Color.WHITE,
                       status: CardStatus.OPEN,
                       annotations: "",
                     };
                     parentProps.createWorkflow(optimisticWorkflow);
 
-                    if (!parentProps.demo) {
+                    if (parentProps.projectId) {
                       API_CREATE_WORKFLOW(
                         parentProps.workspaceId,
                         parentProps.projectId,
@@ -217,7 +212,7 @@ class CreateCardModal extends Component<Props, State> {
                       kind: "milestone",
                       id: id,
                       workspaceId: parentProps.workspaceId,
-                      projectId: parentProps.projectId,
+                      projectId: parentProps.projectId ?? "",
                       rank: "",
                       title: values.title,
                       description: "",
@@ -228,20 +223,16 @@ class CreateCardModal extends Component<Props, State> {
                           ? ""
                           : parentProps.application.account.id,
                       createdByName:
-                        parentProps.application.account === undefined
-                          ? "demo"
-                          : parentProps.application.account.name,
+                        parentProps.application.account?.name ?? "",
                       lastModified: t,
                       lastModifiedByName:
-                        parentProps.application.account === undefined
-                          ? "demo"
-                          : parentProps.application.account.name,
+                        parentProps.application.account?.name ?? "",
                       color: Color.NONE,
                       annotations: "",
                     };
                     parentProps.createMilestone(optimisticMilestone);
 
-                    if (!parentProps.demo) {
+                    if (parentProps.projectId) {
                       API_CREATE_MILESTONE(
                         parentProps.workspaceId,
                         parentProps.projectId,
@@ -281,36 +272,30 @@ class CreateCardModal extends Component<Props, State> {
                           ? ""
                           : parentProps.application.account.id,
                       createdByName:
-                        parentProps.application.account === undefined
-                          ? "demo"
-                          : parentProps.application.account.name,
+                        parentProps.application.account?.name ?? "",
                       lastModified: t,
                       lastModifiedByName:
-                        parentProps.application.account === undefined
-                          ? "demo"
-                          : parentProps.application.account.name,
+                        parentProps.application.account?.name ?? "",
                       color: Color.NONE,
                       status: CardStatus.OPEN,
                       annotations: "",
                     };
                     parentProps.createSubWorkflow(optimisticSubMilestone);
 
-                    if (!parentProps.demo) {
-                      API_CREATE_SUBWORKFLOW(
-                        parentProps.workspaceId,
-                        workflowId,
-                        id,
-                        values.title
-                      ).then((response) => {
-                        if (response.ok) {
-                          response.json().then((data: ISubWorkflow) => {
-                            parentProps.updateSubWorkflow(data);
-                          });
-                        } else {
-                          parentProps.deleteSubWorkflow(id);
-                        }
-                      });
-                    }
+                    API_CREATE_SUBWORKFLOW(
+                      parentProps.workspaceId,
+                      workflowId,
+                      id,
+                      values.title
+                    ).then((response) => {
+                      if (response.ok) {
+                        response.json().then((data: ISubWorkflow) => {
+                          parentProps.updateSubWorkflow(data);
+                        });
+                      } else {
+                        parentProps.deleteSubWorkflow(id);
+                      }
+                    });
                     this.props.close();
                     actions.setSubmitting(false);
                     break;
@@ -335,37 +320,31 @@ class CreateCardModal extends Component<Props, State> {
                           ? ""
                           : parentProps.application.account.id,
                       createdByName:
-                        parentProps.application.account === undefined
-                          ? "demo"
-                          : parentProps.application.account.name,
+                        parentProps.application.account?.name ?? "",
                       lastModified: t,
                       lastModifiedByName:
-                        parentProps.application.account === undefined
-                          ? "demo"
-                          : parentProps.application.account.name,
+                        parentProps.application.account?.name ?? "",
                       color: Color.NONE,
                       annotations: "",
                       estimate: 0,
                     };
                     parentProps.createFeature(optimisticFeature);
 
-                    if (!parentProps.demo) {
-                      API_CREATE_FEATURE(
-                        parentProps.workspaceId,
-                        milestoneId,
-                        subWorkflowId,
-                        id,
-                        values.title
-                      ).then((response) => {
-                        if (response.ok) {
-                          response.json().then((data: IFeature) => {
-                            parentProps.updateFeature(data);
-                          });
-                        } else {
-                          parentProps.deleteFeature(id);
-                        }
-                      });
-                    }
+                    API_CREATE_FEATURE(
+                      parentProps.workspaceId,
+                      milestoneId,
+                      subWorkflowId,
+                      id,
+                      values.title
+                    ).then((response) => {
+                      if (response.ok) {
+                        response.json().then((data: IFeature) => {
+                          parentProps.updateFeature(data);
+                        });
+                      } else {
+                        parentProps.deleteFeature(id);
+                      }
+                    });
                     this.props.close();
                     actions.setSubmitting(false);
                     break;

@@ -1,3 +1,5 @@
+import { Tag } from "./Tag";
+
 type StatusProps = {
   tooltip?: string;
   icon?: string;
@@ -11,13 +13,13 @@ export const CardFlag: React.FunctionComponent<StatusProps> = (props) => {
   if (!shouldRender) return null;
 
   return (
-    <div className="whitespace-nowrap bg-gray-200" title={tooltip}>
+    <Tag tooltip={tooltip}>
       {icon && (
-        <i className="material-icons mr-1.5 align-middle text-gray-700">
+        <i className="material-icons align-middle text-base text-gray-700">
           {icon}
         </i>
       )}
       {text}
-    </div>
+    </Tag>
   );
 };

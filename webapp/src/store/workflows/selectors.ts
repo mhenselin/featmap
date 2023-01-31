@@ -16,12 +16,12 @@ export const sortWorkflows = (mm: IWorkflow[]) => {
 };
 
 export const getWorkflow = (ff: IWorkflow[], id: string) => {
-  return ff.find((f) => f.id === id)!;
+  return ff.find((f) => f.id === id);
 };
 
 export const filterWorkflowsOnProject = (
   ff: IWorkflow[],
-  projectId: string
+  projectId?: string
 ) => {
   return ff.filter((f) => f.projectId === projectId);
 };

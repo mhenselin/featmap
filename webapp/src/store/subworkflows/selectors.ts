@@ -16,7 +16,7 @@ export const sortSubWorkflows = (mm: ISubWorkflow[]) => {
 };
 
 export const getSubWorkflow = (xx: ISubWorkflow[], id: string) => {
-  return xx.find((f) => f.id === id)!;
+  return xx.find((f) => f.id === id);
 };
 
 export const getSubWorkflowByWorkflow = (xx: ISubWorkflow[], id: string) => {

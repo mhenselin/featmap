@@ -81,7 +81,14 @@ export function reducer(state: State = initialState, action: Actions) {
       const { id, toMilestoneId, toSubWorkflowId, index, ts, by } =
         action.payload;
 
-      const f = getFeature(state.items, id);
+      const f = getFeature(state.items, id) ?? {
+        id: undefined,
+        milestoneId: undefined,
+        subWorkflowId: undefined,
+        rank: undefined,
+        lastModified: undefined,
+        lastModifiedByName: undefined,
+      };
       let ff = sortFeatures(
         filterFeaturesOnMilestoneAndSubWorkflow(
           state.items,

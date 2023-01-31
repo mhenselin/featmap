@@ -1,12 +1,12 @@
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { API_CREATE_WORKSPACE } from "../api";
-import { createProjectAction } from "../store/projects/actions";
 import { Project } from "../store/projects/types";
 import { Button } from "./Button";
 import { Error } from "./Error";
 import { WorkspaceNameField } from "./FormElements/WorkspaceNameField";
 import { Headline } from "./Headline";
+import { useProjectsData } from "./ProjectsContext";
 
 export const CreateWorkspaceForm = () => {
   const [apiErrorMessage, setApiErrorMessage] = useState<null | string>(null);
@@ -16,6 +16,8 @@ export const CreateWorkspaceForm = () => {
     formState: { errors, isSubmitting },
     reset,
   } = useForm();
+
+  const { setProjects } = useProjectsData();
 
   return (
     <div>
@@ -28,7 +30,7 @@ export const CreateWorkspaceForm = () => {
                 response
                   .json()
                   .then((data: Project) => {
-                    createProjectAction(data);
+                    setProjects((prevState) => [...prevState, data]);
                     reset();
                   })
                   .catch((error) => {

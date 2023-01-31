@@ -62,7 +62,14 @@ export function reducer(state: State = initialState, action: Actions) {
 
     case ActionTypes.MOVE_SUBWORKFLOW: {
       const p = action.payload;
-      const m = getSubWorkflow(state.items, p.id);
+      const m = getSubWorkflow(state.items, p.id) ?? {
+        projectId: undefined,
+        id: undefined,
+        rank: undefined,
+        lastModified: undefined,
+        lastModifiedByName: undefined,
+        workflowId: undefined,
+      };
       const ff = sortSubWorkflows(
         getSubWorkflowByWorkflow(state.items, p.toWorkflowId)
       ).filter((x) => x.id !== m.id);

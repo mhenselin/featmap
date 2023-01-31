@@ -15,12 +15,12 @@ export const filterWorkflowPersonasOnWorkflow = (
   ff: IWorkflowPersona[],
   id: string
 ) => {
-  return ff.filter((f) => f.workflowId === id)!;
+  return ff.filter((f) => f.workflowId === id);
 };
 
 export const filterWorkflowPersonasOnProject = (
   ff: IWorkflowPersona[],
-  projectId: string
+  projectId?: string
 ) => {
   return ff.filter((f) => f.projectId === projectId);
 };

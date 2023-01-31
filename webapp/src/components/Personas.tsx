@@ -78,9 +78,8 @@ type PropsFromDispatch = {
 type SelfProps = {
   personas: IPersona[];
   workspaceId: string;
-  projectId: string;
+  projectId?: string;
   close: () => void;
-  demo: boolean;
   pageState: personaBarState;
   setPageState: (s: personaBarState) => void;
   viewOnly: boolean;
@@ -104,14 +103,13 @@ class Personas extends Component<Props, State> {
     document.addEventListener("keydown", this.keydownHandler, false);
   }
 
-  handleDeletePersona(personaId: string) {
+  handleDeletePersona(personaId?: string) {
     this.props.setPageState({ page: "all" });
-    this.props.deletePersona(personaId);
+    if (personaId) {
+      this.props.deletePersona(personaId);
 
-    if (!this.props.demo) {
       API_DELTE_PERSONA(this.props.workspaceId, personaId).then((response) => {
-        if (response.ok) {
-        } else {
+        if (!response.ok) {
           alert("something went wrong when deleting persona");
         }
       });
@@ -147,7 +145,7 @@ class Personas extends Component<Props, State> {
                   case "all":
                     return (
                       <div>
-                        {(!parent.props.viewOnly || parent.props.demo) && (
+                        {!parent.props.viewOnly && (
                           <div className="mb-2 font-medium underline">
                             <DarkButton
                               primary
@@ -193,7 +191,7 @@ class Personas extends Component<Props, State> {
                   case "persona":
                     const p = getPersona(
                       parentProps.personas,
-                      parent.props.pageState.personaId
+                      parent.props.pageState?.personaId
                     );
 
                     type form = {
@@ -208,10 +206,10 @@ class Personas extends Component<Props, State> {
                         {parent.props.pageState.edit ? (
                           <Formik
                             initialValues={{
-                              avatar: p.avatar,
-                              name: p.name,
-                              role: p.role,
-                              description: p.description,
+                              avatar: p?.avatar ?? "avatar00",
+                              name: p?.name ?? "",
+                              role: p?.role ?? "",
+                              description: p?.description ?? "",
                             }}
                             validationSchema={Yup.object().shape({
                               avatar: Yup.string().required("Required."),
@@ -232,20 +230,20 @@ class Personas extends Component<Props, State> {
                               values: form,
                               actions: FormikHelpers<form>
                             ) => {
-                              const opt: IPersona = {
-                                workspaceId: parent.props.workspaceId,
-                                projectId: parent.props.projectId,
-                                id: p.id,
-                                name: values.name,
-                                role: values.role,
-                                avatar: values.avatar,
-                                description: values.description,
-                                createdAt: new Date().toISOString(),
-                              };
+                              if (p?.id) {
+                                const opt: IPersona = {
+                                  workspaceId: parent.props.workspaceId,
+                                  projectId: parent.props.projectId ?? "",
+                                  id: p.id,
+                                  name: values.name,
+                                  role: values.role,
+                                  avatar: values.avatar,
+                                  description: values.description,
+                                  createdAt: new Date().toISOString(),
+                                };
 
-                              parent.props.updatePersona(opt); //optimistic
+                                parent.props.updatePersona(opt); //optimistic
 
-                              if (!parent.props.demo) {
                                 API_UPDATE_PERSONA(
                                   parent.props.workspaceId,
                                   p.id,
@@ -254,20 +252,19 @@ class Personas extends Component<Props, State> {
                                   values.role,
                                   values.description
                                 ).then((response) => {
-                                  if (response.ok) {
-                                  } else {
+                                  if (!response.ok) {
                                     alert(
                                       "something went wrong when editing persona"
                                     );
                                   }
                                 });
-                              }
 
-                              parent.props.setPageState({
-                                page: "persona",
-                                personaId: p.id,
-                                edit: false,
-                              });
+                                parent.props.setPageState({
+                                  page: "persona",
+                                  personaId: p.id,
+                                  edit: false,
+                                });
+                              }
 
                               actions.setSubmitting(false);
                             }}
@@ -374,7 +371,7 @@ class Personas extends Component<Props, State> {
                                     handleOnClick={() =>
                                       parent.props.setPageState({
                                         page: "persona",
-                                        personaId: p.id,
+                                        personaId: p?.id,
                                         edit: false,
                                       })
                                     }
@@ -403,25 +400,24 @@ class Personas extends Component<Props, State> {
                             <div className="mb-2 flex">
                               <div className="flex grow  bg-gray-800 p-2">
                                 <div className="mr-6 flex shrink-0 items-start justify-items-start">
-                                  {avatar(p.avatar)}
+                                  {avatar(p?.avatar)}
                                 </div>
 
                                 <div className="flex flex-col">
-                                  <div className=" text-xl "> {p.name}</div>
-                                  <div className="italic "> {p.role}</div>
+                                  <div className=" text-xl "> {p?.name}</div>
+                                  <div className="italic "> {p?.role}</div>
 
                                   <div className="mt-2">
                                     <div className="markdown-body  text-white">
                                       <ReactMarkdown linkTarget="_blank">
-                                        {p.description}
+                                        {p?.description ?? ""}
                                       </ReactMarkdown>
                                     </div>
                                   </div>
                                 </div>
                               </div>
                               <div className="bg-gray-800">
-                                {(!parent.props.viewOnly ||
-                                  parent.props.demo) && (
+                                {!parent.props.viewOnly && (
                                   <ContextMenu icon="more_horiz">
                                     <div className="absolute top-0 right-0  mt-8 min-w-full rounded bg-white text-xs shadow-md">
                                       <ul className="">
@@ -432,7 +428,7 @@ class Personas extends Component<Props, State> {
                                             icon="delete"
                                             warning
                                             handleOnClick={() =>
-                                              parent.handleDeletePersona(p.id)
+                                              parent.handleDeletePersona(p?.id)
                                             }
                                           />
                                         </li>
@@ -443,14 +439,14 @@ class Personas extends Component<Props, State> {
                               </div>
                             </div>
 
-                            {(!parent.props.viewOnly || parent.props.demo) && (
+                            {!parent.props.viewOnly && (
                               <div>
                                 <DarkButton
                                   primary
                                   handleOnClick={() =>
                                     parent.props.setPageState({
                                       page: "persona",
-                                      personaId: p.id,
+                                      personaId: p?.id,
                                       edit: true,
                                     })
                                   }
@@ -516,7 +512,7 @@ class Personas extends Component<Props, State> {
                           ) => {
                             const optimisticPersona: IPersona = {
                               workspaceId: parent.props.workspaceId,
-                              projectId: parent.props.projectId,
+                              projectId: parent.props.projectId ?? "",
                               id: uuid(),
                               name: values.name,
                               role: values.role,
@@ -529,25 +525,23 @@ class Personas extends Component<Props, State> {
 
                             const workflowPersonaId = uuid();
 
-                            if (!parent.props.demo) {
-                              API_CREATE_PERSONA(
-                                optimisticPersona.workspaceId,
-                                optimisticPersona.projectId,
-                                optimisticPersona.id,
-                                optimisticPersona.avatar,
-                                optimisticPersona.name,
-                                optimisticPersona.role,
-                                optimisticPersona.description,
-                                workflowId,
-                                workflowPersonaId
-                              ).then((response) => {
-                                if (!response.ok) {
-                                  alert(
-                                    "something went wrong when creating persona"
-                                  );
-                                }
-                              });
-                            }
+                            API_CREATE_PERSONA(
+                              optimisticPersona.workspaceId,
+                              optimisticPersona.projectId,
+                              optimisticPersona.id,
+                              optimisticPersona.avatar,
+                              optimisticPersona.name,
+                              optimisticPersona.role,
+                              optimisticPersona.description,
+                              workflowId,
+                              workflowPersonaId
+                            ).then((response) => {
+                              if (!response.ok) {
+                                alert(
+                                  "something went wrong when creating persona"
+                                );
+                              }
+                            });
 
                             if (workflowId !== "") {
                               const optimisticWorkflowPersona: IWorkflowPersona =

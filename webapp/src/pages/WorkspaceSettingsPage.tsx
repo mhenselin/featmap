@@ -21,16 +21,20 @@ import { Headline } from "../components/Headline";
 import { Loading } from "../components/Loading";
 import { MessageType } from "../components/Message";
 import { TimeAgo } from "../components/TimeAgo";
-import { isEditor, memberLevelToTitle, subIsInactive } from "../core/misc";
+import { isEditor, memberLevelToTitle } from "../core/misc";
 import { AllActions, AppState } from "../store";
 import { newMessage, receiveAppAction } from "../store/application/actions";
 import {
   application,
   getMembership,
-  getSubscription,
   getWorkspaceByName,
 } from "../store/application/selectors";
-import { Application, IInvite, Membership } from "../store/application/types";
+import {
+  Application,
+  IInvite,
+  Membership,
+  Workspace,
+} from "../store/application/types";
 
 const mapStateToProps = (state: AppState) => ({
   application: application(state),
@@ -72,47 +76,47 @@ class WorkspaceSettingsPage extends Component<Props, State> {
       allowExternalSharing: false,
       loading: true,
     };
+
+    this.ws = getWorkspaceByName(
+      props.application,
+      props.match.params.workspaceName
+    );
   }
+
+  private ws: Workspace | undefined;
 
   componentDidMount() {
     this.loadMembers();
     this.loadInvites();
 
-    const ws = getWorkspaceByName(
-      this.props.application,
-      this.props.match.params.workspaceName
-    )!;
-    this.setState({ allowExternalSharing: ws.allowExternalSharing });
+    if (this.ws?.allowExternalSharing) {
+      this.setState({ allowExternalSharing: this.ws.allowExternalSharing });
+    }
     this.setState({ loading: false });
   }
 
   loadInvites() {
-    const ws = getWorkspaceByName(
-      this.props.application,
-      this.props.match.params.workspaceName
-    )!;
-    API_GET_INVITES(ws.id).then((response) => {
-      if (response.ok) {
-        response.json().then((data: IInvite[]) => {
-          this.setState({ invites: data });
-        });
-      }
-    });
+    if (this.ws?.id) {
+      API_GET_INVITES(this.ws.id).then((response) => {
+        if (response.ok) {
+          response.json().then((data: IInvite[]) => {
+            this.setState({ invites: data });
+          });
+        }
+      });
+    }
   }
 
   loadMembers() {
-    const ws = getWorkspaceByName(
-      this.props.application,
-      this.props.match.params.workspaceName
-    )!;
-
-    API_GET_MEMBERS(ws.id).then((response) => {
-      if (response.ok) {
-        response.json().then((data: Membership[]) => {
-          this.setState({ members: data });
-        });
-      }
-    });
+    if (this.ws?.id) {
+      API_GET_MEMBERS(this.ws.id).then((response) => {
+        if (response.ok) {
+          response.json().then((data: Membership[]) => {
+            this.setState({ members: data });
+          });
+        }
+      });
+    }
   }
 
   render() {
@@ -120,13 +124,7 @@ class WorkspaceSettingsPage extends Component<Props, State> {
       return <Loading />;
     }
 
-    const ws = getWorkspaceByName(
-      this.props.application,
-      this.props.match.params.workspaceName
-    )!;
-    const m = getMembership(this.props.application, ws.id);
-    const s = getSubscription(this.props.application, ws.id);
-    const hasExpired = subIsInactive(s);
+    const m = getMembership(this.props.application, this.ws?.id);
     type changeRoleForm = { level: string };
     type inviteForm = { email: string; level: string };
 
@@ -134,7 +132,7 @@ class WorkspaceSettingsPage extends Component<Props, State> {
       const [show, setShow] = useState(false);
 
       const isMyself =
-        props.member.accountId === this.props.application.account!.id;
+        props.member.accountId === this.props.application.account?.id;
       return (
         <div>
           <div className="flex flex-row  ">
@@ -167,15 +165,15 @@ class WorkspaceSettingsPage extends Component<Props, State> {
           {!isMyself && show && (
             <div className="flex flex-row ">
               <div className="mt-3 grow text-xs">
-                {!hasExpired && (
-                  <Formik
-                    initialValues={{ level: props.member.level }}
-                    validationSchema={Yup.object().shape({
-                      level: Yup.string().required("Required."),
-                    })}
-                    onSubmit={(values: changeRoleForm) => {
+                <Formik
+                  initialValues={{ level: props.member.level }}
+                  validationSchema={Yup.object().shape({
+                    level: Yup.string().required("Required."),
+                  })}
+                  onSubmit={(values: changeRoleForm) => {
+                    if (this.ws?.id) {
                       API_UPDATE_MEMBER_LEVEL(
-                        ws.id,
+                        this.ws.id,
                         props.member.id,
                         values.level
                       ).then((response) => {
@@ -194,36 +192,36 @@ class WorkspaceSettingsPage extends Component<Props, State> {
                           }
                         });
                       });
-                    }}
-                    component={({ status }) => (
-                      <Form>
-                        {status && status.msg && <div>{status.msg}</div>}
+                    }
+                  }}
+                  component={({ status }) => (
+                    <Form>
+                      {status && status.msg && <div>{status.msg}</div>}
 
-                        <div>
-                          <Field
-                            name="level"
-                            component="select"
-                            className="mr-2 rounded border p-1"
-                          >
-                            <option value="VIEWER">
-                              {memberLevelToTitle("VIEWER")}
-                            </option>
-                            <option value="EDITOR">
-                              {memberLevelToTitle("EDITOR")}
-                            </option>
-                            <option value="ADMIN">
-                              {memberLevelToTitle("ADMIN")}
-                            </option>
-                            <option value="OWNER">
-                              {memberLevelToTitle("OWNER")}
-                            </option>
-                          </Field>
-                          <Button secondary small submit title="Change role" />
-                        </div>
-                      </Form>
-                    )}
-                  ></Formik>
-                )}
+                      <div>
+                        <Field
+                          name="level"
+                          component="select"
+                          className="mr-2 rounded border p-1"
+                        >
+                          <option value="VIEWER">
+                            {memberLevelToTitle("VIEWER")}
+                          </option>
+                          <option value="EDITOR">
+                            {memberLevelToTitle("EDITOR")}
+                          </option>
+                          <option value="ADMIN">
+                            {memberLevelToTitle("ADMIN")}
+                          </option>
+                          <option value="OWNER">
+                            {memberLevelToTitle("OWNER")}
+                          </option>
+                        </Field>
+                        <Button secondary small submit title="Change role" />
+                      </div>
+                    </Form>
+                  )}
+                ></Formik>
               </div>
 
               <div className="mt-3 ml-3 flex  text-xs">
@@ -233,24 +231,28 @@ class WorkspaceSettingsPage extends Component<Props, State> {
                     level: Yup.string().required("Required."),
                   })}
                   onSubmit={() => {
-                    API_DELETE_MEMBER(ws.id, props.member.id).then(
-                      (response) => {
-                        if (response.ok) {
-                          this.loadMembers();
-                          this.props.newMessage(
-                            MessageType.SUCCESS,
-                            "membership removed"
-                          );
-                        } else {
-                          response.json().then((data: { message: string }) => {
+                    if (this.ws?.id) {
+                      API_DELETE_MEMBER(this.ws.id, props.member.id).then(
+                        (response) => {
+                          if (response.ok) {
+                            this.loadMembers();
                             this.props.newMessage(
-                              MessageType.FAILURE,
-                              data.message
+                              MessageType.SUCCESS,
+                              "membership removed"
                             );
-                          });
+                          } else {
+                            response
+                              .json()
+                              .then((data: { message: string }) => {
+                                this.props.newMessage(
+                                  MessageType.FAILURE,
+                                  data.message
+                                );
+                              });
+                          }
                         }
-                      }
-                    );
+                      );
+                    }
                   }}
                   component={({ status }) => (
                     <Form>
@@ -273,28 +275,31 @@ class WorkspaceSettingsPage extends Component<Props, State> {
         <Headline level={1}>Workspace settings</Headline>
 
         <CardLayout title="My membership">
-          {memberLevelToTitle(m.level)}. Joined <TimeAgo date={m.createdAt} />.
-          {m.level !== "OWNER" && ( // Owners are not allowed to leave their own workspace
+          {memberLevelToTitle(m?.level)}. Joined <TimeAgo date={m?.createdAt} />
+          .
+          {m?.level !== "OWNER" && ( // Owners are not allowed to leave their own workspace
             <div>
               <Formik
                 initialValues={{ email: "", level: 10 }}
                 onSubmit={() => {
-                  API_LEAVE(ws.id).then((response) => {
-                    if (response.ok) {
-                      this.props.newMessage(
-                        MessageType.SUCCESS,
-                        "left workspace"
-                      );
-                      window.location.href = "/";
-                    } else {
-                      response.json().then((data: { message: string }) => {
+                  if (this.ws?.id) {
+                    API_LEAVE(this.ws.id).then((response) => {
+                      if (response.ok) {
                         this.props.newMessage(
-                          MessageType.FAILURE,
-                          data.message
+                          MessageType.SUCCESS,
+                          "left workspace"
                         );
-                      });
-                    }
-                  });
+                        window.location.href = "/";
+                      } else {
+                        response.json().then((data: { message: string }) => {
+                          this.props.newMessage(
+                            MessageType.FAILURE,
+                            data.message
+                          );
+                        });
+                      }
+                    });
+                  }
                 }}
               >
                 <Form>
@@ -310,18 +315,23 @@ class WorkspaceSettingsPage extends Component<Props, State> {
         <CardLayout title="Private link (WIP ?)">
           {(() => {
             const submit = () => {
-              API_CHANGE_ALLOW_EXTERNAL_SHARING(
-                ws.id,
-                !this.state.allowExternalSharing
-              ).then((response) => {
-                if (response.ok) {
-                  this.setState({
-                    allowExternalSharing: !this.state.allowExternalSharing,
-                  });
+              if (this.ws?.id) {
+                API_CHANGE_ALLOW_EXTERNAL_SHARING(
+                  this.ws.id,
+                  !this.state.allowExternalSharing
+                ).then((response) => {
+                  if (response.ok) {
+                    this.setState({
+                      allowExternalSharing: !this.state.allowExternalSharing,
+                    });
 
-                  this.props.newMessage(MessageType.SUCCESS, "setting changed");
-                }
-              });
+                    this.props.newMessage(
+                      MessageType.SUCCESS,
+                      "setting changed"
+                    );
+                  }
+                });
+              }
             };
 
             return (
@@ -340,23 +350,23 @@ class WorkspaceSettingsPage extends Component<Props, State> {
           })()}
         </CardLayout>
 
-        {m.level === "ADMIN" || m.level === "OWNER" ? (
+        {m?.level === "ADMIN" || m?.level === "OWNER" ? (
           <CardLayout title="Workspace invites">
             {
               <div>
-                {!hasExpired && (
-                  <div className="">
-                    <Formik
-                      initialValues={{ email: "", level: "VIEWER" }}
-                      validationSchema={Yup.object().shape({
-                        email: Yup.string()
-                          .email("Invalid.")
-                          .required("Required."),
-                        level: Yup.string().required("Required."),
-                      })}
-                      onSubmit={(values: inviteForm) => {
+                <div className="">
+                  <Formik
+                    initialValues={{ email: "", level: "VIEWER" }}
+                    validationSchema={Yup.object().shape({
+                      email: Yup.string()
+                        .email("Invalid.")
+                        .required("Required."),
+                      level: Yup.string().required("Required."),
+                    })}
+                    onSubmit={(values: inviteForm) => {
+                      if (this.ws?.id) {
                         API_CREATE_INVITE(
-                          ws.id,
+                          this.ws.id,
                           values.email,
                           values.level
                         ).then((response) => {
@@ -377,63 +387,59 @@ class WorkspaceSettingsPage extends Component<Props, State> {
                               });
                           }
                         });
-                      }}
-                    >
-                      {(formikBag: FormikProps<inviteForm>) => (
-                        <Form>
-                          {formikBag.status && formikBag.status.msg && (
-                            <div>{formikBag.status.msg}</div>
-                          )}
+                      }
+                    }}
+                  >
+                    {(formikBag: FormikProps<inviteForm>) => (
+                      <Form>
+                        {formikBag.status && formikBag.status.msg && (
+                          <div>{formikBag.status.msg}</div>
+                        )}
 
-                          <div className="flex flex-col ">
-                            <div className="m-1 flex flex-col">
-                              <Field
-                                name="email"
-                                component="input"
-                                className="w-64 rounded border  p-2  "
-                                placeholder="email"
-                              ></Field>
-                              {formikBag.touched.email &&
-                                formikBag.errors.email && (
-                                  <div className="text-xs font-bold text-red-500">
-                                    {formikBag.errors.email}
-                                  </div>
-                                )}
-                            </div>
-
-                            <div className="m-1 flex flex-col">
-                              <Field
-                                name="level"
-                                component="select"
-                                className="w-64 rounded border  bg-white  p-2  "
-                              >
-                                <option value="VIEWER">
-                                  {memberLevelToTitle("VIEWER")}
-                                </option>
-                                <option value="EDITOR">
-                                  {memberLevelToTitle("EDITOR")}
-                                </option>
-                                <option value="ADMIN">
-                                  {memberLevelToTitle("ADMIN")}
-                                </option>
-                                <option value="OWNER">
-                                  {memberLevelToTitle("OWNER")}
-                                </option>
-                              </Field>
-                            </div>
-                            <div className="m-1 text-xs">
-                              <Button
-                                submit
-                                secondary
-                                title="Send invitation"
-                              />
-                            </div>
+                        <div className="flex flex-col ">
+                          <div className="m-1 flex flex-col">
+                            <Field
+                              name="email"
+                              component="input"
+                              className="w-64 rounded border  p-2  "
+                              placeholder="email"
+                            ></Field>
+                            {formikBag.touched.email &&
+                              formikBag.errors.email && (
+                                <div className="text-xs font-bold text-red-500">
+                                  {formikBag.errors.email}
+                                </div>
+                              )}
                           </div>
-                        </Form>
-                      )}
-                    </Formik>
-                  </div>
-                )}
+
+                          <div className="m-1 flex flex-col">
+                            <Field
+                              name="level"
+                              component="select"
+                              className="w-64 rounded border  bg-white  p-2  "
+                            >
+                              <option value="VIEWER">
+                                {memberLevelToTitle("VIEWER")}
+                              </option>
+                              <option value="EDITOR">
+                                {memberLevelToTitle("EDITOR")}
+                              </option>
+                              <option value="ADMIN">
+                                {memberLevelToTitle("ADMIN")}
+                              </option>
+                              <option value="OWNER">
+                                {memberLevelToTitle("OWNER")}
+                              </option>
+                            </Field>
+                          </div>
+                          <div className="m-1 text-xs">
+                            <Button submit secondary title="Send invitation" />
+                          </div>
+                        </div>
+                      </Form>
+                    )}
+                  </Formik>
+                </div>
 
                 <div className="mt-2">
                   <div className="flex max-w-2xl  flex-col  ">
@@ -453,26 +459,30 @@ class WorkspaceSettingsPage extends Component<Props, State> {
                               <Formik
                                 initialValues={{ email: "", level: 10 }}
                                 onSubmit={() => {
-                                  API_DELETE_INVITE(ws.id, x.id).then(
-                                    (response) => {
-                                      if (response.ok) {
-                                        this.loadInvites();
-                                        this.props.newMessage(
-                                          MessageType.SUCCESS,
-                                          "invite canceled"
-                                        );
-                                      } else {
-                                        response
-                                          .json()
-                                          .then((data: { message: string }) => {
-                                            this.props.newMessage(
-                                              MessageType.FAILURE,
-                                              data.message
+                                  if (this.ws?.id) {
+                                    API_DELETE_INVITE(this.ws.id, x.id).then(
+                                      (response) => {
+                                        if (response.ok) {
+                                          this.loadInvites();
+                                          this.props.newMessage(
+                                            MessageType.SUCCESS,
+                                            "invite canceled"
+                                          );
+                                        } else {
+                                          response
+                                            .json()
+                                            .then(
+                                              (data: { message: string }) => {
+                                                this.props.newMessage(
+                                                  MessageType.FAILURE,
+                                                  data.message
+                                                );
+                                              }
                                             );
-                                          });
+                                        }
                                       }
-                                    }
-                                  );
+                                    );
+                                  }
                                 }}
                                 component={() => (
                                   <Form>
@@ -488,12 +498,12 @@ class WorkspaceSettingsPage extends Component<Props, State> {
                                 )}
                               ></Formik>
                             </div>
-                            {!hasExpired && (
-                              <div className="ml-1">
-                                <Formik
-                                  initialValues={{}}
-                                  onSubmit={() => {
-                                    API_RESEND_INVITE(ws.id, x.id).then(
+                            <div className="ml-1">
+                              <Formik
+                                initialValues={{}}
+                                onSubmit={() => {
+                                  if (this.ws?.id) {
+                                    API_RESEND_INVITE(this.ws.id, x.id).then(
                                       (response) => {
                                         if (response.ok) {
                                           this.loadInvites();
@@ -515,23 +525,23 @@ class WorkspaceSettingsPage extends Component<Props, State> {
                                         }
                                       }
                                     );
-                                  }}
-                                >
-                                  {() => (
-                                    <Form>
-                                      <span className="text-xs">
-                                        <Button
-                                          small
-                                          secondary
-                                          submit
-                                          title="Resend invite"
-                                        />
-                                      </span>
-                                    </Form>
-                                  )}
-                                </Formik>
-                              </div>
-                            )}
+                                  }
+                                }}
+                              >
+                                {() => (
+                                  <Form>
+                                    <span className="text-xs">
+                                      <Button
+                                        small
+                                        secondary
+                                        submit
+                                        title="Resend invite"
+                                      />
+                                    </span>
+                                  </Form>
+                                )}
+                              </Formik>
+                            </div>
                           </div>
                         </div>
                       ))}
@@ -543,7 +553,7 @@ class WorkspaceSettingsPage extends Component<Props, State> {
           </CardLayout>
         ) : null}
 
-        {m.level === "ADMIN" || m.level === "OWNER" ? ( // Admin or higher}
+        {m?.level === "ADMIN" || m?.level === "OWNER" ? ( // Admin or higher}
           <CardLayout title="Members">
             {
               <div>
@@ -566,7 +576,7 @@ class WorkspaceSettingsPage extends Component<Props, State> {
           </CardLayout>
         ) : null}
 
-        {m.level === "OWNER" ? ( // Admin or higher
+        {m?.level === "OWNER" ? ( // Admin or higher
           <CardLayout title="Delete workspace">
             <div>
               <p>
@@ -578,22 +588,24 @@ class WorkspaceSettingsPage extends Component<Props, State> {
               <Formik
                 initialValues={{}}
                 onSubmit={() => {
-                  API_DELETE_WORKSPACE(ws.id).then((response) => {
-                    if (response.ok) {
-                      this.props.newMessage(
-                        MessageType.SUCCESS,
-                        "workspace deleted"
-                      );
-                      window.location.href = "/";
-                    } else {
-                      response.json().then((data: { message: string }) => {
+                  if (this.ws?.id) {
+                    API_DELETE_WORKSPACE(this.ws.id).then((response) => {
+                      if (response.ok) {
                         this.props.newMessage(
-                          MessageType.FAILURE,
-                          data.message
+                          MessageType.SUCCESS,
+                          "workspace deleted"
                         );
-                      });
-                    }
-                  });
+                        window.location.href = "/";
+                      } else {
+                        response.json().then((data: { message: string }) => {
+                          this.props.newMessage(
+                            MessageType.FAILURE,
+                            data.message
+                          );
+                        });
+                      }
+                    });
+                  }
                 }}
               >
                 {() => (

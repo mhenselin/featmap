@@ -49,11 +49,6 @@ import {
 } from "../store/milestones/actions";
 import { IMilestone } from "../store/milestones/types";
 import {
-  createProjectAction,
-  deleteProjectAction,
-  updateProjectAction,
-} from "../store/projects/actions";
-import {
   createSubWorkflowAction,
   deleteSubWorkflowAction,
   updateSubWorkflowAction,
@@ -98,9 +93,6 @@ const mapDispatchToProps = {
   deleteFeature: deleteFeatureAction,
   deleteAllFeaturesByMilestone: deleteAllFeaturesByMilestoneAction,
   deleteAllFeaturesBySubWorkflow: deleteAllFeaturesBySubWorkflowAction,
-  updateProject: updateProjectAction,
-  createProject: createProjectAction,
-  deleteProject: deleteProjectAction,
 };
 
 type PropsFromState = {
@@ -123,18 +115,14 @@ type PropsFromDispatch = {
   deleteFeature: typeof deleteFeatureAction;
   deleteAllFeaturesByMilestone: typeof deleteAllFeaturesByMilestoneAction;
   deleteAllFeaturesBySubWorkflow: typeof deleteAllFeaturesBySubWorkflowAction;
-  updateProject: typeof updateProjectAction;
-  createProject: typeof createProjectAction;
-  deleteProject: typeof deleteProjectAction;
 };
 
 type SelfProps = {
-  entity: EntityTypes;
+  entity?: EntityTypes;
   comments: IFeatureComment[];
   url: string;
   close: () => void;
   viewOnly: boolean;
-  demo: boolean;
 };
 
 type Props = PropsFromState & PropsFromDispatch & SelfProps;
@@ -157,22 +145,10 @@ class EntityDetailsBody extends Component<Props, State> {
 
   urlRef = createRef<HTMLInputElement>();
 
-  copyToClipboard = (url: string) => {
-    const listener = (e: ClipboardEvent) => {
-      e.clipboardData!.setData("text/plain", url);
-      e.preventDefault();
-    };
-
-    document.addEventListener("copy", listener);
-    document.execCommand("copy");
-    document.removeEventListener("copy", listener);
-    this.setState({ copySuccess: true });
-  };
-
   handleDelete = () => {
     const card = this.props.entity;
 
-    switch (card.kind) {
+    switch (card?.kind) {
       case "project": {
         if (
           !window.confirm(
@@ -182,15 +158,13 @@ class EntityDetailsBody extends Component<Props, State> {
           return;
         }
 
-        this.props.deleteProject(card.id);
-        if (!this.props.demo) {
-          API_DELETE_PROJECT(card.workspaceId, card.id).then((response) => {
-            if (response.ok) {
-            } else {
-              alert("Something went wrong.");
-            }
-          });
-        }
+        // @TODO delete project
+        //this.props.deleteProject(card.id);
+        API_DELETE_PROJECT(card.workspaceId, card.id).then((response) => {
+          if (!response.ok) {
+            alert("Something went wrong.");
+          }
+        });
 
         break;
       }
@@ -199,14 +173,11 @@ class EntityDetailsBody extends Component<Props, State> {
         this.props.deleteMilestone(card.id);
         this.props.deleteAllFeaturesByMilestone(card.id);
 
-        if (!this.props.demo) {
-          API_DELETE_MILESTONE(card.workspaceId, card.id).then((response) => {
-            if (response.ok) {
-            } else {
-              alert("Something went wrong.");
-            }
-          });
-        }
+        API_DELETE_MILESTONE(card.workspaceId, card.id).then((response) => {
+          if (!response.ok) {
+            alert("Something went wrong.");
+          }
+        });
         break;
       }
 
@@ -214,14 +185,11 @@ class EntityDetailsBody extends Component<Props, State> {
         this.props.deleteSubWorkflow(card.id);
         this.props.deleteAllFeaturesBySubWorkflow(card.id);
 
-        if (!this.props.demo) {
-          API_DELETE_SUBWORKFLOW(card.workspaceId, card.id).then((response) => {
-            if (response.ok) {
-            } else {
-              alert("Something went wrong.");
-            }
-          });
-        }
+        API_DELETE_SUBWORKFLOW(card.workspaceId, card.id).then((response) => {
+          if (!response.ok) {
+            alert("Something went wrong.");
+          }
+        });
         break;
       }
 
@@ -232,27 +200,21 @@ class EntityDetailsBody extends Component<Props, State> {
           (x) => this.props.deleteAllFeaturesBySubWorkflow(x.id)
         );
 
-        if (!this.props.demo) {
-          API_DELETE_WORKFLOW(card.workspaceId, card.id).then((response) => {
-            if (response.ok) {
-            } else {
-              alert("Something went wrong.");
-            }
-          });
-        }
+        API_DELETE_WORKFLOW(card.workspaceId, card.id).then((response) => {
+          if (!response.ok) {
+            alert("Something went wrong.");
+          }
+        });
         break;
       }
 
       case "feature": {
         this.props.deleteFeature(card.id);
-        if (!this.props.demo) {
-          API_DELETE_FEATURE(card.workspaceId, card.id).then((response) => {
-            if (response.ok) {
-            } else {
-              alert("Something went wrong.");
-            }
-          });
-        }
+        API_DELETE_FEATURE(card.workspaceId, card.id).then((response) => {
+          if (!response.ok) {
+            alert("Something went wrong.");
+          }
+        });
         break;
       }
 
@@ -265,19 +227,16 @@ class EntityDetailsBody extends Component<Props, State> {
   handleClose = () => {
     const card = this.props.entity;
 
-    switch (card.kind) {
+    switch (card?.kind) {
       case "feature": {
         this.props.updateFeature({
           ...card,
           status: CardStatus.CLOSED,
           lastModified: new Date().toISOString(),
-          lastModifiedByName:
-            this.props.application.account === undefined
-              ? "demo"
-              : this.props.application.account.name,
+          lastModifiedByName: this.props.application.account?.name ?? "",
         });
-        if (!this.props.demo) {
-          API_CLOSE_FEATURE(card.workspaceId, card.id).then((response) => {
+        API_CLOSE_FEATURE(card.workspaceId, card.id)
+          .then((response) => {
             if (response.ok) {
               response.json().then((data: IFeature) => {
                 this.props.updateFeature(data);
@@ -285,8 +244,10 @@ class EntityDetailsBody extends Component<Props, State> {
             } else {
               alert("Something went wrong.");
             }
+          })
+          .catch(() => {
+            console.log("caught by design");
           });
-        }
         break;
       }
 
@@ -295,13 +256,10 @@ class EntityDetailsBody extends Component<Props, State> {
           ...card,
           status: CardStatus.CLOSED,
           lastModified: new Date().toISOString(),
-          lastModifiedByName:
-            this.props.application.account === undefined
-              ? "demo"
-              : this.props.application.account.name,
+          lastModifiedByName: this.props.application.account?.name ?? "",
         });
-        if (!this.props.demo) {
-          API_CLOSE_MILESTONE(card.workspaceId, card.id).then((response) => {
+        API_CLOSE_MILESTONE(card.workspaceId, card.id)
+          .then((response) => {
             if (response.ok) {
               response.json().then((data: IMilestone) => {
                 this.props.updateMilestone(data);
@@ -309,8 +267,10 @@ class EntityDetailsBody extends Component<Props, State> {
             } else {
               alert("Something went wrong.");
             }
+          })
+          .catch(() => {
+            console.log("caught by design");
           });
-        }
         break;
       }
 
@@ -319,13 +279,10 @@ class EntityDetailsBody extends Component<Props, State> {
           ...card,
           status: CardStatus.CLOSED,
           lastModified: new Date().toISOString(),
-          lastModifiedByName:
-            this.props.application.account === undefined
-              ? "demo"
-              : this.props.application.account.name,
+          lastModifiedByName: this.props.application.account?.name ?? "",
         });
-        if (!this.props.demo) {
-          API_CLOSE_SUBWORKFLOW(card.workspaceId, card.id).then((response) => {
+        API_CLOSE_SUBWORKFLOW(card.workspaceId, card.id)
+          .then((response) => {
             if (response.ok) {
               response.json().then((data: ISubWorkflow) => {
                 this.props.updateSubWorkflow(data);
@@ -333,8 +290,10 @@ class EntityDetailsBody extends Component<Props, State> {
             } else {
               alert("Something went wrong.");
             }
+          })
+          .catch(() => {
+            console.log("caught by design");
           });
-        }
         break;
       }
 
@@ -343,13 +302,10 @@ class EntityDetailsBody extends Component<Props, State> {
           ...card,
           status: CardStatus.CLOSED,
           lastModified: new Date().toISOString(),
-          lastModifiedByName:
-            this.props.application.account === undefined
-              ? "demo"
-              : this.props.application.account.name,
+          lastModifiedByName: this.props.application.account?.name ?? "",
         });
-        if (!this.props.demo) {
-          API_CLOSE_WORKFLOW(card.workspaceId, card.id).then((response) => {
+        API_CLOSE_WORKFLOW(card.workspaceId, card.id)
+          .then((response) => {
             if (response.ok) {
               response.json().then((data: IFeature) => {
                 this.props.updateFeature(data);
@@ -357,8 +313,10 @@ class EntityDetailsBody extends Component<Props, State> {
             } else {
               alert("Something went wrong.");
             }
+          })
+          .catch(() => {
+            console.log("caught by design");
           });
-        }
         break;
       }
 
@@ -372,19 +330,16 @@ class EntityDetailsBody extends Component<Props, State> {
   handleOpen = () => {
     const card = this.props.entity;
 
-    switch (card.kind) {
+    switch (card?.kind) {
       case "feature": {
         this.props.updateFeature({
           ...card,
           status: CardStatus.OPEN,
           lastModified: new Date().toISOString(),
-          lastModifiedByName:
-            this.props.application.account === undefined
-              ? "demo"
-              : this.props.application.account.name,
+          lastModifiedByName: this.props.application.account?.name ?? "",
         });
-        if (!this.props.demo) {
-          API_OPEN_FEATURE(card.workspaceId, card.id).then((response) => {
+        API_OPEN_FEATURE(card.workspaceId, card.id)
+          .then((response) => {
             if (response.ok) {
               response.json().then((data: IFeature) => {
                 this.props.updateFeature(data);
@@ -392,8 +347,10 @@ class EntityDetailsBody extends Component<Props, State> {
             } else {
               alert("Something went wrong.");
             }
+          })
+          .catch(() => {
+            console.log("caught by design");
           });
-        }
         break;
       }
 
@@ -402,13 +359,10 @@ class EntityDetailsBody extends Component<Props, State> {
           ...card,
           status: CardStatus.OPEN,
           lastModified: new Date().toISOString(),
-          lastModifiedByName:
-            this.props.application.account === undefined
-              ? "demo"
-              : this.props.application.account.name,
+          lastModifiedByName: this.props.application.account?.name ?? "",
         });
-        if (!this.props.demo) {
-          API_OPEN_MILESTONE(card.workspaceId, card.id).then((response) => {
+        API_OPEN_MILESTONE(card.workspaceId, card.id)
+          .then((response) => {
             if (response.ok) {
               response.json().then((data: IMilestone) => {
                 this.props.updateMilestone(data);
@@ -416,8 +370,10 @@ class EntityDetailsBody extends Component<Props, State> {
             } else {
               alert("Something went wrong.");
             }
+          })
+          .catch(() => {
+            console.log("caught by design");
           });
-        }
         break;
       }
 
@@ -426,13 +382,10 @@ class EntityDetailsBody extends Component<Props, State> {
           ...card,
           status: CardStatus.OPEN,
           lastModified: new Date().toISOString(),
-          lastModifiedByName:
-            this.props.application.account === undefined
-              ? "demo"
-              : this.props.application.account.name,
+          lastModifiedByName: this.props.application.account?.name ?? "",
         });
-        if (!this.props.demo) {
-          API_OPEN_SUBWORKFLOW(card.workspaceId, card.id).then((response) => {
+        API_OPEN_SUBWORKFLOW(card.workspaceId, card.id)
+          .then((response) => {
             if (response.ok) {
               response.json().then((data: ISubWorkflow) => {
                 this.props.updateSubWorkflow(data);
@@ -440,8 +393,10 @@ class EntityDetailsBody extends Component<Props, State> {
             } else {
               alert("Something went wrong.");
             }
+          })
+          .catch(() => {
+            console.log("caught by design");
           });
-        }
         break;
       }
 
@@ -450,13 +405,10 @@ class EntityDetailsBody extends Component<Props, State> {
           ...card,
           status: CardStatus.OPEN,
           lastModified: new Date().toISOString(),
-          lastModifiedByName:
-            this.props.application.account === undefined
-              ? "demo"
-              : this.props.application.account.name,
+          lastModifiedByName: this.props.application.account?.name ?? "",
         });
-        if (!this.props.demo) {
-          API_OPEN_WORKFLOW(card.workspaceId, card.id).then((response) => {
+        API_OPEN_WORKFLOW(card.workspaceId, card.id)
+          .then((response) => {
             if (response.ok) {
               response.json().then((data: IWorkflow) => {
                 this.props.updateWorkflow(data);
@@ -464,8 +416,10 @@ class EntityDetailsBody extends Component<Props, State> {
             } else {
               alert("Something went wrong.");
             }
+          })
+          .catch(() => {
+            console.log("caught by design");
           });
-        }
         break;
       }
 
@@ -477,30 +431,27 @@ class EntityDetailsBody extends Component<Props, State> {
   handleChangeColor = (color: Color) => {
     const card = this.props.entity;
 
-    switch (card.kind) {
+    switch (card?.kind) {
       case "feature": {
         this.props.updateFeature({
           ...card,
           color: color,
           lastModified: new Date().toISOString(),
-          lastModifiedByName:
-            this.props.application.account === undefined
-              ? "demo"
-              : this.props.application.account.name,
+          lastModifiedByName: this.props.application.account?.name ?? "",
         });
-        if (!this.props.demo) {
-          API_CHANGE_FEATURE_COLOR(card.workspaceId, card.id, color).then(
-            (response) => {
-              if (response.ok) {
-                response.json().then((data: IFeature) => {
-                  this.props.updateFeature(data);
-                });
-              } else {
-                alert("Something went wrong.");
-              }
+        API_CHANGE_FEATURE_COLOR(card.workspaceId, card.id, color)
+          .then((response) => {
+            if (response.ok) {
+              response.json().then((data: IFeature) => {
+                this.props.updateFeature(data);
+              });
+            } else {
+              alert("Something went wrong.");
             }
-          );
-        }
+          })
+          .catch(() => {
+            console.log("caught by design");
+          });
         break;
       }
 
@@ -509,40 +460,34 @@ class EntityDetailsBody extends Component<Props, State> {
           ...card,
           color: color,
           lastModified: new Date().toISOString(),
-          lastModifiedByName:
-            this.props.application.account === undefined
-              ? "demo"
-              : this.props.application.account.name,
+          lastModifiedByName: this.props.application.account?.name ?? "",
         });
-        if (!this.props.demo) {
-          API_CHANGE_MILESTONE_COLOR(card.workspaceId, card.id, color).then(
-            (response) => {
-              if (response.ok) {
-                response.json().then((data: IMilestone) => {
-                  this.props.updateMilestone(data);
-                });
-              } else {
-                alert("Something went wrong.");
-              }
+        API_CHANGE_MILESTONE_COLOR(card.workspaceId, card.id, color)
+          .then((response) => {
+            if (response.ok) {
+              response.json().then((data: IMilestone) => {
+                this.props.updateMilestone(data);
+              });
+            } else {
+              alert("Something went wrong.");
             }
-          );
-        }
+          })
+          .catch(() => {
+            console.log("caught by design");
+          });
         break;
       }
 
       case "workflow": {
-        this.props.updateWorkflow({
-          ...card,
-          color: color,
-          lastModified: new Date().toISOString(),
-          lastModifiedByName:
-            this.props.application.account === undefined
-              ? "demo"
-              : this.props.application.account.name,
-        });
-        if (!this.props.demo) {
-          API_CHANGE_WORKFLOW_COLOR(card.workspaceId, card.id, color).then(
-            (response) => {
+        if (card) {
+          this.props.updateWorkflow({
+            ...card,
+            color: color,
+            lastModified: new Date().toISOString(),
+            lastModifiedByName: this.props.application.account?.name ?? "",
+          });
+          API_CHANGE_WORKFLOW_COLOR(card.workspaceId, card.id, color)
+            .then((response) => {
               if (response.ok) {
                 response.json().then((data: IWorkflow) => {
                   this.props.updateWorkflow(data);
@@ -550,25 +495,24 @@ class EntityDetailsBody extends Component<Props, State> {
               } else {
                 alert("Something went wrong.");
               }
-            }
-          );
+            })
+            .catch(() => {
+              console.log("caught by design");
+            });
         }
         break;
       }
 
       case "subworkflow": {
-        this.props.updateSubWorkflow({
-          ...card,
-          color: color,
-          lastModified: new Date().toISOString(),
-          lastModifiedByName:
-            this.props.application.account === undefined
-              ? "demo"
-              : this.props.application.account.name,
-        });
-        if (!this.props.demo) {
-          API_CHANGE_SUBWORKFLOW_COLOR(card.workspaceId, card.id, color).then(
-            (response) => {
+        if (card) {
+          this.props.updateSubWorkflow({
+            ...card,
+            color: color,
+            lastModified: new Date().toISOString(),
+            lastModifiedByName: this.props.application.account?.name ?? "",
+          });
+          API_CHANGE_SUBWORKFLOW_COLOR(card.workspaceId, card.id, color)
+            .then((response) => {
               if (response.ok) {
                 response.json().then((data: ISubWorkflow) => {
                   this.props.updateSubWorkflow(data);
@@ -576,8 +520,10 @@ class EntityDetailsBody extends Component<Props, State> {
               } else {
                 alert("Something went wrong.");
               }
-            }
-          );
+            })
+            .catch(() => {
+              console.log("caught by design");
+            });
         }
         break;
       }
@@ -589,23 +535,23 @@ class EntityDetailsBody extends Component<Props, State> {
 
   render() {
     let open = true;
-    switch (this.props.entity.kind) {
+    switch (this.props.entity?.kind) {
       case "milestone":
       case "subworkflow":
       case "workflow":
       case "feature":
-        open = this.props.entity.status === CardStatus.OPEN;
+        open = this.props.entity?.status === CardStatus.OPEN;
         break;
       default:
     }
 
     const A = () => {
-      switch (this.props.entity.kind) {
+      switch (this.props.entity?.kind) {
         case "workflow":
         case "subworkflow":
         case "milestone":
         case "feature": {
-          const color = this.props.entity.color;
+          const color = this.props.entity?.color;
           return (
             <div className="mt-3 flex flex-col text-xs ">
               <div className=" mb-1 font-bold">Color</div>
@@ -617,12 +563,9 @@ class EntityDetailsBody extends Component<Props, State> {
                         <button
                           onClick={() => this.handleChangeColor(x)}
                           title={x}
-                          className={
-                            "flex h-4 w-4 border " +
-                            colorToBackgroundColorClass(x) +
-                            " " +
-                            colorToBorderColorClass(x)
-                          }
+                          className={`flex h-4 w-4 border ${colorToBackgroundColorClass(
+                            x
+                          )} ${colorToBorderColorClass(x)}`}
                         />
                         <div className="flex justify-center">
                           {color === x ? <div>●</div> : null}
@@ -641,7 +584,7 @@ class EntityDetailsBody extends Component<Props, State> {
     };
 
     const B = () => {
-      switch (this.props.entity.kind) {
+      switch (this.props.entity?.kind) {
         case "feature": {
           const fea: IFeature = this.props.entity;
           return (
@@ -650,7 +593,7 @@ class EntityDetailsBody extends Component<Props, State> {
               <div className="flex grow items-center">
                 <Formik
                   initialValues={{
-                    estimate: this.props.entity.estimate,
+                    estimate: this.props.entity?.estimate,
                   }}
                   validationSchema={Yup.object().shape({
                     estimate: Yup.number()
@@ -666,25 +609,27 @@ class EntityDetailsBody extends Component<Props, State> {
                       estimate: est,
                       lastModified: new Date().toISOString(),
                       lastModifiedByName:
-                        this.props.application.account === undefined
-                          ? "demo"
-                          : this.props.application.account.name,
+                        this.props.application.account?.name ?? "",
                     });
 
-                    if (!this.props.demo) {
+                    if (this.props.entity) {
                       API_CHANGE_FEATURE_ESTIMATE(
                         this.props.entity.workspaceId,
                         this.props.entity.id,
                         est
-                      ).then((response) => {
-                        if (response.ok) {
-                          response.json().then((data: IFeature) => {
-                            this.props.updateFeature(data);
-                          });
-                        } else {
-                          alert("Something went wrong.");
-                        }
-                      });
+                      )
+                        .then((response) => {
+                          if (response.ok) {
+                            response.json().then((data: IFeature) => {
+                              this.props.updateFeature(data);
+                            });
+                          } else {
+                            alert("Something went wrong.");
+                          }
+                        })
+                        .catch(() => {
+                          console.log("caught by design");
+                        });
                     }
                   }}
                 >
@@ -719,12 +664,12 @@ class EntityDetailsBody extends Component<Props, State> {
     };
 
     const C = () => {
-      switch (this.props.entity.kind) {
+      switch (this.props.entity?.kind) {
         case "milestone":
         case "subworkflow":
         case "workflow":
         case "feature":
-          if (this.props.entity.status === "OPEN") {
+          if (this.props.entity?.status === "OPEN") {
             return (
               <Button
                 secondary
@@ -735,7 +680,7 @@ class EntityDetailsBody extends Component<Props, State> {
               />
             );
           }
-          if (this.props.entity.status === "CLOSED") {
+          if (this.props.entity?.status === "CLOSED") {
             return (
               <Button
                 secondary
@@ -757,9 +702,9 @@ class EntityDetailsBody extends Component<Props, State> {
         <div
           className={
             "flex h-4 w-full " +
-            (this.props.entity.kind === "project"
+            (this.props.entity?.kind === "project"
               ? ""
-              : colorToBackgroundColorClass(this.props.entity.color))
+              : colorToBackgroundColorClass(this.props.entity?.color))
           }
         />
         <div className={"flex h-full w-full flex-row overflow-auto bg-white "}>
@@ -770,14 +715,12 @@ class EntityDetailsBody extends Component<Props, State> {
               viewOnly={this.props.viewOnly}
               open={open}
               card={this.props.entity}
-              demo={this.props.demo}
               edit={false}
               close={() => alert("close")}
             />
             <CardDetailsTitle
               // eslint-disable-next-line @typescript-eslint/ban-ts-comment
               // @ts-ignore
-              demo={this.props.demo}
               viewOnly={this.props.viewOnly}
               card={this.props.entity}
               app={this.props.application}
@@ -787,7 +730,6 @@ class EntityDetailsBody extends Component<Props, State> {
             <CardDetailsDescription
               // eslint-disable-next-line @typescript-eslint/ban-ts-comment
               // @ts-ignore
-              demo={this.props.demo}
               viewOnly={this.props.viewOnly}
               entity={this.props.entity}
               app={this.props.application}
@@ -795,9 +737,8 @@ class EntityDetailsBody extends Component<Props, State> {
               close={this.props.close}
             />
 
-            {this.props.entity.kind === "feature" ? (
+            {this.props.entity?.kind === "feature" ? (
               <CardDetailsComments
-                demo={this.props.demo}
                 viewOnly={this.props.viewOnly}
                 entity={this.props.entity}
                 app={this.props.application}
@@ -837,7 +778,7 @@ class EntityDetailsBody extends Component<Props, State> {
               <div className="flex grow items-center">
                 <div className="flex grow ">
                   <input
-                    onClick={() => this.urlRef.current!.select()}
+                    onClick={() => this.urlRef.current?.select?.()}
                     ref={this.urlRef}
                     readOnly
                     className="mr-1 w-full  border p-1"
@@ -850,10 +791,10 @@ class EntityDetailsBody extends Component<Props, State> {
                   />
                 </div>
                 <div>
-                  {document.queryCommandSupported("copy") && (
+                  {navigator.clipboard && (
                     <button
                       onClick={() =>
-                        this.copyToClipboard(
+                        navigator.clipboard.writeText(
                           window.location.protocol +
                             "//" +
                             window.location.host +
@@ -892,8 +833,8 @@ class EntityDetailsBody extends Component<Props, State> {
               <div className=" mb-1 font-bold">Created</div>
               <div className="flex grow items-center">
                 <span className="font-medium">
-                  <TimeAgo date={this.props.entity.createdAt} /> by{" "}
-                  {this.props.entity.createdByName}
+                  <TimeAgo date={this.props.entity?.createdAt} /> by{" "}
+                  {this.props.entity?.createdByName}
                 </span>
               </div>
             </div>
@@ -901,8 +842,8 @@ class EntityDetailsBody extends Component<Props, State> {
               <div className=" mb-1 font-bold">Last modified</div>
               <div className="flex grow items-center  ">
                 <span className="font-medium">
-                  <TimeAgo date={this.props.entity.lastModified} /> by{" "}
-                  {this.props.entity.lastModifiedByName}
+                  <TimeAgo date={this.props.entity?.lastModified} /> by{" "}
+                  {this.props.entity?.lastModifiedByName}
                 </span>
               </div>
             </div>

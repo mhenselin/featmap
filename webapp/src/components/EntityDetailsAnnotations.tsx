@@ -25,11 +25,6 @@ import {
 } from "../store/milestones/actions";
 import { IMilestone } from "../store/milestones/types";
 import {
-  createProjectAction,
-  deleteProjectAction,
-  updateProjectAction,
-} from "../store/projects/actions";
-import {
   createSubWorkflowAction,
   deleteSubWorkflowAction,
   updateSubWorkflowAction,
@@ -61,9 +56,6 @@ const mapDispatchToProps = {
   updateFeature: updateFeatureAction,
   createFeature: createFeatureAction,
   deleteFeature: deleteFeatureAction,
-  updateProject: updateProjectAction,
-  createProject: createProjectAction,
-  deleteProject: deleteProjectAction,
 };
 
 type PropsFromState = {
@@ -83,16 +75,12 @@ type PropsFromDispatch = {
   updateFeature: typeof updateFeatureAction;
   createFeature: typeof createFeatureAction;
   deleteFeature: typeof deleteFeatureAction;
-  updateProject: typeof updateProjectAction;
-  createProject: typeof createProjectAction;
-  deleteProject: typeof deleteProjectAction;
 };
 
 type SelfProps = {
-  card: EntityTypes;
+  card?: EntityTypes;
   close: () => void;
   edit: boolean;
-  demo: boolean;
   open: boolean;
   viewOnly: boolean;
 };
@@ -111,7 +99,7 @@ class EntityDetailsAnnotations extends Component<Props, State> {
 
   handleAddAnnotation = (name: string) => {
     const currentAnnotations = dbAnnotationsFromNames(
-      this.props.card.annotations
+      this.props.card?.annotations
     );
     currentAnnotations.add(name);
     this.updateAnnotations(currentAnnotations.toString());
@@ -119,7 +107,7 @@ class EntityDetailsAnnotations extends Component<Props, State> {
 
   handleRemoveAnnotation = (name: string) => {
     const currentAnnotations = dbAnnotationsFromNames(
-      this.props.card.annotations
+      this.props.card?.annotations
     );
     currentAnnotations.remove([name]);
     this.updateAnnotations(currentAnnotations.toString());
@@ -127,30 +115,25 @@ class EntityDetailsAnnotations extends Component<Props, State> {
 
   updateAnnotations = (names: string) => {
     const card = this.props.card;
-    switch (card.kind) {
+    switch (card?.kind) {
       case "feature": {
         this.props.updateFeature({
           ...card,
           annotations: names,
           lastModified: new Date().toISOString(),
-          lastModifiedByName:
-            this.props.application.account === undefined
-              ? "demo"
-              : this.props.application.account.name,
+          lastModifiedByName: this.props.application.account?.name ?? "",
         });
-        if (!this.props.demo) {
-          API_CHANGE_FEATURE_ANNOTATIONS(card.workspaceId, card.id, names).then(
-            (response) => {
-              if (response.ok) {
-                response.json().then((data: IFeature) => {
-                  this.props.updateFeature(data);
-                });
-              } else {
-                alert("Something went wrong.");
-              }
+        API_CHANGE_FEATURE_ANNOTATIONS(card.workspaceId, card.id, names).then(
+          (response) => {
+            if (response.ok) {
+              response.json().then((data: IFeature) => {
+                this.props.updateFeature(data);
+              });
+            } else {
+              alert("Something went wrong.");
             }
-          );
-        }
+          }
+        );
         break;
       }
 
@@ -159,17 +142,10 @@ class EntityDetailsAnnotations extends Component<Props, State> {
           ...card,
           annotations: names,
           lastModified: new Date().toISOString(),
-          lastModifiedByName:
-            this.props.application.account === undefined
-              ? "demo"
-              : this.props.application.account.name,
+          lastModifiedByName: this.props.application.account?.name ?? "",
         });
-        if (!this.props.demo) {
-          API_CHANGE_WORKFLOW_ANNOTATIONS(
-            card.workspaceId,
-            card.id,
-            names
-          ).then((response) => {
+        API_CHANGE_WORKFLOW_ANNOTATIONS(card.workspaceId, card.id, names).then(
+          (response) => {
             if (response.ok) {
               response.json().then((data: IWorkflow) => {
                 this.props.updateWorkflow(data);
@@ -177,8 +153,8 @@ class EntityDetailsAnnotations extends Component<Props, State> {
             } else {
               alert("Something went wrong.");
             }
-          });
-        }
+          }
+        );
         break;
       }
 
@@ -187,26 +163,21 @@ class EntityDetailsAnnotations extends Component<Props, State> {
           ...card,
           annotations: names,
           lastModified: new Date().toISOString(),
-          lastModifiedByName:
-            this.props.application.account === undefined
-              ? "demo"
-              : this.props.application.account.name,
+          lastModifiedByName: this.props.application.account?.name ?? "",
         });
-        if (!this.props.demo) {
-          API_CHANGE_SUBWORKFLOW_ANNOTATIONS(
-            card.workspaceId,
-            card.id,
-            names
-          ).then((response) => {
-            if (response.ok) {
-              response.json().then((data: ISubWorkflow) => {
-                this.props.updateSubWorkflow(data);
-              });
-            } else {
-              alert("Something went wrong.");
-            }
-          });
-        }
+        API_CHANGE_SUBWORKFLOW_ANNOTATIONS(
+          card.workspaceId,
+          card.id,
+          names
+        ).then((response) => {
+          if (response.ok) {
+            response.json().then((data: ISubWorkflow) => {
+              this.props.updateSubWorkflow(data);
+            });
+          } else {
+            alert("Something went wrong.");
+          }
+        });
         break;
       }
 
@@ -215,17 +186,10 @@ class EntityDetailsAnnotations extends Component<Props, State> {
           ...card,
           annotations: names,
           lastModified: new Date().toISOString(),
-          lastModifiedByName:
-            this.props.application.account === undefined
-              ? "demo"
-              : this.props.application.account.name,
+          lastModifiedByName: this.props.application.account?.name ?? "",
         });
-        if (!this.props.demo) {
-          API_CHANGE_MILESTONE_ANNOTATIONS(
-            card.workspaceId,
-            card.id,
-            names
-          ).then((response) => {
+        API_CHANGE_MILESTONE_ANNOTATIONS(card.workspaceId, card.id, names).then(
+          (response) => {
             if (response.ok) {
               response.json().then((data: IMilestone) => {
                 this.props.updateMilestone(data);
@@ -233,8 +197,8 @@ class EntityDetailsAnnotations extends Component<Props, State> {
             } else {
               alert("Something went wrong.");
             }
-          });
-        }
+          }
+        );
         break;
       }
     }
@@ -248,7 +212,7 @@ class EntityDetailsAnnotations extends Component<Props, State> {
 
   render() {
     const currentAnnotations = dbAnnotationsFromNames(
-      this.props.card.annotations
+      this.props.card?.annotations
     );
     const leftOverAnnotations = allAnnotations().remove(
       currentAnnotations.annotations.map((c) => c.name)
@@ -288,7 +252,7 @@ class EntityDetailsAnnotations extends Component<Props, State> {
         {leftOverAnnotations.annotations.length &&
         this.props.open &&
         !this.props.viewOnly &&
-        !(this.props.card.kind === "project") ? (
+        this.props.card?.kind !== "project" ? (
           <ContextMenu icon="add" text="Annotation" smallIcon>
             <div className="absolute top-0 left-0  mt-8 min-w-full rounded bg-white text-xs shadow-md">
               <ul className="">

@@ -65,7 +65,13 @@ export function reducer(
 
     case ActionTypes.MOVE_MILESTONE: {
       const p = action.payload;
-      const m = getMilestone(state.items, p.id);
+      const m = getMilestone(state.items, p.id) ?? {
+        projectId: undefined,
+        id: undefined,
+        rank: undefined,
+        lastModified: undefined,
+        lastModifiedByName: undefined,
+      };
       const ff = sortMilestones(
         filterMilestonesOnProject(state.items, m.projectId)
       ).filter((x) => x.id !== m.id);

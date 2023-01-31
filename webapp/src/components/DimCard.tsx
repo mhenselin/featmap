@@ -6,7 +6,7 @@ export const DimCard: React.FunctionComponent<Readonly<DimCardProps>> = (
 ) => {
   const { children } = props;
   return (
-    <div className="flex h-24 w-36 items-center justify-center rounded border border-dashed border-gray-200 p-1 ">
+    <div className="flex h-24 w-40 items-center justify-center rounded border border-dashed border-gray-200 p-1 ">
       <div className="flex">{children}</div>
     </div>
   );

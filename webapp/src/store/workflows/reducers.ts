@@ -61,7 +61,13 @@ export function reducer(state: State = initialState, action: Actions) {
 
     case ActionTypes.MOVE_WORKFLOW: {
       const p = action.payload;
-      const m = getWorkflow(state.items, p.id);
+      const m = getWorkflow(state.items, p.id) ?? {
+        projectId: undefined,
+        id: undefined,
+        rank: undefined,
+        lastModified: undefined,
+        lastModifiedByName: undefined,
+      };
       const ff = sortWorkflows(
         filterWorkflowsOnProject(state.items, m.projectId)
       ).filter((x) => x.id !== m.id);
@@ -74,7 +80,7 @@ export function reducer(state: State = initialState, action: Actions) {
 
       return {
         ...state,
-        items: state.items.map((x) => (x.id === m.id ? m : x)),
+        items: state.items.map((x) => (x.id === m?.id ? m : x)),
       };
     }
 

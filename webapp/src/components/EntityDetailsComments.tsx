@@ -44,11 +44,10 @@ type PropsFromDispatch = {
   deleteFeatureComment: typeof deleteFeatureCommentAction;
 };
 type SelfProps = {
-  entity: EntityTypes;
+  entity?: EntityTypes;
   comments: IFeatureComment[];
   app: Application;
   viewOnly: boolean;
-  demo: boolean;
   open: boolean;
 };
 type Props = PropsFromState & PropsFromDispatch & SelfProps;
@@ -65,7 +64,7 @@ class EntityDetailsComments extends Component<Props, State> {
   deleteComment = (id: string) => {
     this.props.deleteFeatureComment(id); // optimistic
 
-    if (!this.props.demo) {
+    if (this.props.entity?.workspaceId) {
       API_DELETE_FEATURE_COMMENT(this.props.entity.workspaceId, id).then(
         (response) => {
           if (response.ok) {
@@ -84,7 +83,7 @@ class EntityDetailsComments extends Component<Props, State> {
     optimistic.lastModified = new Date().toISOString();
     this.props.updateFeatureComment(optimistic);
 
-    if (!this.props.demo) {
+    if (this.props.entity?.workspaceId) {
       API_UPDATE_FEATURE_COMMENT_POST(
         this.props.entity.workspaceId,
         comment.id,
@@ -102,7 +101,10 @@ class EntityDetailsComments extends Component<Props, State> {
   };
 
   render() {
-    const member = getMembership(this.props.app, this.props.entity.workspaceId);
+    const member = getMembership(
+      this.props.app,
+      this.props.entity?.workspaceId
+    );
 
     return (
       <div className=" mb-4 w-full self-start ">
@@ -125,42 +127,37 @@ class EntityDetailsComments extends Component<Props, State> {
               onSubmit={(values: { comment: string }) => {
                 const id = uuid();
                 const t = new Date().toISOString();
-                const by =
-                  this.props.app.account === undefined
-                    ? "demo"
-                    : this.props.app.account!.name;
+                const by = this.props.app.account?.name ?? "";
 
                 const optimistic: IFeatureComment = {
                   kind: "featureComment",
                   id: id,
-                  workspaceId: this.props.entity.workspaceId,
-                  featureId: this.props.entity.id,
+                  workspaceId: this.props.entity?.workspaceId ?? "",
+                  featureId: this.props.entity?.id ?? "",
                   projectId: "",
                   createdAt: t,
                   createdByName: by,
                   lastModified: t,
                   post: values.comment,
-                  memberId: member === undefined ? "demo" : member.id,
+                  memberId: member?.id ?? "",
                 };
 
                 this.props.createFeatureComment(optimistic);
 
-                if (!this.props.demo) {
-                  API_CREATE_FEATURE_COMMENT(
-                    optimistic.workspaceId,
-                    optimistic.featureId,
-                    optimistic.id,
-                    optimistic.post
-                  ).then((response) => {
-                    if (response.ok) {
-                      response.json().then((data: IFeatureComment) => {
-                        this.props.updateFeatureComment(data);
-                      });
-                    } else {
-                      alert("Something went wrong when posting a comment.");
-                    }
-                  });
-                }
+                API_CREATE_FEATURE_COMMENT(
+                  optimistic.workspaceId,
+                  optimistic.featureId,
+                  optimistic.id,
+                  optimistic.post
+                ).then((response) => {
+                  if (response.ok) {
+                    response.json().then((data: IFeatureComment) => {
+                      this.props.updateFeatureComment(data);
+                    });
+                  } else {
+                    alert("Something went wrong when posting a comment.");
+                  }
+                });
 
                 // actions.setSubmitting(false)
               }}
@@ -215,7 +212,6 @@ class EntityDetailsComments extends Component<Props, State> {
                   return (
                     <div className=" mt-4  bg-white" key={comment.id}>
                       <Comment
-                        demo={this.props.demo}
                         viewOnly={this.props.viewOnly}
                         comment={comment}
                         member={member}

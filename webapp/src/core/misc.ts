@@ -13,7 +13,7 @@ export enum SubscriptionLevels {
   PRO = "PRO",
 }
 
-export const isEditor = (level: Roles) => {
+export const isEditor = (level?: Roles) => {
   return (
     level === Roles.EDITOR || level === Roles.ADMIN || level === Roles.OWNER
   );
@@ -21,10 +21,10 @@ export const isEditor = (level: Roles) => {
 
 export type personaBarState =
   | { page: "all" }
-  | { page: "persona"; personaId: string; edit: boolean }
+  | { page: "persona"; personaId?: string; edit: boolean }
   | { page: "create"; workflowId: string; workflowTitle: string };
 
-export const memberLevelToTitle = (level: string) => {
+export const memberLevelToTitle = (level?: string) => {
   switch (level) {
     case "VIEWER":
       return "Viewer";
@@ -41,17 +41,15 @@ export const memberLevelToTitle = (level: string) => {
 
 export enum Color {
   NONE = "",
-  WHITE = "WHITE",
-  GREY = "GREY",
-  RED = "RED",
-  ORANGE = "ORANGE",
-  YELLOW = "YELLOW",
-  GREEN = "GREEN",
-  TEAL = "TEAL",
-  BLUE = "BLUE",
-  INDIGO = "INDIGO",
-  PURPLE = "PURPLE",
-  PINK = "PINK",
+  WHITE = "white",
+  GREY = "gray",
+  RED = "red",
+  ORANGE = "orange",
+  YELLOW = "yellow",
+  TEAL = "teal",
+  BLUE = "blue",
+  PURPLE = "purple",
+  PINK = "pink",
 }
 
 export enum Annotation2 {
@@ -107,8 +105,8 @@ const annotationsFromNames = (names: string[]): Annotations => {
   return new Annotations(ann);
 };
 
-export const dbAnnotationsFromNames = (ann: string) => {
-  const list = ann.split(",");
+export const dbAnnotationsFromNames = (ann?: string) => {
+  const list = ann?.split(",") ?? [];
   return annotationsFromNames(list);
 };
 
@@ -132,38 +130,55 @@ export const Colors = new Array<Color>(
   Color.RED,
   Color.ORANGE,
   Color.YELLOW,
-  Color.GREEN,
   Color.TEAL,
   Color.BLUE,
-  Color.INDIGO,
   Color.PURPLE,
   Color.PINK
 );
 
-export const colorToBackgroundColorClass = (color: Color) => {
+export const colorToSubtleBackgroundColorClass = (color?: Color) => {
+  switch (color) {
+    case Color.GREY:
+      return "bg-gray-200";
+    case Color.RED:
+      return "bg-red-50";
+    case Color.ORANGE:
+      return "bg-orange-50";
+    case Color.YELLOW:
+      return "bg-yellow-50";
+    case Color.TEAL:
+      return "bg-green-50";
+    case Color.BLUE:
+      return "bg-blue-50";
+    case Color.PURPLE:
+      return "bg-purple-50";
+    case Color.PINK:
+      return "bg-pink-50";
+    default:
+      return "";
+  }
+};
+
+export const colorToBackgroundColorClass = (color?: Color) => {
   switch (color) {
     case Color.WHITE:
       return "bg-white";
     case Color.GREY:
       return "bg-gray-500";
     case Color.RED:
-      return "bg-red-400";
+      return "bg-red-500";
     case Color.ORANGE:
-      return "bg-yellow-500";
+      return "bg-orange-500";
     case Color.YELLOW:
-      return "bg-yellow-300";
-    case Color.GREEN:
-      return "bg-green-400";
+      return "bg-yellow-500";
     case Color.TEAL:
-      return "bg-green-600";
+      return "bg-green-500";
     case Color.BLUE:
-      return "bg-blue-400";
-    case Color.INDIGO:
-      return "bg-indigo-400";
+      return "bg-blue-500";
     case Color.PURPLE:
-      return "bg-purple-400";
+      return "bg-purple-500";
     case Color.PINK:
-      return "bg-pink-400";
+      return "bg-pink-500";
     case Color.NONE:
       return "bg-white";
     default:
@@ -178,23 +193,19 @@ export const colorToBorderColorClass = (color: Color) => {
     case Color.GREY:
       return "border-gray-500";
     case Color.RED:
-      return "border-red-400";
+      return "border-red-500";
     case Color.ORANGE:
-      return "border-yellow-500";
+      return "border-orange-500";
     case Color.YELLOW:
-      return "border-yellow-300";
-    case Color.GREEN:
-      return "border-green-400";
+      return "border-yellow-500";
     case Color.TEAL:
-      return "border-green-600";
+      return "border-green-500";
     case Color.BLUE:
-      return "border-blue-400";
-    case Color.INDIGO:
-      return "border-indigo-400";
+      return "border-blue-500";
     case Color.PURPLE:
-      return "border-purple-400";
+      return "border-purple-500";
     case Color.PINK:
-      return "border-pink-400";
+      return "border-pink-500";
     case Color.NONE:
       return "border-gray-500";
     default:

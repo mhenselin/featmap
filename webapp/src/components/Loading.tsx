@@ -1,6 +1,17 @@
-export const Loading = () => {
+type LoadingProps = {
+  label?: string;
+};
+
+export const Loading: React.FunctionComponent<Readonly<LoadingProps>> = (
+  props
+) => {
+  const { label } = props;
+
   return (
     <div className="absolute top-1/2 left-1/2 -mt-4 -ml-2 h-8 w-4 text-indigo-700">
+      <div className="absolute -left-24 top-9 w-52 whitespace-nowrap text-center text-sm text-black">
+        &hellip;loading {label}
+      </div>
       <div className="absolute z-10 -ml-2 h-8 w-8 animate-bounce">
         <svg
           xmlns="http://www.w3.org/2000/svg"
